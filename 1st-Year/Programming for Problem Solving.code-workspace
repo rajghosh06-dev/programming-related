@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "Programming for Problem Solving"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdio.h": "c",
+			"T1.C": "cpp",
+			"random": "c",
+			"limits": "c",
+			"stdlib.h": "c"
+		}
+	}
+}

@@ -1,0 +1,2 @@
+DATABASE MANAGEMENT SYSTEM
+These are ERD [ENTITY RELATIONSHIP DIAGRAMS] which were done on the WEB Browser. Link is:https://erdplus.com/standalone

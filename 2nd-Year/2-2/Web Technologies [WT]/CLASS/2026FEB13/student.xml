@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<student xmlns:xsi="https://www/w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="student.xsd">
+    <rollno>101</rollno>
+    <name>Rishit</name>
+    <branch>AIML</branch>
+    <marks>100</marks>
+</student>

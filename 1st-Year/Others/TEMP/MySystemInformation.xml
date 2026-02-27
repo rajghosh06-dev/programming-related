@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSystemDetailsEntryItem xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SystemDetailsEntryItem>
+    <ComponentType>Operating System</ComponentType>
+    <Display>Microsoft Windows 11 Home Single Language (x64)</Display>
+    <Version>10.0.26100</Version>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Serial IO I2C Host Controller - 51E9</Display>
+    <Version>30.100.2237.26</Version>
+    <Device>51E9</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Iris(R) Xe Graphics</Display>
+    <Version>31.0.101.5186</Version>
+    <Device>A7A1</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) USB 3.20 eXtensible Host Controller - 1.20 (Microsoft)</Display>
+    <Version>10.0.26100.2161</Version>
+    <Device>A71E</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Wi-Fi 6E AX211 160MHz</Display>
+    <Version>23.80.1.3</Version>
+    <Device>51F1</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Smart Sound Technology OED</Display>
+    <Version>10.29.0.10898</Version>
+    <Device>0222</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek(R) Audio</Display>
+    <Version>6.0.9700.1</Version>
+    <Device>0295</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>PCI Express Root Port</Display>
+    <Version>10.0.26100.2161</Version>
+    <Device>A76E</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel RST VMD Managed Controller 09AB</Display>
+    <Version>19.5.1.1040</Version>
+    <Device>09AB</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Shared SRAM - 51EF</Display>
+    <Version>10.1.36.7</Version>
+    <Device>51EF</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) SPI (flash) Controller - 51A4</Display>
+    <Version>10.1.36.7</Version>
+    <Device>51A4</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Smart Sound Technology BUS</Display>
+    <Version>10.29.0.10898</Version>
+    <Device>51CA</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Smart Sound Technology for Digital Microphones</Display>
+    <Version>10.29.0.10898</Version>
+    <Device>AE20</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Management Engine Interface #1</Display>
+    <Version>2406.5.5.0</Version>
+    <Device>51E0</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Serial IO I2C Host Controller - 51E8</Display>
+    <Version>30.100.2237.26</Version>
+    <Device>51E8</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Innovation Platform Framework Processor Participant</Display>
+    <Version>1.0.11100.29710</Version>
+    <Device>A71D</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>PCI standard host CPU bridge</Display>
+    <Version>10.0.26100.1150</Version>
+    <Device>A708</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Smart Sound Technology for USB Audio</Display>
+    <Version>10.29.0.10898</Version>
+    <Device>AE50</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) SMBus - 51A3</Display>
+    <Version>10.1.36.7</Version>
+    <Device>51A3</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Integrated Sensor Solution</Display>
+    <Version>3.1.0.4586</Version>
+    <Device>51FC</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel RST VMD Controller A77F</Display>
+    <Version>19.5.1.1040</Version>
+    <Device>A77F</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>USB4(TM) Host Router (Microsoft)</Display>
+    <Version>10.0.26100.2161</Version>
+    <Device>0000</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Smart Sound Technology for Bluetooth Audio</Display>
+    <Version>10.29.0.10898</Version>
+    <Device>AE30</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) USB 3.10 eXtensible Host Controller - 1.20 (Microsoft)</Display>
+    <Version>10.0.26100.2161</Version>
+    <Device>51ED</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) GNA Scoring Accelerator module</Display>
+    <Version>3.0.0.1457</Version>
+    <Device>A74F</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) LPC Controller - 519D</Display>
+    <Version>10.1.36.7</Version>
+    <Device>519D</Device>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>BIOS</ComponentType>
+    <Display>BIOS</Display>
+    <Version>1.18.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>FRMW</ComponentType>
+    <Display>NVMe PC SN740 NVMe WD 1TB</Display>
+    <Version>7391.4108</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Chipset Device Software</Display>
+    <Version>10.1.19468.8385</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell Digital Delivery Services</Display>
+    <Version>5.3.0.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell Optimizer</Display>
+    <Version>5.0.1100.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell Pair</Display>
+    <Version>1.2.4</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>DolbyVision</Display>
+    <Version>1.0.0.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell Update for Windows Universal</Display>
+    <Version>5.4.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Common PPM Package</Display>
+    <Version>2.1.1</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>MyDell</Display>
+    <Version>3.3.54.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek High Definition Audio</Display>
+    <Version>6.0.9700.1</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Card Reader</Display>
+    <Version>10.0.22621.31276</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek USB Ethernet Controller</Display>
+    <Version>1153.10.20.1104</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>DolbyVision</Display>
+    <Version>1.0.0.0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell DBUtil Removal Utility</Display>
+    <Version>0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Dell AC Thermal PPkg Driver</Display>
+    <Version>0</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>Dell SupportAssist OS Recovery Plugin for Dell Update</Display>
+    <Version>5.5.7.18773</Version>
+    <ServiceTag />
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Serial IO GPIO Host Controller - INTC1055</Display>
+    <Version>30.100.2237.26</Version>
+    <HardwareID>ACPI\VEN_INTC&amp;DEV_1055</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Goodix MOC Fingerprint</Display>
+    <Version>3.4.32.490</Version>
+    <HardwareID>USB\VID_27C6&amp;PID_639C&amp;REV_0100</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Innovation Platform Framework Generic Participant</Display>
+    <Version>1.0.11100.29710</Version>
+    <HardwareID>ACPI\VEN_INTC&amp;DEV_10A1</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Camera DFU Device</Display>
+    <Version>10.0.26100.1150</Version>
+    <HardwareID>USB\VID_0BDA&amp;PID_5556&amp;REV_2161&amp;MI_02</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Wireless Bluetooth(R)</Display>
+    <Version>23.80.0.3</Version>
+    <HardwareID>USB\VID_8087&amp;PID_0033&amp;REV_0000</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) HID Event Filter</Display>
+    <Version>2.2.2.1</Version>
+    <HardwareID>ACPI\VEN_INTC&amp;DEV_1078</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Innovation Platform Framework Manager</Display>
+    <Version>1.0.11100.29710</Version>
+    <HardwareID>ACPI\VEN_INTC&amp;DEV_10A0</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Integrated Webcam</Display>
+    <Version>10.0.26100.2161</Version>
+    <HardwareID>USB\VID_0BDA&amp;PID_5556&amp;REV_2161&amp;MI_00</HardwareID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) iCLS Client</Display>
+    <Version>1.72.189.0</Version>
+    <SoftwareComponentClassID>SWC\PROVIDER_INTEL_COMPONENT_ICLSCLIENT_ES_ONLY</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Graphics Command Center</Display>
+    <Version>32.0.101.6078</Version>
+    <SoftwareComponentClassID>SWC\101.6078_VEN8086_IGCC</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Audio Universal Service</Display>
+    <Version>1.0.770.0</Version>
+    <SoftwareComponentClassID>SWC\VEN_10EC&amp;SID_0001</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Dynamic Tuning Technology Device Extension Component</Display>
+    <Version>9.0.11101.30293</Version>
+    <SoftwareComponentClassID>SWC\VID8086_DTT_1.0</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Connectivity Performance Suite</Display>
+    <Version>3.1024.122.1</Version>
+    <SoftwareComponentClassID>{D9B17877-8CA0-4FAD-94CA-00B16E47A53F}\ICPS_Dell</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Management Engine WMI Provider</Display>
+    <Version>2408.5.4.0</Version>
+    <SoftwareComponentClassID>SWC\06657A6D-FE0F-4C90-8DDA-A1501C74CE4B</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Dynamic Application Loader Host Interface</Display>
+    <Version>1.44.2023.710</Version>
+    <SoftwareComponentClassID>SWC\3C4852D6-D47B-4F46-B05E-B5EDC1AA440E</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Asio Component</Display>
+    <Version>1.0.12.1</Version>
+    <SoftwareComponentClassID>SWC\VEN_10EC&amp;ASIO_ID_0001</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Optane(TM) Memory and Storage Management Component</Display>
+    <Version>19.5.1.1040</Version>
+    <SoftwareComponentClassID>SWC\VID8086&amp;SW_RstHSA_19_0</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Audio Effects Component</Display>
+    <Version>13.0.6000.1167</Version>
+    <SoftwareComponentClassID>SWC\VEN_10EC&amp;AID_0001</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Waves Audio Effects Component</Display>
+    <Version>12.2.0.16158</Version>
+    <SoftwareComponentClassID>SWC\VEN_WAVES&amp;AID_MA12</SoftwareComponentClassID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>31.0.101.5186</Version>
+    <ExtensionID>{5EF4619D-3C77-4d0d-A320-DA2867128DB7}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>31.0.101.4575</Version>
+    <ExtensionID>{5047A43B-8140-457c-A872-7A4F54F5207E}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>31.0.101.3688</Version>
+    <ExtensionID>{CE0FB41A-CA44-4d20-93A6-FE778F7D05BF}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>31.0.101.4502</Version>
+    <ExtensionID>{5FE9556A-723B-47a6-841D-0350E72459E1}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>31.0.101.4032</Version>
+    <ExtensionID>{780742FE-D4D5-412e-9313-B93453ADB1C0}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel</Display>
+    <Version>9.0.11101.30293</Version>
+    <ExtensionID>{BC7814A1-A80E-44B3-87C6-652EAC676387}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Dell</Display>
+    <Version>1.12.2.208</Version>
+    <ExtensionID>{3ED78669-04CF-413C-A8DF-553436CEA20F}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Semiconductor Corp.</Display>
+    <Version>6.0.9700.1</Version>
+    <ExtensionID>{C3A63EDD-2D27-4B66-B155-5E94B43D926A}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Semiconductor Corp.</Display>
+    <Version>6.0.9700.1</Version>
+    <ExtensionID>{A23F0038-653E-48E7-8F42-BB00F02085D7}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Waves</Display>
+    <Version>6.0.22.0</Version>
+    <ExtensionID>{B67FDDCF-DE75-4538-9065-64ABE7519815}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Realtek Semiconductor Corp.</Display>
+    <Version>10.35.212.020</Version>
+    <ExtensionID>{2A1A2071-D20A-43F8-AA82-B6DD10133949}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Corporation</Display>
+    <Version>01.00.3415.00</Version>
+    <ExtensionID>{B16A31ED-0474-491D-ADBB-6AAC323D38D7}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel(R) Corporation</Display>
+    <Version>10.29.00.9872</Version>
+    <ExtensionID>{9A1BFA75-8AC5-4945-9BCA-7FEABD045D14}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>32.0.101.6078</Version>
+    <ExtensionID>{69CB4EDD-BAFE-4F9A-9135-C1F284D6860D}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>DRVR</ComponentType>
+    <Display>Intel Corporation</Display>
+    <Version>19.5.1.1040</Version>
+    <ExtensionID>{8541b81c-193b-4f91-a86b-53df20c1974b}</ExtensionID>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>DellInc.DellSupportAssistforPCs</Display>
+    <Version>4.0.16.0</Version>
+    <PackageFamilyName>DellInc.DellSupportAssistforPCs_htrsf667h5kn2</PackageFamilyName>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>AppUp.IntelOptaneMemoryandStorageManagement</Display>
+    <Version>20.0.1011.0</Version>
+    <PackageFamilyName>AppUp.IntelOptaneMemoryandStorageManagement_8j3eq9eme6ctt</PackageFamilyName>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>AppUp.IntelGraphicsExperience</Display>
+    <Version>1.100.5635.0</Version>
+    <PackageFamilyName>appup.intelgraphicsexperience_8j3eq9eme6ctt</PackageFamilyName>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>DolbyLaboratories.DolbyAccess</Display>
+    <Version>3.24.2820.0</Version>
+    <PackageFamilyName>dolbylaboratories.dolbyaccess_rz1tebttyb220</PackageFamilyName>
+  </SystemDetailsEntryItem>
+  <SystemDetailsEntryItem>
+    <ComponentType>APAC</ComponentType>
+    <Display>DolbyLaboratories.DolbyAccessOEM</Display>
+    <Version>3.25.430.0</Version>
+    <PackageFamilyName>dolbylaboratories.dolbyaccessoem_rz1tebttyb220</PackageFamilyName>
+  </SystemDetailsEntryItem>
+</ArrayOfSystemDetailsEntryItem>

@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <script>
+            function concatenate(first, last)
+            {
+                return first+last;
+            }
+            function showResult()
+            {
+                var result=concatenate("Name is: "+"Zara ", "Ali");
+                document.write(result);
+            }
+            //CUSTOM-MANUAL-PRACTICE
+                function showManualResult(fname, lname)
+                {
+                    var result=concatenate("Name is: "+fname+" ", lname);
+                    document.write(result);
+                }
+        </script>
+    </head>
+    <body>
+        <input type="button" value="Call Function" onclick="showResult()"><br><hr>
+        <!--CUSTOM-MANUAL-PRACTICE-->
+        <script>
+            var FirstName = "RISHIT";
+            var LastName = "GHOSH";
+        </script>
+            <input type="button" value="To return Custom Result" onclick="showManualResult(FirstName, LastName)">
+    </body>
+</html>

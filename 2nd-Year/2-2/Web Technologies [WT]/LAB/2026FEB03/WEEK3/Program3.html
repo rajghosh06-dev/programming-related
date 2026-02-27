@@ -1,0 +1,44 @@
+<!-- WEEK - 3 -->
+<html>	
+	<head>
+        <title>Contries</title>
+	    <script type="text/JavaScript">
+            function showData(menu) 
+            {
+                var country = menu.options[menu.selectedIndex].text; 
+                var capital = menu.options[menu.selectedIndex].value; 
+                document.getElementById("tscou").innerHTML = "You are Selected : "+country; 
+                document.getElementById("tscap").innerHTML = "It's Capital is : "+capital; 
+            } 
+        </script>
+	</head>
+	<body>
+    	<center>
+            <h1 style="color:blue;">Select any Country, it will display capital of the Country</h1>
+                <form>
+                    <select name = "Countries" onChange="showData(this);">
+                        <option value="">--Select a country--</option>
+                        <option value="New Delhi">India</option>
+                        <option value="maskov">Rusia</option>
+                        <option value="Tokyo">Japan</option>
+                        <option value="Islamad">Pakistan</option>
+                        <option value="washington DC">US</option>                        
+                    </select>
+                </form>
+            <!-- <h1 style="color:rgb(255, 0, 0);">Select any State, it will display capital of the State</h1>
+                <form>
+                    <select name = "State" onChange="showData(this);">
+                        <option value="">--Select a country--</option>
+                        <option value="Hyderabad">Telangana</option>
+                        <option value="Amravati">Andhra Pradesh</option>
+                        <option value="Tatanagar">Jharkhand</option>
+                        <option value="Jaipur">Rajasthan</option>
+                        <option value="Mumbai">Maharastra</option>                        
+                    </select>
+                </form> -->
+
+            <h2 style="color:red;font-family:Lucida Handwriting;font-size:150%;" id="tscou" type="text"></h2>
+            <h1 style="color:green;font-family:Times New Roman;font-size:200%;" id="tscap" type="text"></h1>
+    	</center>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookstore SYSTEM "Sample.dtd">
+
+<bookstore>
+    <book>
+        <title>WEB TECHNOLOGY</title>
+        <author>Chris Bates</author>
+        <ISBN>123-456-789</ISBN>
+        <publisher>Willey</publisher>
+        <edition>3</edition>
+        <price>350</price>
+    </book>
+</bookstore>

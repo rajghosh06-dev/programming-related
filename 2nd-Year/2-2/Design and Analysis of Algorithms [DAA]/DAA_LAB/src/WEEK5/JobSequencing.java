@@ -1,5 +1,6 @@
+//LAB8_26FEB16
 //JOB Sequencing
-package LAB8_26FEB16;
+package WEEK5;
 
 import java.util.*;
 

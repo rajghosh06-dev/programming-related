@@ -1,9 +1,10 @@
-// Combined Program: Articulation Points and Biconnected Components
-package LAB6_26FEB09;
+//LAB6_26FEB09
+//Articulation Points [Tarjan]
+package WEEK2;
 
 import java.util.*;
 
-public class GraphAnalysis
+public class ArticulationPointsTarjan
 {
     private int V;
     private int[][] adj;
@@ -11,9 +12,8 @@ public class GraphAnalysis
     private int[] dfn, low, parent;
     private boolean[] ap;
     private int timeDFS;
-    private Stack<int[]> stack;
 
-    public GraphAnalysis(int V)
+    public ArticulationPointsTarjan(int V)
     {
         this.V = V;
         adj = new int[V][V];
@@ -24,10 +24,8 @@ public class GraphAnalysis
         ap = new boolean[V];
         timeDFS = 0;
         Arrays.fill(parent, -1);
-        stack = new Stack<>();
     }
 
-    // DFS for articulation points + biconnected components
     private void DFS(int u)
     {
         visited[u] = true;
@@ -42,7 +40,6 @@ public class GraphAnalysis
                 {
                     children++;
                     parent[v] = u;
-                    stack.push(new int[]{u, v}); // push tree edge
                     DFS(v);
                     low[u] = Math.min(low[u], low[v]);
 
@@ -51,40 +48,19 @@ public class GraphAnalysis
                         ap[u] = true;
                     if (parent[u] != -1 && low[v] >= dfn[u])
                         ap[u] = true;
-
-                    // Biconnected component condition
-                    if (low[v] >= dfn[u])
-                    {
-                        System.out.print("Biconnected Component: ");
-                        int[] edge;
-                        do
-                        {
-                            edge = stack.pop();
-                            System.out.print("(" + (edge[0] + 1) + "," + (edge[1] + 1) + ") ");
-                        } while (!(edge[0] == u && edge[1] == v));
-                        System.out.println();
-                    }
                 }
-                else if (v != parent[u] && dfn[v] < dfn[u])
+                else if (v != parent[u])
                 {
                     // Back edge
-                    stack.push(new int[]{u, v});
                     low[u] = Math.min(low[u], dfn[v]);
                 }
             }
         }
     }
 
-    public void analyzeGraph()
+    public void findArticulationPoints()
     {
-        // Run DFS from all unvisited nodes (for disconnected graphs)
-        for (int i = 0; i < V; i++)
-        {
-            if (!visited[i])
-            {
-                DFS(i);
-            }
-        }
+        DFS(0);
 
         System.out.println("\nVertex  DFN  LOW");
         for (int i = 0; i < V; i++)
@@ -108,7 +84,7 @@ public class GraphAnalysis
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter number of vertices: ");
         int V = sc.nextInt();
-        GraphAnalysis g = new GraphAnalysis(V);
+        ArticulationPointsTarjan g = new ArticulationPointsTarjan(V);
 
         System.out.println("Enter adjacency matrix (0/1):");
         for (int i = 0; i < V; i++)
@@ -119,7 +95,7 @@ public class GraphAnalysis
             }
         }
 
-        g.analyzeGraph();
+        g.findArticulationPoints();
         sc.close();
     }
 }

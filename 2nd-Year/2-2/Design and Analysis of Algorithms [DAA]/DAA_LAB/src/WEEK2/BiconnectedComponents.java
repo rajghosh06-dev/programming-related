@@ -1,5 +1,6 @@
+//LAB6_26FEB09
 //BiconnectedComponents
-package LAB6_26FEB09;
+package WEEK2;
 
 import java.util.*;
 

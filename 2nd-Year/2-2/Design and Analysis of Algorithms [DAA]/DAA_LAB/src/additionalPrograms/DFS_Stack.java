@@ -1,6 +1,6 @@
 //LAB3_26JAN12/DFS.java :: DFS using Stack [non-recurrsive]
 
-package LAB3_26JAN12;
+package additionalPrograms;
 
 import java.util.Scanner;
 import java.util.Stack;

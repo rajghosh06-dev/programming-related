@@ -1,4 +1,6 @@
-package LAB5_26FEB02;
+//LAB5_26FEB02
+//INORDER TRAVERSAL
+package additionalPrograms;
 
 import java.util.Scanner;
 import java.util.Stack;

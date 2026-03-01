@@ -1,5 +1,5 @@
 //Krushkal's Algorithm
-package LAB7_26FEB13;
+package WEEK3;
 
 import java.util.*;
 

@@ -1,5 +1,5 @@
 //LAB3_26JAN12/PowerFunction.java :: Power Function
-package LAB3_26JAN12;
+package additionalPrograms;
 
 import java.util.*;
 

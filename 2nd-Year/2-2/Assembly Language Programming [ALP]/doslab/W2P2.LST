@@ -1,0 +1,72 @@
+Microsoft (R) Macro Assembler Version 5.00                  2/10/26 19:24:10
+                                                             Page     1-1
+
+
+				;PROGRAM TO DISPLAY MULTIPLE STRINGS LINE BY LI
+				NE 
+				ASSUME CS:CODE, DS:DATA ;ASSUME IS AN ASSEMBLER
+				 DIRECTIVE TO DECLARE SEGMENTS 
+ 0000				DATA SEGMENT 
+ 0000  43 4F 4D 50 55 54 45	        STR1 DB "COMPUTER SCIENCE AND ENGINEERI
+				NG",13,10,"GEETHANJALI",0DH,0AH,"AIML$" 
+       52 20 53 43 49 45 4E	
+       43 45 20 41 4E 44 20	
+       45 4E 47 49 4E 45 45	
+       52 49 4E 47 0D 0A 47	
+       45 45 54 48 41 4E 4A	
+       41 4C 49 0D 0A 41 49	
+       4D 4C 24			
+				                        ;DISPLAYING MULTIPLE ST
+				RINGS IN NEW LINE 
+ 0034				DATA ENDS 
+ 0000				CODE SEGMENT 
+ 0000  B8 ---- R		        MOV AX, DATA    ;READING ADDRESS OF DAT
+				A SEGMENT AND MOVING TO AX 
+ 0003  8E D8			        MOV DS, AX      ;MOVING CONTENTS OF AX 
+				TO DS 
+ 0005  BA 0000 R		        MOV DX, OFFSET STR1; READING OFFSET ADD
+				RESS OF STR1 
+				 
+ 0008  B4 09			        MOV AH, 09H     ;DOS INT 21H SERVICE: D
+				ISPLAY STRING 
+ 000A  CD 21			        INT 21H         ;THE TWO INSTRUCTION TO
+				GETHER CONSIDERED UNDER ISR-09 
+				                        ;INTERRUPT SERVICE ROUT
+				INE-09 : TO DISPLAY STRING OF CHARACTERS 
+				 
+ 000C  B4 4C			        MOV AH, 4CH     ;DOS INT 21H SERVICE: T
+				ERMINATE WITH RETURN CODE 
+ 000E  CD 21			        INT 21H         ;THE TWO INSTRUCTIONS T
+				OGETHER CONSIDERED AS UNDER ISR-4C 
+				                        ;INTERRUPT SERVICE ROUT
+				INE-4C : TO TERMINATE WITH RETURN CODE 
+ 0010				CODE ENDS 
+				END                     ;END OF PROGRAM 
+Microsoft (R) Macro Assembler Version 5.00                  2/10/26 19:24:10
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	0010	PARA	NONE	
+DATA . . . . . . . . . . . . . .  	0034	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+STR1 . . . . . . . . . . . . . .  	L BYTE	0000	DATA
+
+@FILENAME  . . . . . . . . . . .  	TEXT  W2P2		
+
+
+     20 Source  Lines
+     20 Total   Lines
+      5 Symbols
+
+  51216 + 465328 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<attendance>
+
+    <student>
+        <name>Rahul</name>
+        <status>Present</status>
+    </student>
+
+    <student>
+        <name>Anita</name>
+        <status>Absent</status>
+    </student>
+
+</attendance>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cse>
+    <student>
+        <userid>501</userid>
+        <name>AAA</name>
+        <gender>male</gender>
+        <marks>65</marks>
+    </student>
+    <student>
+        <userid>502</userid>
+        <name>BBB</name>
+        <gender>female</gender>
+        <marks>85</marks>
+    </student>
+</cse>

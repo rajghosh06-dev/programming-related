@@ -1,3 +1,4 @@
+<!--2026FEB03-->
 <!-- WEEK - 1 -->
 <html>
     <head>
@@ -13,15 +14,15 @@
 	        } 
 	        function towords(s) 
 	        { 
-	            s = s.toString(); 
+	            s = s.toString();
 	        	if (s != parseFloat(s)) 
                     return 'not a number'; 
-	            var x = s.indexOf('.'); 
+	            var x = s.indexOf('.');
 	            if (x == -1) 
 	                x = s.length; 
                 if (x > 3 || s[0]=='-') 
                     return 'out of range'; 
-                var n = s.split(''); 
+                var n = s.split('');
                 var str = '';
                 for (var i=0; i < x; i++) 
 	            { 

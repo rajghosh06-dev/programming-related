@@ -6,6 +6,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/rajghosh06-dev/programming-related?color=blue)
 ![GitHub language count](https://img.shields.io/github/languages/count/rajghosh06-dev/programming-related?color=yellow)
 ![GitHub top language](https://img.shields.io/github/languages/top/rajghosh06-dev/programming-related?color=orange)
+
 ![GitHub last commit](https://img.shields.io/github/last-commit/rajghosh06-dev/programming-related?color=red)
 
 ![GitHub forks](https://img.shields.io/github/forks/rajghosh06-dev/programming-related?style=social)

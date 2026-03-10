@@ -1,28 +1,32 @@
+
 # Programming Related
 
-![GitHub repo size](https://img.shields.io/github/repo-size/rajghosh06-dev/programming-related?color=blue&style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/rajghosh06-dev/programming-related?style=for-the-badge)
-![GitHub top language](https://img.shields.io/github/languages/top/rajghosh06-dev/programming-related?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/rajghosh06-dev/programming-related?style=for-the-badge)
-![GitHub license](https://img.shields.io/github/license/rajghosh06-dev/programming-related?style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/rajghosh06-dev/programming-related?style=for-the-badge&color=yellow)
-![GitHub forks](https://img.shields.io/github/forks/rajghosh06-dev/programming-related?style=for-the-badge&color=green)
+![Project Status: Active](https://img.shields.io/badge/status-active-brightgreen)
+![GitHub license](https://img.shields.io/github/license/rajghosh06-dev/programming-related?color=purple)
+![GitHub repo size](https://img.shields.io/github/repo-size/rajghosh06-dev/programming-related?color=blue)
+![GitHub language count](https://img.shields.io/github/languages/count/rajghosh06-dev/programming-related?color=yellow)
+![GitHub top language](https://img.shields.io/github/languages/top/rajghosh06-dev/programming-related?color=orange)
+![GitHub last commit](https://img.shields.io/github/last-commit/rajghosh06-dev/programming-related?color=red)
+
+![GitHub forks](https://img.shields.io/github/forks/rajghosh06-dev/programming-related?style=social)
+![GitHub stars](https://img.shields.io/github/stars/rajghosh06-dev/programming-related?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/rajghosh06-dev/programming-related?style=social)
 
 ---
 
 ## 🖥️ Languages & Tools
-![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
-![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
-![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![Jupyter Notebook](https://img.shields.io/badge/Jupyter-FA0F00?style=for-the-badge&logo=jupyter&logoColor=white)
+![Assembly](https://img.shields.io/badge/Assembly-6E4C13?logo=asm&logoColor=white)
+![C](https://img.shields.io/badge/C-00599C?logo=c&logoColor=white)
+![C++](https://img.shields.io/badge/C++-00599C?logo=cplusplus&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?logo=java&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![Jupyter Notebook](https://img.shields.io/badge/Jupyter-FA0F00?logo=jupyter&logoColor=white)
 
----
-
-A collection of programming practice files, assignments, and projects from my college coursework.  
+> A collection of programming practice files, assignments, and projects from my college coursework.  
 This repository serves as a reference for learning, revision, and sharing programming concepts.
 
 ---
@@ -42,7 +46,7 @@ PROGRAMMING-RELATED/
 
 ---
 
-## 🚀 How to Use
+## How to Use
 1. Clone the repository:
    ```bash
    git clone https://github.com/rajghosh06-dev/programming-related.git
@@ -57,7 +61,7 @@ PROGRAMMING-RELATED/
 
 ---
 
-## 📖 Contents
+## Contents
 - Basic programming exercises
 - Data structures and algorithms
 - Object-oriented programming examples
@@ -71,7 +75,7 @@ You are free to use, modify, and distribute the code with proper attribution.
 
 ---
 
-## ✨ Author
+## Author
 **Rishit Ghosh**  
 B.Tech CSE (AI & ML),  
 Geethanjali College of Engineering and Technology  

@@ -1,61 +1,97 @@
-#include<stdio.h>
-#include<graphics.h>
-struct tree_element
-{
-	char name[20];
-	int x,y,ftype,lx,rx,nc,level;
-	struct tree_element *link[5];
-};
+// WEEK4 :: Simulate Hierarchical Level Directory
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-typedef struct tree_element node;
+// Define tree node structure
+typedef struct tree_element {
+    char name[20];              // Directory or file name
+    int ftype;                  // 1 = Directory, 2 = File
+    int nc;                     // Number of children (only for directories)
+    int level;                  // Depth level
+    struct tree_element *link[5]; // Child pointers (max 5)
+} node;
 
-void main()
-{
-	int gd=DETECT,gm; node *root; root=NULL;
-	//clrscr();
-	create(&root,0,"root",0,639,320); clrscr(); initgraph(&gd,&gm,"c:\\tc\\BGI"); display(root);
-	//getch(); 
-	closegraph();
+// Function prototypes
+void create(node **root, int lev, const char *parentName);
+void display(node *root, int indent);
+
+int main() {
+    node *root = NULL;
+
+    // Create root directory
+    create(&root, 0, "root");
+
+    // Display hierarchical structure
+    printf("\n\nHierarchical Directory Structure:\n");
+    display(root, 0);
+
+    return 0;
 }
-create(node **root,int lev,char *dname,int lx,int rx,int x)
-{
-	int i,gap;
-	if(*root==NULL)
-	{
-		(*root)=(node *)malloc(sizeof(node));
-		printf("Enter name of dir/file(under %s) :",dname);
-		fflush(stdin);
-		gets((*root)->name);
-		printf("enter 1 for Dir/2 forfile :");
-		scanf("%d",&(*root)->ftype);
-		(*root)->level=lev;
-		(*root)->y=50+lev*50;
-		(*root)->x=x;
-		(*root)->lx=lx;
-		(*root)->rx=rx;
-		for(i=0;i<5;i++)
-			(*root)->link[i]=NULL;
-			if((*root)->ftype==1)
-			{
-				printf("No of sub directories/files(for %s):",(*root)->name); scanf("%d",&(*root)->nc); if((*root)->nc==0)
-				gap=rx-lx;
-			else
-				gap=(rx-lx)/(*root)->nc;
-				for(i=0;i<(*root)->nc;i++)
-					create(&((*root)->link[i]),lev+1,(*root)->name,lx+gap*i,lx+gap*i+gap,lx+gap*i+gap/2);
-			}
-		else (*root)->nc=0;
-}}
-display(node *root){
-int i; settextstyle(2,0,4); settextjustify(1,1); setfillstyle(1,BLUE);
-setcolor(14); if(root!=NULL){
-for(i=0;i<root->nc;i++){
-line(root->x,root->y,root->link[i]->x,root->link[i]->y);
+
+// Recursive function to create directory/file
+void create(node **root, int lev, const char *parentName) {
+    int i;
+
+    if (*root == NULL) {
+        *root = (node *)malloc(sizeof(node));
+
+        printf("\nEnter name of dir/file (under %s): ", parentName);
+        scanf("%s", (*root)->name);
+
+        // Input validation for ftype
+        do {
+            printf("Enter 1 for Directory / 2 for File: ");
+            scanf("%d", &(*root)->ftype);
+            if ((*root)->ftype != 1 && (*root)->ftype != 2) {
+                printf("Invalid choice! Please enter 1 or 2.\n");
+            }
+        } while ((*root)->ftype != 1 && (*root)->ftype != 2);
+
+        (*root)->level = lev;
+        (*root)->nc = 0;
+
+        // If directory, ask for children
+        if ((*root)->ftype == 1) {
+            printf("Number of subdirectories/files under %s: ", (*root)->name);
+            scanf("%d", &(*root)->nc);
+
+            if ((*root)->nc > 5) {
+                printf("Maximum 5 children allowed. Setting to 5.\n");
+                (*root)->nc = 5;
+            }
+
+            for (i = 0; i < (*root)->nc; i++) {
+                (*root)->link[i] = NULL;
+                create(&((*root)->link[i]), lev + 1, (*root)->name);
+            }
+        } else {
+            // File cannot have children
+            (*root)->nc = 0;
+            for (i = 0; i < 5; i++) {
+                (*root)->link[i] = NULL;
+            }
+        }
+    }
 }
-if(root->ftype==1) bar3d(root->x-20,root->y-10,root->x+20,root->y+10,0,0); else fillellipse(root->x,root->y,20,20);
-outtextxy(root->x,root->y,root->name); for(i=0;i<root->nc;i++)
-{
-display(root->link[i]);
-}
-}
+
+// Recursive function to display directory tree
+void display(node *root, int indent) {
+    if (root != NULL) {
+        // Print indentation for hierarchy
+        for (int i = 0; i < indent; i++) {
+            printf("   ");
+        }
+
+        // Print directory/file name
+        if (root->ftype == 1)
+            printf("[DIR] %s\n", root->name);
+        else
+            printf("[FILE] %s\n", root->name);
+
+        // Display children (only if directory)
+        for (int i = 0; i < root->nc; i++) {
+            display(root->link[i], indent + 1);
+        }
+    }
 }

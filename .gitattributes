@@ -1,33 +1,54 @@
 # --- Core source files ---
-*.c     text eol=lf
-*.cpp   text eol=lf
-*.h     text eol=lf
-*.java  text eol=lf
-*.sql   text eol=lf
+*.c       text eol=lf
+*.cpp     text eol=lf
+*.h       text eol=lf
+*.java    text eol=lf
+*.sql     text eol=lf
+*.py      text eol=lf
+*.html    text eol=lf
+*.css     text eol=lf
+*.js      text eol=lf
+*.xml     text eol=lf
+*.dtd     text eol=lf
 
 # --- Scripts ---
-*.sh    text eol=lf
-*.bat   text eol=crlf
-*.ps1   text eol=crlf
+*.sh      text eol=lf
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+*.ps1     text eol=crlf
 
 # --- Config / metadata ---
-*.xml   text eol=lf
-*.json  text eol=lf
-*.yml   text eol=lf
-*.yaml  text eol=lf
-*.ini   text eol=lf
+*.json    text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.ini     text eol=lf
+*.properties text eol=lf
 
 # --- Documentation ---
-*.md    text eol=lf
-*.txt   text eol=lf
+*.md      text eol=lf
+*.txt     text eol=lf
+
+# --- IDE / project files ---
+# IntelliJ / PyCharm
+*.iml     text eol=lf
+.idea/*   text eol=lf
+# VS Code
+.vscode/* text eol=lf
 
 # --- Special cases ---
 # Keep binary files untouched
-*.png   binary
-*.jpg   binary
-*.jpeg  binary
-*.gif   binary
-*.pdf   binary
-*.zip   binary
-*.exe   binary
-*.dll   binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.pdf     binary
+*.zip     binary
+*.exe     binary
+*.dll     binary
+*.so      binary
+*.o       binary
+*.obj     binary
+*.class   binary
+*.jar     binary
+*.war     binary
+*.ear     binary

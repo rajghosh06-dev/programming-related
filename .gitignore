@@ -1,0 +1,56 @@
+# --- General OS/Editor junk ---
+*.log
+*.tmp
+*.swp
+*.bak
+*.DS_Store
+Thumbs.db
+
+# --- Java ---
+*.class
+*.jar
+*.war
+*.ear
+##out/
+target/
+.idea/
+*.iml
+
+# --- C / C++ ---
+*.o
+##*.obj
+##*.exe
+*.dll
+*.so
+##*.out
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+build/
+dist/
+
+# --- Assembly (CAALP) ---
+##*.obj
+##*.exe
+##*.lst
+
+# --- Web (HTML, CSS, JS, XML, DTD) ---
+# Usually keep source files, ignore generated/minified or cache
+*.min.js
+*.min.css
+node_modules/
+.env
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.iml
+
+# --- Misc ---
+*.class
+*.db
+*.sqlite

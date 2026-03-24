@@ -6,23 +6,28 @@
 *.DS_Store
 Thumbs.db
 
-# --- Java ---
+# --- Java / Web ---
 *.class
 *.jar
 *.war
 *.ear
-##out/
+out/
 target/
+WEB-INF/classes/
+WEB-INF/lib/
+
+# --- IDEs ---
 .idea/
 *.iml
+.vscode/
 
 # --- C / C++ ---
 *.o
-##*.obj
-##*.exe
+*.obj
+*.exe
 *.dll
 *.so
-##*.out
+*.out
 
 # --- Python ---
 __pycache__/
@@ -33,24 +38,16 @@ __pycache__/
 build/
 dist/
 
-# --- Assembly (CAALP) ---
-##*.obj
-##*.exe
-##*.lst
+# --- Assembly ---
+*.lst
 
 # --- Web (HTML, CSS, JS, XML, DTD) ---
-# Usually keep source files, ignore generated/minified or cache
+# Keep source files, ignore generated/minified or cache
 *.min.js
 *.min.css
 node_modules/
 .env
 
-# --- IDEs ---
-.vscode/
-.idea/
-*.iml
-
-# --- Misc ---
-*.class
+# --- Databases ---
 *.db
 *.sqlite

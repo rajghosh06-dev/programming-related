@@ -31,6 +31,8 @@ public class MatrixChainMul
 
         System.out.print("Optimal Parenthesization: ");
         printOptimal(1, n);
+
+        sc.close();
     }
 
     static void matrixChainOrder(int[] p, int n)

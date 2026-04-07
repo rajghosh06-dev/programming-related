@@ -19,7 +19,10 @@ public class SecondServlet extends HttpServlet
                 out.print("<h2>Cookies stored:</h2>");
                 for (Cookie c : ck)
                 {
-                    out.print("<p>" + c.getName() + " = " + c.getValue() + "</p>");
+                    if ("uname".equals(c.getName()))
+                    {
+                        out.print("<h2>Hello " + c.getValue() + "</h2>");
+                    }
                 }
             }
             else

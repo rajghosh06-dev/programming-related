@@ -6,7 +6,8 @@ public class SecondServlet extends HttpServlet
 {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
@@ -18,9 +19,12 @@ public class SecondServlet extends HttpServlet
         String name = config.getInitParameter("username");
         String pass = config.getInitParameter("password");
 
-        if (n != null && p != null && n.equals(name) && p.equals(pass)) {
+        if (n != null && p != null && n.equals(name) && p.equals(pass))
+        {
             out.println("<h2>Welcome " + n + "</h2>");
-        } else {
+        }
+        else
+        {
             out.println("<h2>Sorry username or password error</h2>");
             RequestDispatcher rd = request.getRequestDispatcher("/index.html");
             rd.include(request, response);

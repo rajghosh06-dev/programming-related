@@ -90,15 +90,15 @@ Instead of isolated snapshots, the directory layout captures iterative growth ov
 <table>
 <tr>
 <td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/2c53be5d886acfba7078e654a04ddd9043da63bc">feat: finalize README automation, stable hero badge, and repo hygiene</a></strong><br />
-<sub>Apr 12, 2026 · 07:02 AM UTC</sub>
+<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/ca6bd090a43e811c0d471eff23c7a21c325f8120">chore: sync README automation</a></strong><br />
+<sub>Apr 12, 2026 · 07:03 AM UTC</sub>
 
 <br /><br />
 
 <strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
+<strong>Committed by:</strong> rajghosh06-dev<br />
 <strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>2c53be5</code>
+<strong>Commit:</strong> <code>ca6bd09</code>
 </td>
 <td width="50%" valign="top">&nbsp;</td>
 </tr>
@@ -275,7 +275,7 @@ This matrix is generated from repository analytics and local metadata.
 
 ## Data Snapshot
 
-- Generated at: **2026-04-12 07:03:21 UTC**
+- Generated at: **2026-04-12 09:03:43 UTC**
 - Scanned files: **1513**
 - Tracked language files: **741**
 
@@ -288,7 +288,7 @@ This matrix is generated from repository analytics and local metadata.
 | C++ | 47 | 918 |
 | JSON | 36 | 16068 |
 | Assembly | 8 | 208 |
-| Markdown | 6 | 568 |
+| Markdown | 6 | 510 |
 | Python | 5 | 922 |
 | PHP | 4 | 221 |
 | CSS | 3 | 124 |

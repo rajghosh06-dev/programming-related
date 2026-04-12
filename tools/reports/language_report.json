@@ -1,0 +1,135 @@
+{
+  "generated_at_utc": "2026-04-12 07:00:55 UTC",
+  "repository": "PROGRAMMING-RELATED",
+  "scanned_files": 1538,
+  "tracked_language_files": 741,
+  "languages": [
+    {
+      "language": "C",
+      "files": 278,
+      "lines": 17029
+    },
+    {
+      "language": "Java",
+      "files": 174,
+      "lines": 8098
+    },
+    {
+      "language": "HTML",
+      "files": 116,
+      "lines": 3343
+    },
+    {
+      "language": "XML",
+      "files": 53,
+      "lines": 1417
+    },
+    {
+      "language": "C++",
+      "files": 47,
+      "lines": 918
+    },
+    {
+      "language": "JSON",
+      "files": 36,
+      "lines": 16068
+    },
+    {
+      "language": "Assembly",
+      "files": 8,
+      "lines": 208
+    },
+    {
+      "language": "Markdown",
+      "files": 6,
+      "lines": 568
+    },
+    {
+      "language": "Python",
+      "files": 5,
+      "lines": 922
+    },
+    {
+      "language": "PHP",
+      "files": 4,
+      "lines": 221
+    },
+    {
+      "language": "CSS",
+      "files": 3,
+      "lines": 124
+    },
+    {
+      "language": "JavaScript",
+      "files": 3,
+      "lines": 116
+    },
+    {
+      "language": "C/C++ Header",
+      "files": 3,
+      "lines": 17
+    },
+    {
+      "language": "Jupyter Notebook",
+      "files": 2,
+      "lines": 102
+    },
+    {
+      "language": "YAML",
+      "files": 1,
+      "lines": 45
+    },
+    {
+      "language": "PowerShell",
+      "files": 1,
+      "lines": 42
+    },
+    {
+      "language": "Makefile",
+      "files": 1,
+      "lines": 18
+    }
+  ],
+  "top_directories": [
+    {
+      "path": "2nd-Year/2-2/Web-Technologies/gcet_programs",
+      "files": 66
+    },
+    {
+      "path": "2nd-Year/2-2/Web-Technologies/CLASS/tempC",
+      "files": 11
+    },
+    {
+      "path": "2nd-Year/2-1/temp/OBJECT ORIENTED PROGRAMMING [JAVA]/GCET/src/beginning/Arithmetic_Operation",
+      "files": 10
+    },
+    {
+      "path": "2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]/GCET/src/beginning/Arithmetic_Operation",
+      "files": 10
+    },
+    {
+      "path": "2nd-Year/2-2/Operating-System/PBL/page-replacement",
+      "files": 9
+    },
+    {
+      "path": "2nd-Year/2-2/Web-Technologies/LAB/BASIC/2026JAN20/Program9 - College Website",
+      "files": 8
+    },
+    {
+      "path": "2nd-Year/2-2/Assembly-Language-Programming/doslab",
+      "files": 8
+    },
+    {
+      "path": "2nd-Year/2-1/temp/OBJECT ORIENTED PROGRAMMING [JAVA]/GCET/src/practice",
+      "files": 8
+    },
+    {
+      "path": "2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]/GCET/src/practice",
+      "files": 8
+    },
+    {
+      "path": "1st-Year/Programming for Problem Solving/24R11A6685/PPS-1/CHAPTER-Wise/UNIT-2/PRINT Patterns/NUMBERS",
+      "files": 8
+    }
+  ]
+}

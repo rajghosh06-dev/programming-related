@@ -1,0 +1,45 @@
+name: Sync Repository README
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */4 * * *"
+  push:
+    paths:
+      - "tools/analyze_repo.py"
+      - "tools/generate_readme.py"
+      - "tools/data/project_directory.json"
+      - "tools/update_project_directory.py"
+      - "tools/validate_readme_assets.py"
+      - ".github/workflows/sync-readme.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Regenerate README and reports
+        run: python tools/generate_readme.py
+
+      - name: Validate README assets
+        run: python tools/validate_readme_assets.py
+
+      - name: Commit updated README if needed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: sync README automation"
+          file_pattern: |
+            README.md
+            tools/reports/language_report.json
+            tools/reports/language_report.md

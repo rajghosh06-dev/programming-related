@@ -40,6 +40,8 @@ dist/
 
 # --- Assembly ---
 *.lst
+*.backup*
+*.bak~
 
 # --- Web (HTML, CSS, JS, XML, DTD) ---
 # Keep source files, ignore generated/minified or cache
@@ -47,6 +49,15 @@ dist/
 *.min.css
 node_modules/
 .env
+
+# --- Tooling / automation ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+tools/**/__pycache__/
+tools/reports/*.tmp
+tools/reports/*.bak
+tools/reports/*.old
 
 # --- Databases ---
 *.db

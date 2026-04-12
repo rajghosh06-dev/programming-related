@@ -1,0 +1,51 @@
+[
+  {
+    "project": "Programming for Problem Solving",
+    "subject": "PPS",
+    "stack": "C",
+    "description": "First-year foundational problem-solving programs, assignments, and practice sets in C.",
+    "path": "1st-Year/Programming for Problem Solving"
+  },
+  {
+    "project": "Data Structures Coursework",
+    "subject": "DS",
+    "stack": "C, C++",
+    "description": "Core data structures implementation and semester lab work for second-year DS curriculum.",
+    "path": "2nd-Year/2-1/DATA STRUCTURES [C Language]"
+  },
+  {
+    "project": "Object Oriented Programming",
+    "subject": "OOP",
+    "stack": "Java",
+    "description": "Java-based OOP practice, classroom exercises, and modular coding experiments.",
+    "path": "2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]"
+  },
+  {
+    "project": "Web Technologies Lab",
+    "subject": "WT",
+    "stack": "HTML, CSS, JavaScript, PHP, MySQL",
+    "description": "Web lab implementations including frontend pages, server-side workflows, and local database connectivity.",
+    "path": "2nd-Year/2-2/Web-Technologies"
+  },
+  {
+    "project": "Design and Analysis of Algorithms",
+    "subject": "DAA",
+    "stack": "C++, Java",
+    "description": "DAA class and lab material with implementation-driven algorithm study and project folders.",
+    "path": "2nd-Year/2-2/Design-and-Analysis-of-Algorithms"
+  },
+  {
+    "project": "Operating System Practice",
+    "subject": "OS",
+    "stack": "C, Shell",
+    "description": "Operating-system oriented exercises including PBL and week-wise implementation notes.",
+    "path": "2nd-Year/2-2/Operating-System"
+  },
+  {
+    "project": "Assembly Language Programming",
+    "subject": "ALP",
+    "stack": "Assembly",
+    "description": "Assembly-level coursework and DOS-based practical experiments.",
+    "path": "2nd-Year/2-2/Assembly-Language-Programming"
+  }
+]

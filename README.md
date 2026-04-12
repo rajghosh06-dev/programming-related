@@ -1,354 +1,319 @@
-<!-- THIS FILE IS AUTO-GENERATED. Edit tools/data/project_directory.json and run python tools/generate_readme.py. -->
+<!-- AUTO-GENERATED: Edit .github/readme-automation/data/project_directory.json and run generate_readme.py -->
 
-<div align="center">
+<div align="center" style="backdrop-filter: blur(20px); background: radial-gradient(circle, rgba(0, 221, 255, 0.05), rgba(57, 255, 20, 0.02)); padding: 20px; border-radius: 20px; border: 1px solid rgba(0, 221, 255, 0.2); margin: 10px 0;">
 
-# Programming Related
+<img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:0a0e27,50:00DDFF,100:39FF14&text=PROGRAMMING-RELATED&fontColor=ffffff&fontSize=50&animation=fadeIn&desc=Structured%20Coursework%20%7C%20Labs%20%7C%20Implementation&descAlignY=63" alt="Hero Banner" />
 
-### A Living Coursework Atlas for Code, Labs, and Semester Projects
+### 📚 Academic Engineering Portfolio
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=160&color=0:0B132B,45:1C2541,100:3A506B&text=PROGRAMMING%20RELATED&fontColor=FFFFFF&fontSize=34&fontAlignY=36" alt="Programming Related Banner" />
+*Comprehensive coursework spanning foundational problem-solving through advanced algorithms and systems programming*
 
-<br />
-
-<p><strong>Programming Related</strong> is a high-structure repository designed for semester-wise learning, implementation practice, and long-term revision across multiple technical subjects.</p>
-
-<br />
-
-<img src="https://img.shields.io/badge/Open_on_GitHub-View_Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="Open on GitHub" />
-<img src="https://img.shields.io/badge/Mode-Revision%20Friendly-00A8E8?style=flat-square" alt="Mode" />
-<img src="https://img.shields.io/badge/Layout-Year%20Wise-2EC4B6?style=flat-square" alt="Layout" />
-<img src="https://img.shields.io/badge/Status-Maintained-52B788?style=flat-square" alt="Status" />
-
-<br />
-
-<img src="https://img.shields.io/github/repo-size/rajghosh06-dev/programming-related?style=flat-square&color=2563EB" alt="Repository Size" />
-<img src="https://img.shields.io/github/last-commit/rajghosh06-dev/programming-related?style=flat-square&color=7C3AED" alt="Last Commit" />
-<img src="https://img.shields.io/github/languages/count/rajghosh06-dev/programming-related?style=flat-square&color=F4A261" alt="Language Count" />
-<img src="https://img.shields.io/github/license/rajghosh06-dev/programming-related?style=flat-square&color=6A4C93" alt="License" />
-
-<br />
-
-<img src="https://img.shields.io/github/stars/rajghosh06-dev/programming-related?style=social" alt="GitHub Stars" />
-<img src="https://img.shields.io/github/forks/rajghosh06-dev/programming-related?style=social" alt="GitHub Forks" />
-<img src="https://img.shields.io/github/watchers/rajghosh06-dev/programming-related?style=social" alt="GitHub Watchers" />
+<div style="background: rgba(0, 221, 255, 0.1); border: 1px solid rgba(0, 221, 255, 0.3); border-radius: 12px; padding: 8px 16px; backdrop-filter: blur(10px); display: inline-block; margin: 4px;">
+<img src="https://img.shields.io/badge/Years-2024--2026-00DDFF?style=flat-square" alt="Years" />
+<img src="https://img.shields.io/badge/Projects-7-39FF14?style=flat-square" alt="Projects" />
+<img src="https://img.shields.io/badge/Languages-12+-FF00FF?style=flat-square" alt="Languages" />
+<img src="https://img.shields.io/github/last-commit/rajghosh06-dev/programming-related/main?label=Updated&style=flat-square&color=00FF88" alt="Last Update" />
+</div>
 
 </div>
 
-<br />
+---
 
-```text
-Pulse      : College coding archive with implementation-first discipline
-Structure  : Year -> Semester -> Subject -> Exercises / Labs / Projects
-Outcome    : Faster revision, cleaner navigation, and showcase-ready documentation
-```
+<div style="background: rgba(57, 255, 20, 0.08); border-left: 4px solid #39FF14; border-radius: 8px; padding: 16px; backdrop-filter: blur(10px); margin: 16px 0;">
+
+## 📖 Purpose & Vision
+
+**PROGRAMMING-RELATED** is a structured repository capturing academic progression across computer science fundamentals:
+
+- **Clarity:** Well-organized coursework by year and subject for easy navigation
+- **Completeness:** Full lab implementations, assignments, and practical code exercises  
+- **Professional:** Portfolio-quality code structure and documentation
+- **Growth:** Clear progression from foundational concepts in Year 1 to advanced systems in Year 2
+
+This portfolio demonstrates disciplined coding practices, algorithm implementation mastery, and real-world software engineering principles.
+
+</div>
 
 ---
 
-## Repository Identity
+## 🗂️ Subject Portfolio Matrix
 
-This repository is intentionally designed as an academic engineering notebook, not just a dump of files.
+<div align="center" style="background: rgba(0, 221, 255, 0.05); border-radius: 16px; padding: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(0, 221, 255, 0.2); margin: 12px auto; max-width: 920px;">
+<table align="center" style="margin: 0 auto; border-collapse: separate; border-spacing: 8px;">
+<tr>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #00DDFF; border-radius: 12px; background: rgba(0, 221, 255, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(0, 221, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #00DDFF; text-shadow: 0 0 8px #00DDFF;">PPS</strong><br /><small style="color: rgba(0, 221, 255, 0.9);">C</small></td>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #FF00FF; border-radius: 12px; background: rgba(255, 0, 255, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(255, 0, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #FF00FF; text-shadow: 0 0 8px #FF00FF;">DS</strong><br /><small style="color: rgba(255, 0, 255, 0.9);">C, C++</small></td>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #39FF14; border-radius: 12px; background: rgba(57, 255, 20, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(57, 255, 20, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #39FF14; text-shadow: 0 0 8px #39FF14;">OOP</strong><br /><small style="color: rgba(57, 255, 20, 0.9);">Java</small></td>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #B310F0; border-radius: 12px; background: rgba(179, 16, 240, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(179, 16, 240, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #B310F0; text-shadow: 0 0 8px #B310F0;">WT</strong><br /><small style="color: rgba(179, 16, 240, 0.9);">HTML, CSS, JavaScript, PHP, MySQL</small></td>
+</tr>
+<tr>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #0099FF; border-radius: 12px; background: rgba(0, 153, 255, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(0, 153, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #0099FF; text-shadow: 0 0 8px #0099FF;">DAA</strong><br /><small style="color: rgba(0, 153, 255, 0.9);">C++, Java</small></td>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #FF006E; border-radius: 12px; background: rgba(255, 0, 110, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(255, 0, 110, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #FF006E; text-shadow: 0 0 8px #FF006E;">OS</strong><br /><small style="color: rgba(255, 0, 110, 0.9);">C, Shell</small></td>
+<td align="center" valign="middle" style="padding: 14px; text-align: center; vertical-align: middle; border: 2px solid #00DDFF; border-radius: 12px; background: rgba(0, 221, 255, 0.12); backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(0, 221, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2); min-width: 140px;"><strong style="color: #00DDFF; text-shadow: 0 0 8px #00DDFF;">ALP</strong><br /><small style="color: rgba(0, 221, 255, 0.9);">Assembly</small></td>
+</tr>
 
-It prioritizes:
+</table>
+</div>
 
-- clear year/semester progression,
-- implementation-oriented learning records,
-- reusable practice references before exams,
-- and a professional presentation layer suitable for collaboration.
+
+### 🎯 Portfolio Highlights
+
+<table style="width: 100%; border-collapse: collapse; background: rgba(57, 255, 20, 0.05); border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 8px; backdrop-filter: blur(10px); overflow: hidden;">
+<tr style="background: rgba(57, 255, 20, 0.1); border-bottom: 2px solid rgba(57, 255, 20, 0.3);">
+<th style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px; text-align: left;"><strong>Feature</strong></th>
+<th style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px; text-align: left;"><strong>Details</strong></th>
+</tr>
+<tr style="background: rgba(57, 255, 20, 0.03);">
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;"><strong>Years Covered</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;">2024-2026 (1st & 2nd Year CSE)</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;"><strong>Total Projects</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;">7 major subject streams</td>
+</tr>
+<tr style="background: rgba(57, 255, 20, 0.03);">
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;"><strong>Code Files Tracked</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;">750+ language files</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;"><strong>Implementation Focus</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;">Labs, assignments, and practical coursework</td>
+</tr>
+<tr style="background: rgba(57, 255, 20, 0.03);">
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;"><strong>Professional Goal</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(57, 255, 20, 0.2); border-radius: 4px;">Exam revision, portfolio clarity, skill demonstration</td>
+</tr>
+</table>
+
+
 
 ---
 
-## Academic Atlas
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(0, 221, 255, 0.4); background: linear-gradient(135deg, rgba(0, 221, 255, 0.18), rgba(0, 255, 136, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(0, 221, 255, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(0, 221, 255, 0.85);">📊 REPOSITORY ANALYTICS</strong>
+</div>
+</div></div>
 
-The repository spans first-year fundamentals and second-year specialization tracks including DSA, OOP, OS, DAA, Web Technologies, SQL, and Assembly.
+<table style="width: 100%; border-collapse: collapse; background: rgba(24, 10, 42, 0.62); border: 1px solid rgba(255, 0, 255, 0.24); border-radius: 14px; backdrop-filter: blur(14px); overflow: hidden; margin: 12px 0; box-shadow: 0 14px 34px rgba(255, 0, 255, 0.10);">
+<tr style="background: rgba(255, 0, 255, 0.14); border-bottom: 2px solid rgba(255, 0, 255, 0.25);">
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.16); border-radius: 4px; text-align: left;"><strong>Language</strong></th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.16); border-radius: 4px; text-align: right;"><strong>Files</strong></th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.16); border-radius: 4px; text-align: right;"><strong>Lines</strong></th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.16); border-radius: 4px; text-align: right;"><strong>Contribution</strong></th>
+</tr>
+<tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>C</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>278</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>17,029</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>37.1%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>Java</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>174</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>8,098</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>23.2%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>HTML</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>116</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>3,343</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>15.5%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>XML</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>53</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>1,417</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>7.1%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>C++</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>47</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>918</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>6.3%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>JSON</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>38</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>16,254</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>5.1%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>Python</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>9</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>953</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>1.2%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>Markdown</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>8</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>560</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>1.1%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>Assembly</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>8</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>208</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>1.1%</td></tr><tr style='background: rgba(255, 0, 255, 0.05);'><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px;'><strong>PHP</strong></td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>4</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>221</td><td style='padding: 10px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 4px; text-align: right;'>0.5%</td></tr>
+</table>
 
-Instead of isolated snapshots, the directory layout captures iterative growth over semesters while keeping code discoverable.
+**📊 Scan Summary:** 1,547 total files • 750 language files
+
+**Languages Detected:** 12+  
+**Primary Stacks:** C (37.1%) • Java (23.2%) • Web Tech (15.5%)  
+**Coverage:** Foundational to Advanced Computer Science
+
+
 
 ---
 
-## Project Directory
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255, 0, 255, 0.4); background: linear-gradient(135deg, rgba(255, 0, 255, 0.18), rgba(255, 20, 147, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(255, 0, 255, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(255, 0, 255, 0.85);">🎓 COURSE BREAKDOWN</strong>
+</div>
+</div></div>
 
 <!-- AUTO:PROJECT_DIRECTORY:START -->
 | PROJECT | SUBJECT | STACK | DESCRIPTION | LAST UPDATE | BRANCHES | REPOSITORY |
 | --- | --- | --- | --- | --- | --- | --- |
-| **Programming for Problem Solving** | PPS | C | First-year foundational problem-solving programs, assignments, and practice sets in C. | Apr 12, 2026 | `main` | [`1st-Year/Programming for Problem Solving`](https://github.com/rajghosh06-dev/programming-related/tree/main/1st-Year/Programming%20for%20Problem%20Solving) |
-| **Data Structures Coursework** | DS | C, C++ | Core data structures implementation and semester lab work for second-year DS curriculum. | Apr 12, 2026 | `main` | [`2nd-Year/2-1/DATA STRUCTURES [C Language]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/DATA%20STRUCTURES%20%5BC%20Language%5D) |
-| **Object Oriented Programming** | OOP | Java | Java-based OOP practice, classroom exercises, and modular coding experiments. | Apr 12, 2026 | `main` | [`2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/OBJECT%20ORIENTED%20PROGRAMMING%20%5BJAVA%5D) |
+| **Programming for Problem Solving** | PPS | C | First-year foundational problem-solving programs, assignments, and practice sets in C. | Feb 28, 2026 | `main` | [`1st-Year/Programming for Problem Solving`](https://github.com/rajghosh06-dev/programming-related/tree/main/1st-Year/Programming%20for%20Problem%20Solving) |
+| **Data Structures Coursework** | DS | C, C++ | Core data structures implementation and semester lab work for second-year DS curriculum. | Feb 28, 2026 | `main` | [`2nd-Year/2-1/DATA STRUCTURES [C Language]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/DATA%20STRUCTURES%20%5BC%20Language%5D) |
+| **Object Oriented Programming** | OOP | Java | Java-based OOP practice, classroom exercises, and modular coding experiments. | Mar 25, 2026 | `main` | [`2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/OBJECT%20ORIENTED%20PROGRAMMING%20%5BJAVA%5D) |
 | **Web Technologies Lab** | WT | HTML, CSS, JavaScript, PHP, MySQL | Web lab implementations including frontend pages, server-side workflows, and local database connectivity. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Web-Technologies`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Web-Technologies) |
 | **Design and Analysis of Algorithms** | DAA | C++, Java | DAA class and lab material with implementation-driven algorithm study and project folders. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Design-and-Analysis-of-Algorithms`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Design-and-Analysis-of-Algorithms) |
-| **Operating System Practice** | OS | C, Shell | Operating-system oriented exercises including PBL and week-wise implementation notes. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Operating-System`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Operating-System) |
-| **Assembly Language Programming** | ALP | Assembly | Assembly-level coursework and DOS-based practical experiments. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Assembly-Language-Programming`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Assembly-Language-Programming) |
+| **Operating System Practice** | OS | C, Shell | Operating-system oriented exercises including PBL and week-wise implementation notes. | Mar 25, 2026 | `main` | [`2nd-Year/2-2/Operating-System`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Operating-System) |
+| **Assembly Language Programming** | ALP | Assembly | Assembly-level coursework and DOS-based practical experiments. | Mar 25, 2026 | `main` | [`2nd-Year/2-2/Assembly-Language-Programming`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Assembly-Language-Programming) |
 <!-- AUTO:PROJECT_DIRECTORY:END -->
 
-> This table is generated from tools/data/project_directory.json and local git history.
+> **Source:** Auto-synced from `.github/readme-automation/data/project_directory.json` + Git metadata
 
 ---
-
-## Commit Pulse
 
 <div align="center">
-
-<table>
-<tr>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/2c53be5d886acfba7078e654a04ddd9043da63bc">feat: finalize README automation, stable hero badge, and repo hygiene</a></strong><br />
-<sub>Apr 12, 2026 · 07:02 AM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>2c53be5</code>
-</td>
-<td width="50%" valign="top">&nbsp;</td>
-</tr>
-</table>
-
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(57, 255, 20, 0.4); background: linear-gradient(135deg, rgba(57, 255, 20, 0.18), rgba(0, 255, 0, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(57, 255, 20, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(57, 255, 20, 0.85);">🛠 TECH STACK &amp; TOOLS</strong>
 </div>
-
-> This section is generated from the latest local repository commits.
-
----
-
-## Navigation Blueprint
-
-- Year-wise and semester-wise segregation for fast navigation.
-- Subject-specific folders for focused coursework and practice.
-- Root-level automation utilities for analysis and README synchronization.
-
-### Typical flow
-
-`Concept -> Practice -> Lab -> Project -> Reflection -> Cleanup`
-
----
-
-## Evolution Roadmap
-
-- [ ] Add deeper static analysis for folder-level quality checks.
-- [ ] Add auto-generated execution matrix for language-specific run commands.
-- [ ] Add optional badges for assignment and project completion coverage.
-- [ ] Add repository health summary with trend snapshots.
-
----
-
-## Skill Stack Matrix
-
-This matrix is generated from repository analytics and local metadata.
+</div></div>
 
 ### Languages
 
-<div align="center">
+Foundational & production-ready languages used across all projects:
 
-<table>
-<tr>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" width="64" height="64" /><br />
-<strong>C</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="64" height="64" /><br />
-<strong>Java</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML" width="64" height="64" /><br />
-<strong>HTML</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="64" height="64" /><br />
-<strong>C++</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://img.shields.io/badge/ASM-111827?style=for-the-badge&logo=gnuassembler&logoColor=white" alt="Assembly" width="64" height="64" /><br />
-<strong>Assembly</strong>
-</td>
-</tr>
-</table>
-
-<table>
-<tr>
-<td align="center" width="33%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="64" height="64" /><br />
-<strong>Python</strong>
-</td>
-<td align="center" width="33%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="PHP" width="64" height="64" /><br />
-<strong>PHP</strong>
-</td>
-<td align="center" width="33%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" alt="CSS" width="64" height="64" /><br />
-<strong>CSS</strong>
-</td>
-</tr>
-</table>
-
+<div align="center" style="margin: 12px 0;">
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.03); border-radius: 8px; border: 1px solid rgba(0, 221, 255, 0.15);"><tr><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">C</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Java</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">HTML</strong></td></tr></table>
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.03); border-radius: 8px; border: 1px solid rgba(0, 221, 255, 0.15);"><tr><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">C++</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Python</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://img.shields.io/badge/ASM-FF006E?style=flat-square&logo=gnuassembler&logoColor=white" alt="Assembly" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Assembly</strong></td></tr></table>
 </div>
 
-### Frameworks and Runtime Stack
+### Frameworks & Libraries
 
-<div align="center">
+Build systems and specialized tools for specific domains:
 
-<table>
-<tr>
-<td align="center" width="25%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/maven/maven-original.svg" alt="Maven" width="64" height="64" /><br />
-<strong>Maven</strong>
-</td>
-<td align="center" width="25%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="JDBC" width="64" height="64" /><br />
-<strong>JDBC</strong>
-</td>
-<td align="center" width="25%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" alt="NumPy" width="64" height="64" /><br />
-<strong>NumPy</strong>
-</td>
-<td align="center" width="25%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" alt="Pandas" width="64" height="64" /><br />
-<strong>Pandas</strong>
-</td>
-</tr>
-</table>
-
-<table>
-<tr>
-<td align="center" width="100%">
-<img src="https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white" alt="XAMPP" width="64" height="64" /><br />
-<strong>XAMPP</strong>
-</td>
-</tr>
-</table>
-
+<div align="center" style="margin: 12px 0;">
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.03); border-radius: 8px; border: 1px solid rgba(0, 221, 255, 0.15);"><tr><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/maven/maven-original.svg" alt="Maven" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Maven</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="JDBC" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">JDBC</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://img.shields.io/badge/XAMPP-FB7A24?style=flat-square&logo=xampp&logoColor=white" alt="XAMPP" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">XAMPP</strong></td></tr></table>
 </div>
 
-### Tools
+### Development Tools
 
-<div align="center">
+Professional-grade IDEs and utilities for coding, debugging, and version control:
 
-<table>
-<tr>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" alt="VS Code" width="64" height="64" /><br />
-<strong>VS Code</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" alt="Git" width="64" height="64" /><br />
-<strong>Git</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/intellij/intellij-original.svg" alt="IntelliJ" width="64" height="64" /><br />
-<strong>IntelliJ</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="64" height="64" /><br />
-<strong>Jupyter</strong>
-</td>
-<td align="center" width="20%">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="Dev C++" width="64" height="64" /><br />
-<strong>Dev C++</strong>
-</td>
-</tr>
-</table>
-
-<table>
-<tr>
-<td align="center" width="50%">
-<img src="https://img.shields.io/badge/Code::Blocks-3C5A99?style=for-the-badge" alt="Code::Blocks" width="64" height="64" /><br />
-<strong>Code::Blocks</strong>
-</td>
-<td align="center" width="50%">
-<img src="https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white" alt="XAMPP" width="64" height="64" /><br />
-<strong>XAMPP</strong>
-</td>
-</tr>
-</table>
-
+<div align="center" style="margin: 12px 0;">
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.03); border-radius: 8px; border: 1px solid rgba(0, 221, 255, 0.15);"><tr><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg" alt="VS Code" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">VS Code</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" alt="Git" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Git</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/intellij/intellij-original.svg" alt="IntelliJ" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">IntelliJ</strong></td></tr></table>
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.03); border-radius: 8px; border: 1px solid rgba(0, 221, 255, 0.15);"><tr><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jupyter/jupyter-original.svg" alt="Jupyter" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Jupyter</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="Dev C++" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Dev C++</strong></td><td align="center" width="33%" style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; background: rgba(0, 221, 255, 0.05); backdrop-filter: blur(8px);"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/eclipse/eclipse-original.svg" alt="Eclipse" width="56" height="56" style="filter: drop-shadow(0 0 4px rgba(0, 221, 255, 0.3));" /><br /><strong style="color: rgba(0, 221, 255, 0.9); margin-top: 8px; display: block;">Eclipse</strong></td></tr></table>
 </div>
 
 ### What We Optimize For
 
-- Fast navigation across years, subjects, and lab modules.
-- Honest documentation that is practical for revision sessions.
-- Reproducible execution patterns for common language stacks.
-- Low-maintenance automation that prevents stale README data.
-
-
----
-
-## Data Snapshot
-
-- Generated at: **2026-04-12 07:03:21 UTC**
-- Scanned files: **1513**
-- Tracked language files: **741**
-
-| Language | Files | Lines |
-| --- | ---: | ---: |
-| C | 278 | 17029 |
-| Java | 174 | 8098 |
-| HTML | 116 | 3343 |
-| XML | 53 | 1417 |
-| C++ | 47 | 918 |
-| JSON | 36 | 16068 |
-| Assembly | 8 | 208 |
-| Markdown | 6 | 568 |
-| Python | 5 | 922 |
-| PHP | 4 | 221 |
-| CSS | 3 | 124 |
-| JavaScript | 3 | 116 |
-
+<table style="width: 100%; border-collapse: collapse; background: rgba(0, 221, 255, 0.05); border: 1px solid rgba(0, 221, 255, 0.2); border-radius: 8px; backdrop-filter: blur(10px); overflow: hidden;">
+<tr style="background: rgba(0, 221, 255, 0.1);">
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;"><strong>Code Quality</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;">Clean architecture, readable implementation, modular design</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;"><strong>Reproducibility</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;">Makefile support, dependency clarity, cross-platform testing</td>
+</tr>
+<tr style="background: rgba(0, 221, 255, 0.08);">
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;"><strong>Documentation</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;">Clear comments, structured READMEs, lab reports alongside code</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;"><strong>Professional Practice</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(0, 221, 255, 0.15); border-radius: 4px;">Git hygiene, version control discipline, commit clarity</td>
+</tr>
+</table>
 
 ---
 
-## Automation Control Room
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(179, 16, 240, 0.4); background: linear-gradient(135deg, rgba(179, 16, 240, 0.18), rgba(157, 78, 221, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(179, 16, 240, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(179, 16, 240, 0.85);">🚀 RECENT ACTIVITY</strong>
+</div>
+</div></div>
 
-This README is automation-driven and can be regenerated from repository data.
+### Latest Commits
 
-### Files
+<table style="width: 100%; border-collapse: collapse; background: rgba(255, 0, 255, 0.05); border: 1px solid rgba(255, 0, 255, 0.2); border-radius: 8px; backdrop-filter: blur(10px); overflow: hidden;">
+<tr style="background: rgba(255, 0, 255, 0.1);">
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Commit</th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Message</th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Author</th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Date</th>
+</tr>
+<tr style="background: rgba(255, 0, 255, 0.08);"><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev/programming-related/commit/ca6bd090a43e811c0d471eff23c7a21c325f8120" style="color: #FF00FF; text-decoration: none; font-weight: 600;">ca6bd09</a></td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">chore: sync README automation</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">rajghosh06-dev</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Apr 12, 2026</td></tr>
+<tr style="background: rgba(255, 0, 255, 0.04);"><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev/programming-related/commit/2c53be5d886acfba7078e654a04ddd9043da63bc" style="color: #FF00FF; text-decoration: none; font-weight: 600;">2c53be5</a></td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">feat: finalize README automation, stable hero badge, and rep</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Rishit Ghosh</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Apr 12, 2026</td></tr>
+<tr style="background: rgba(255, 0, 255, 0.08);"><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev/programming-related/commit/f30d8fe45a547700b36071a719bbe21400dfd651" style="color: #FF00FF; text-decoration: none; font-weight: 600;">f30d8fe</a></td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">feat: Add DAA lab Week8 and project files Added new features</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Rishit Ghosh</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Apr 12, 2026</td></tr>
+<tr style="background: rgba(255, 0, 255, 0.04);"><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev/programming-related/commit/7c2b0e5ec20ff18ddf6869b47e91079cc647f0d6" style="color: #FF00FF; text-decoration: none; font-weight: 600;">7c2b0e5</a></td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">feat: Implement Web Technologies Lab exercises (Week10â€“Wee</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Rishit Ghosh</td><td style="padding: 12px; border: 1px solid rgba(255, 0, 255, 0.15); border-radius: 4px;">Apr 12, 2026</td></tr>
+</table>
 
-- `tools/analyze_repo.py`: scans repository files and computes language statistics.
-- `tools/generate_readme.py`: generates the full README including tables and sections.
-- `tools/validate_readme_assets.py`: validates badge and external asset links used in README.
-- `tools/data/project_directory.json`: project metadata source for the Project Directory table.
-- `.github/workflows/sync-readme.yml`: scheduled and trigger-based README synchronization workflow.
+> Latest activity reflects ongoing coursework and continuous improvement across all subjects.
 
-### Local refresh
+---
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\refresh_readme.ps1 -VerboseOutput
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(0, 153, 255, 0.4); background: linear-gradient(135deg, rgba(0, 153, 255, 0.18), rgba(0, 212, 255, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(0, 153, 255, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(0, 153, 255, 0.85);">📁 PROJECT STRUCTURE</strong>
+</div>
+</div></div>
+
+### Repository Organization
+
+<div style="background: rgba(24, 10, 42, 0.6); border: 1px solid rgba(255, 0, 255, 0.22); border-radius: 14px; padding: 18px; backdrop-filter: blur(14px); box-shadow: 0 14px 34px rgba(255, 0, 255, 0.10); margin: 12px 0;">
+
+```
+PROGRAMMING-RELATED/
+├── 1st-Year/
+│   └── Programming for Problem Solving
+│
+└── 2nd-Year/
+    ├── 2-1/
+    │   ├── Data Structures
+    │   └── Object Oriented Programming
+    │
+    └── 2-2/
+        ├── Web Technologies
+        ├── Design and Analysis of Algorithms
+        ├── Operating Systems
+        └── Assembly Language Programming
 ```
 
----
+</div>
 
-## Why This Repository Feels Different
+### Typical Project Flow
 
-| Focus Area | What It Looks Like |
-| --- | --- |
-| **Structured Learning** | Coursework remains easy to navigate across years, semesters, and subjects. |
-| **Implementation Depth** | Practice files, labs, and projects are maintained together for continuity. |
-| **Documentation Quality** | README now includes generated tables, stats, and automation-backed sections. |
-| **Consistency** | Regeneration workflow keeps information current with low manual effort. |
+**Idea → Learning → Implementation → Testing → Documentation → Showcase**
+
+Each subject stream follows disciplined software engineering practices with clear separation of concerns, comprehensive testing where applicable, and documentation standards for peer review and future revision.
 
 ---
 
-## Working Pattern
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255, 0, 110, 0.4); background: linear-gradient(135deg, rgba(255, 0, 110, 0.18), rgba(255, 20, 147, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(255, 0, 110, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(255, 0, 110, 0.85);">👤 PORTFOLIO AUTHOR</strong>
+</div>
+</div></div>
 
-| Approach | In Practice |
-| --- | --- |
-| **Plan by subject** | Folder structure follows year, semester, and subject flow. |
-| **Implement by concept** | Code is grouped into practical modules and assignments. |
-| **Review for clarity** | Readability and reproducibility are treated as first-class outcomes. |
-| **Improve continuously** | Automation updates documentation as the repository evolves. |
+### Rishit Ghosh
+
+**Student | Software Engineer | Open Source Enthusiast**
+
+<table style="width: 100%; border-collapse: collapse; background: rgba(255, 0, 110, 0.05); border: 1px solid rgba(255, 0, 110, 0.2); border-radius: 8px; backdrop-filter: blur(10px); overflow: hidden; margin: 12px 0;">
+<tr style="background: rgba(255, 0, 110, 0.1);">
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px; text-align: left;">Link</th>
+<th style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px; text-align: left;">Details</th>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><strong>Portfolio</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev" style="color: #FF006E; text-decoration: none; border-bottom: 2px solid #FF006E;">GitHub Profile</a></td>
+</tr>
+<tr style="background: rgba(255, 0, 110, 0.05);">
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><strong>GitHub</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><a href="https://github.com/rajghosh06-dev" style="color: #FF006E; text-decoration: none; border-bottom: 2px solid #FF006E;">@rajghosh06-dev</a></td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><strong>Organization</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><a href="https://github.com/Code-Crew-Nexus" style="color: #FF006E; text-decoration: none; border-bottom: 2px solid #FF006E;">Code-Crew-Nexus</a></td>
+</tr>
+<tr style="background: rgba(255, 0, 110, 0.05);">
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><strong>Institution</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;">B.Tech CSE (AI & ML) @ GCET, Hyderabad</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><strong>Last Updated</strong></td>
+<td style="padding: 12px; border: 1px solid rgba(255, 0, 110, 0.15); border-radius: 4px;"><code>2026-04-12 09:07:28 UTC</code></td>
+</tr>
+</table>
 
 ---
 
-## Author
+<div align="center">
+<div align="center" style="margin: 18px 0 10px;">
+<div style="display: inline-block; padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(0, 221, 255, 0.4); background: linear-gradient(135deg, rgba(0, 221, 255, 0.18), rgba(0, 255, 136, 0.10)); backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgba(0, 221, 255, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.18);">
+<strong style="color: #ffffff; font-size: 1.2rem; letter-spacing: 0.04em; text-shadow: 0 0 10px rgba(0, 221, 255, 0.85);">📜 LICENSE &amp; USAGE</strong>
+</div>
+</div></div>
 
-**Rishit Ghosh**
+<div style="background: rgba(0, 221, 255, 0.08); border-left: 4px solid #00DDFF; border-radius: 8px; padding: 16px; backdrop-filter: blur(10px); margin: 12px 0;">
 
-- Portfolio: https://rajghosh06-dev.github.io/portfolio/
-- LinkedIn: https://www.bing.com/search?q=%22https%3A%2F%2Fwww.linkedin.com%2Fin%2Frajghosh06%2F%22
-- GitHub: https://github.com/rajghosh06-dev
+This repository is licensed under the **MIT License**. See [📋 LICENSE](./LICENSE) for complete terms.
+
+**Usage:** These materials are provided for educational reference, portfolio demonstration, and peer learning. Feel free to fork, study, and adapt for your own learning journey.
+
+</div>
 
 ---
 
-## License
-
-This repository is licensed under the MIT License. See LICENSE for details.
+<p align="center" style="background: rgba(0, 221, 255, 0.1); padding: 16px; border-radius: 12px; border: 1px solid rgba(0, 221, 255, 0.2); backdrop-filter: blur(10px); margin: 16px auto;"><em>🎓 Building disciplined code, professional standards, and durable learning outcomes</em></p>

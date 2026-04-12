@@ -27,7 +27,8 @@
 *.properties text eol=lf
 
 # --- Documentation ---
-*.md      text eol=lf
+*.md      text eol=lf diff=markdown
+README.md  text eol=lf diff=markdown
 *.txt     text eol=lf
 
 # --- IDE / project files ---

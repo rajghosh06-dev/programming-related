@@ -54,10 +54,20 @@ node_modules/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+__pycache__/
+**/__pycache__/
 tools/**/__pycache__/
 tools/reports/*.tmp
 tools/reports/*.bak
 tools/reports/*.old
+tools/reports/*.json
+tools/reports/*.md
+.github/readme-automation/**/__pycache__/
+.github/readme-automation/reports/*.tmp
+.github/readme-automation/reports/*.bak
+.github/readme-automation/reports/*.old
+.github/readme-automation/reports/*.json
+.github/readme-automation/reports/*.md
 
 # --- Databases ---
 *.db

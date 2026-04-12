@@ -270,7 +270,7 @@ def build_readme(report: dict[str, Any], projects: list[dict[str, str]], commits
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=210&color=0:0a0e27,50:00DDFF,100:39FF14&text=PROGRAMMING-RELATED&fontColor=ffffff&fontSize=50&animation=fadeIn&desc=Structured%20Coursework%20%7C%20Labs%20%7C%20Implementation&descAlignY=63" alt="Hero Banner" />
 
-### 📚 Engineering Coursework Portfolio
+### 📘 STUDENT COURSEWORK
 
 *Comprehensive coursework spanning foundational problem-solving through advanced algorithms and systems programming*
 
@@ -381,7 +381,7 @@ Each subject stream follows disciplined software engineering practices with clea
 
 | Link | Details |
 | --- | --- |
-| **Portfolio** | [GitHub Profile](https://github.com/rajghosh06-dev) |
+| **Portfolio** | [GitHub Profile](https://rajghosh06-dev.github.io/portfolio/) |
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |

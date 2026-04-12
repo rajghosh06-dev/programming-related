@@ -4,7 +4,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=210&color=0:0a0e27,50:00DDFF,100:39FF14&text=PROGRAMMING-RELATED&fontColor=ffffff&fontSize=50&animation=fadeIn&desc=Structured%20Coursework%20%7C%20Labs%20%7C%20Implementation&descAlignY=63" alt="Hero Banner" />
 
-### 📚 Engineering Coursework Portfolio
+### 📘 STUDENT COURSEWORK
 
 *Comprehensive coursework spanning foundational problem-solving through advanced algorithms and systems programming*
 
@@ -59,18 +59,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 37.1% |
+| **C** | 278 | 17,029 | `████░░░░░░` 37.0% |
 | **Java** | 174 | 8,098 | `██░░░░░░░░` 23.2% |
-| **HTML** | 116 | 3,343 | `██░░░░░░░░` 15.5% |
+| **HTML** | 116 | 3,343 | `██░░░░░░░░` 15.4% |
 | **XML** | 53 | 1,417 | `█░░░░░░░░░` 7.1% |
 | **C++** | 47 | 918 | `█░░░░░░░░░` 6.3% |
 | **JSON** | 38 | 16,254 | `█░░░░░░░░░` 5.1% |
 | **Python** | 9 | 913 | `░░░░░░░░░░` 1.2% |
-| **Markdown** | 8 | 613 | `░░░░░░░░░░` 1.1% |
+| **Markdown** | 9 | 663 | `░░░░░░░░░░` 1.2% |
 | **Assembly** | 8 | 208 | `░░░░░░░░░░` 1.1% |
 | **PHP** | 4 | 221 | `░░░░░░░░░░` 0.5% |
 
-**Scan Summary:** 1,547 total files • 750 language files
+**Scan Summary:** 1,548 total files • 751 language files
 
 
 ---
@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`b905331`](https://github.com/rajghosh06-dev/programming-related/commit/b905331690faba457c5c506800e5cb87ecbfe68a) | docs: rename portfolio heading in README intro | Rishit Ghosh | Apr 12, 2026 |
 | [`084de72`](https://github.com/rajghosh06-dev/programming-related/commit/084de72a8fe729ee448de0117884b04d5784a41d) | chore: sync README automation | rajghosh06-dev | Apr 12, 2026 |
 | [`350b09e`](https://github.com/rajghosh06-dev/programming-related/commit/350b09e33a67aec1db32828868c03c3c8345f4dc) | fix: stabilize README section banners and validate mirrored li | Rishit Ghosh | Apr 12, 2026 |
 | [`4b2036c`](https://github.com/rajghosh06-dev/programming-related/commit/4b2036c9884d4bfa452725773c6d42557461901c) | chore: sync README automation | rajghosh06-dev | Apr 12, 2026 |
 | [`53abefc`](https://github.com/rajghosh06-dev/programming-related/commit/53abefcd37ba47f2c75e4984269c8a8ed7de5422) | docs: mirror root README to .github/profile | Rishit Ghosh | Apr 12, 2026 |
-| [`e3a6178`](https://github.com/rajghosh06-dev/programming-related/commit/e3a6178c9ac29f783590850476e51ff8dc2614bb) | docs: remove competing .github README | Rishit Ghosh | Apr 12, 2026 |
 
 ---
 
@@ -173,11 +173,11 @@ Each subject stream follows disciplined software engineering practices with clea
 
 | Link | Details |
 | --- | --- |
-| **Portfolio** | [GitHub Profile](https://github.com/rajghosh06-dev) |
+| **Portfolio** | [GitHub Profile](https://rajghosh06-dev.github.io/portfolio/) |
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-12 09:37:15 UTC` |
+| **Last Updated** | `2026-04-12 09:49:46 UTC` |
 
 ---
 

@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 AUTOMATION_DIR = ROOT / ".github" / "readme-automation"
 DATA_DIR = AUTOMATION_DIR / "data"
 README_PATH = ROOT / "README.md"
+PROFILE_README_PATH = ROOT / ".github" / "profile" / "README.md"
 
 OWNER = "rajghosh06-dev"
 REPO = "programming-related"
@@ -490,6 +491,8 @@ def main():
     
     readme_content = build_readme(report, projects, commits)
     README_PATH.write_text(readme_content, encoding="utf-8")
+    PROFILE_README_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PROFILE_README_PATH.write_text(readme_content, encoding="utf-8")
     print(r"OK: Comprehensive README generated successfully!")
 
 

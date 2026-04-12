@@ -41,5 +41,6 @@ jobs:
           commit_message: "chore: sync README automation"
           file_pattern: |
             README.md
+            .github/profile/README.md
             .github/readme-automation/reports/language_report.json
             .github/readme-automation/reports/language_report.md

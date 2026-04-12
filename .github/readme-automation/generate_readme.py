@@ -270,7 +270,7 @@ def build_readme(report: dict[str, Any], projects: list[dict[str, str]], commits
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=210&color=0:0a0e27,50:00DDFF,100:39FF14&text=PROGRAMMING-RELATED&fontColor=ffffff&fontSize=50&animation=fadeIn&desc=Structured%20Coursework%20%7C%20Labs%20%7C%20Implementation&descAlignY=63" alt="Hero Banner" />
 
-### 📚 Academic Engineering Portfolio
+### 📚 Engineering Coursework Portfolio
 
 *Comprehensive coursework spanning foundational problem-solving through advanced algorithms and systems programming*
 

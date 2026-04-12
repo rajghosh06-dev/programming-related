@@ -70,13 +70,13 @@ Instead of isolated snapshots, the directory layout captures iterative growth ov
 <!-- AUTO:PROJECT_DIRECTORY:START -->
 | PROJECT | SUBJECT | STACK | DESCRIPTION | LAST UPDATE | BRANCHES | REPOSITORY |
 | --- | --- | --- | --- | --- | --- | --- |
-| **Programming for Problem Solving** | PPS | C | First-year foundational problem-solving programs, assignments, and practice sets in C. | Feb 28, 2026 | `main` | [`1st-Year/Programming for Problem Solving`](https://github.com/rajghosh06-dev/programming-related/tree/main/1st-Year/Programming%20for%20Problem%20Solving) |
-| **Data Structures Coursework** | DS | C, C++ | Core data structures implementation and semester lab work for second-year DS curriculum. | Feb 28, 2026 | `main` | [`2nd-Year/2-1/DATA STRUCTURES [C Language]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/DATA%20STRUCTURES%20%5BC%20Language%5D) |
-| **Object Oriented Programming** | OOP | Java | Java-based OOP practice, classroom exercises, and modular coding experiments. | Mar 25, 2026 | `main` | [`2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/OBJECT%20ORIENTED%20PROGRAMMING%20%5BJAVA%5D) |
+| **Programming for Problem Solving** | PPS | C | First-year foundational problem-solving programs, assignments, and practice sets in C. | Apr 12, 2026 | `main` | [`1st-Year/Programming for Problem Solving`](https://github.com/rajghosh06-dev/programming-related/tree/main/1st-Year/Programming%20for%20Problem%20Solving) |
+| **Data Structures Coursework** | DS | C, C++ | Core data structures implementation and semester lab work for second-year DS curriculum. | Apr 12, 2026 | `main` | [`2nd-Year/2-1/DATA STRUCTURES [C Language]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/DATA%20STRUCTURES%20%5BC%20Language%5D) |
+| **Object Oriented Programming** | OOP | Java | Java-based OOP practice, classroom exercises, and modular coding experiments. | Apr 12, 2026 | `main` | [`2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/OBJECT%20ORIENTED%20PROGRAMMING%20%5BJAVA%5D) |
 | **Web Technologies Lab** | WT | HTML, CSS, JavaScript, PHP, MySQL | Web lab implementations including frontend pages, server-side workflows, and local database connectivity. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Web-Technologies`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Web-Technologies) |
 | **Design and Analysis of Algorithms** | DAA | C++, Java | DAA class and lab material with implementation-driven algorithm study and project folders. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Design-and-Analysis-of-Algorithms`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Design-and-Analysis-of-Algorithms) |
-| **Operating System Practice** | OS | C, Shell | Operating-system oriented exercises including PBL and week-wise implementation notes. | Mar 25, 2026 | `main` | [`2nd-Year/2-2/Operating-System`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Operating-System) |
-| **Assembly Language Programming** | ALP | Assembly | Assembly-level coursework and DOS-based practical experiments. | Mar 25, 2026 | `main` | [`2nd-Year/2-2/Assembly-Language-Programming`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Assembly-Language-Programming) |
+| **Operating System Practice** | OS | C, Shell | Operating-system oriented exercises including PBL and week-wise implementation notes. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Operating-System`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Operating-System) |
+| **Assembly Language Programming** | ALP | Assembly | Assembly-level coursework and DOS-based practical experiments. | Apr 12, 2026 | `main` | [`2nd-Year/2-2/Assembly-Language-Programming`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Assembly-Language-Programming) |
 <!-- AUTO:PROJECT_DIRECTORY:END -->
 
 > This table is generated from tools/data/project_directory.json and local git history.
@@ -90,75 +90,17 @@ Instead of isolated snapshots, the directory layout captures iterative growth ov
 <table>
 <tr>
 <td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/f30d8fe45a547700b36071a719bbe21400dfd651">feat: Add DAA lab Week8 and project files Added new features into Project Files!, Also updated WEEK8.</a></strong><br />
-<sub>Apr 12, 2026 · 06:24 AM UTC</sub>
+<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/2c53be5d886acfba7078e654a04ddd9043da63bc">feat: finalize README automation, stable hero badge, and repo hygiene</a></strong><br />
+<sub>Apr 12, 2026 · 07:02 AM UTC</sub>
 
 <br /><br />
 
 <strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
 <strong>Committed by:</strong> Rishit Ghosh<br />
 <strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>f30d8fe</code>
+<strong>Commit:</strong> <code>2c53be5</code>
 </td>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/7c2b0e5ec20ff18ddf6869b47e91079cc647f0d6">feat: Implement Web Technologies Lab exercises (Week10-Week12)</a></strong><br />
-<sub>Apr 12, 2026 · 06:19 AM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>7c2b0e5</code>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/3c367098e3e65a385034cc7a214b41c36f93f609">Major Changes: Created and inserted new WEEK8/ WEEK9/ and a /BaseProj/ for easy reusability.</a></strong><br />
-<sub>Apr 07, 2026 · 08:27 AM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>3c36709</code>
-</td>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/2ac90c48c9f7db5d58267231193277ba525796a0">Minor Change:: WT: Updated Week-6 (with B), and created and completed Week-7 (A &amp; B); DAA: Updated Week-6 Program, and created and completed Week-7 Program.</a></strong><br />
-<sub>Mar 30, 2026 · 07:41 PM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>2ac90c4</code>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/626c698d96b9f8aa8d75ac81cd3a55bbd731af44">Minor Changes: Added Week6</a></strong><br />
-<sub>Mar 25, 2026 · 06:02 AM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> RISHIT GHOSH<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>626c698</code>
-</td>
-<td width="50%" valign="top">
-<strong><a href="https://github.com/rajghosh06-dev/programming-related/commit/9f101846dc114f92c2dff760a44490269ea1e060">Major Change: Renamed the main Subject Names for compatibility and to prevent errors within the PROJECT Structure.</a></strong><br />
-<sub>Mar 24, 2026 · 03:19 PM UTC</sub>
-
-<br /><br />
-
-<strong>Repository:</strong> <a href="https://github.com/rajghosh06-dev/programming-related">programming-related</a><br />
-<strong>Committed by:</strong> Rishit Ghosh<br />
-<strong>Branch:</strong> <code>main</code><br />
-<strong>Commit:</strong> <code>9f10184</code>
-</td>
+<td width="50%" valign="top">&nbsp;</td>
 </tr>
 </table>
 
@@ -333,8 +275,8 @@ This matrix is generated from repository analytics and local metadata.
 
 ## Data Snapshot
 
-- Generated at: **2026-04-12 07:00:55 UTC**
-- Scanned files: **1538**
+- Generated at: **2026-04-12 07:03:21 UTC**
+- Scanned files: **1513**
 - Tracked language files: **741**
 
 | Language | Files | Lines |

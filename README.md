@@ -59,18 +59,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 37.1% |
-| **Java** | 174 | 8,098 | `██░░░░░░░░` 23.2% |
+| **C** | 278 | 17,029 | `████░░░░░░` 37.2% |
+| **Java** | 174 | 8,098 | `██░░░░░░░░` 23.3% |
 | **HTML** | 116 | 3,343 | `██░░░░░░░░` 15.5% |
 | **XML** | 53 | 1,417 | `█░░░░░░░░░` 7.1% |
 | **C++** | 47 | 918 | `█░░░░░░░░░` 6.3% |
-| **JSON** | 38 | 16,254 | `█░░░░░░░░░` 5.1% |
+| **JSON** | 37 | 16,119 | `░░░░░░░░░░` 4.9% |
 | **Python** | 9 | 913 | `░░░░░░░░░░` 1.2% |
-| **Markdown** | 8 | 613 | `░░░░░░░░░░` 1.1% |
 | **Assembly** | 8 | 208 | `░░░░░░░░░░` 1.1% |
+| **Markdown** | 7 | 547 | `░░░░░░░░░░` 0.9% |
 | **PHP** | 4 | 221 | `░░░░░░░░░░` 0.5% |
 
-**Scan Summary:** 1,547 total files • 750 language files
+**Scan Summary:** 1,520 total files • 748 language files
 
 
 ---
@@ -78,15 +78,15 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 <div align="center"><img src="https://capsule-render.vercel.app/api?type=rect&height=64&color=0:0a0e27,50:FF00FF,100:FF1493&text=COURSE%20BREAKDOWN&fontColor=ffffff&fontSize=24&animation=slideIn" alt="🎓 COURSE BREAKDOWN" /></div>
 
 <!-- AUTO:PROJECT_DIRECTORY:START -->
-| PROJECT | SUBJECT | STACK | DESCRIPTION | LAST UPDATE | BRANCHES | REPOSITORY |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Programming for Problem Solving** | PPS | C | First-year foundational problem-solving programs, assignments, and practice sets in C. | Feb 28, 2026 | `(no branch, rebasing main)`<br />`main` | [`1st-Year/Programming for Problem Solving`](https://github.com/rajghosh06-dev/programming-related/tree/main/1st-Year/Programming%20for%20Problem%20Solving) |
-| **Data Structures Coursework** | DS | C, C++ | Core data structures implementation and semester lab work for second-year DS curriculum. | Feb 28, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-1/DATA STRUCTURES [C Language]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/DATA%20STRUCTURES%20%5BC%20Language%5D) |
-| **Object Oriented Programming** | OOP | Java | Java-based OOP practice, classroom exercises, and modular coding experiments. | Mar 25, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-1/OBJECT ORIENTED PROGRAMMING [JAVA]`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-1/OBJECT%20ORIENTED%20PROGRAMMING%20%5BJAVA%5D) |
-| **Web Technologies Lab** | WT | HTML, CSS, JavaScript, PHP, MySQL | Web lab implementations including frontend pages, server-side workflows, and local database connectivity. | Apr 12, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-2/Web-Technologies`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Web-Technologies) |
-| **Design and Analysis of Algorithms** | DAA | C++, Java | DAA class and lab material with implementation-driven algorithm study and project folders. | Apr 12, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-2/Design-and-Analysis-of-Algorithms`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Design-and-Analysis-of-Algorithms) |
-| **Operating System Practice** | OS | C, Shell | Operating-system oriented exercises including PBL and week-wise implementation notes. | Mar 25, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-2/Operating-System`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Operating-System) |
-| **Assembly Language Programming** | ALP | Assembly | Assembly-level coursework and DOS-based practical experiments. | Mar 25, 2026 | `(no branch, rebasing main)`<br />`main` | [`2nd-Year/2-2/Assembly-Language-Programming`](https://github.com/rajghosh06-dev/programming-related/tree/main/2nd-Year/2-2/Assembly-Language-Programming) |
+| # | Project | Subject | Languages | Status |
+| --- | --- | --- | --- | --- |
+| 1 | **Programming for Problem Solving** | PPS | `C` | ✅ Active |
+| 2 | **Data Structures Coursework** | DS | `C, C++` | ✅ Active |
+| 3 | **Object Oriented Programming** | OOP | `Java` | ✅ Active |
+| 4 | **Web Technologies Lab** | WT | `HTML, CSS, JavaScript, PHP, MySQL` | ✅ Active |
+| 5 | **Design and Analysis of Algorithms** | DAA | `C++, Java` | ✅ Active |
+| 6 | **Operating System Practice** | OS | `C, Shell` | ✅ Active |
+| 7 | **Assembly Language Programming** | ALP | `Assembly` | ✅ Active |
 <!-- AUTO:PROJECT_DIRECTORY:END -->
 
 > **Source:** Auto-synced from `.github/readme-automation/data/project_directory.json` + Git metadata
@@ -128,11 +128,7 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
-| [`084de72`](https://github.com/rajghosh06-dev/programming-related/commit/084de72a8fe729ee448de0117884b04d5784a41d) | chore: sync README automation | rajghosh06-dev | Apr 12, 2026 |
-| [`350b09e`](https://github.com/rajghosh06-dev/programming-related/commit/350b09e33a67aec1db32828868c03c3c8345f4dc) | fix: stabilize README section banners and validate mirrored li | Rishit Ghosh | Apr 12, 2026 |
-| [`4b2036c`](https://github.com/rajghosh06-dev/programming-related/commit/4b2036c9884d4bfa452725773c6d42557461901c) | chore: sync README automation | rajghosh06-dev | Apr 12, 2026 |
-| [`53abefc`](https://github.com/rajghosh06-dev/programming-related/commit/53abefcd37ba47f2c75e4984269c8a8ed7de5422) | docs: mirror root README to .github/profile | Rishit Ghosh | Apr 12, 2026 |
-| [`e3a6178`](https://github.com/rajghosh06-dev/programming-related/commit/e3a6178c9ac29f783590850476e51ff8dc2614bb) | docs: remove competing .github README | Rishit Ghosh | Apr 12, 2026 |
+| [`b905331`](https://github.com/rajghosh06-dev/programming-related/commit/b905331690faba457c5c506800e5cb87ecbfe68a) | docs: rename portfolio heading in README intro | Rishit Ghosh | Apr 12, 2026 |
 
 ---
 
@@ -177,7 +173,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-12 09:37:15 UTC` |
+| **Last Updated** | `2026-04-12 09:37:47 UTC` |
 
 ---
 

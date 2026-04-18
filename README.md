@@ -59,18 +59,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 37.0% |
-| **Java** | 177 | 8,296 | `██░░░░░░░░` 23.5% |
-| **HTML** | 116 | 3,343 | `██░░░░░░░░` 15.4% |
-| **XML** | 53 | 1,417 | `█░░░░░░░░░` 7.0% |
+| **C** | 278 | 17,029 | `████░░░░░░` 36.6% |
+| **Java** | 178 | 8,319 | `██░░░░░░░░` 23.4% |
+| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.9% |
+| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.1% |
 | **C++** | 47 | 918 | `█░░░░░░░░░` 6.2% |
 | **JSON** | 37 | 16,119 | `░░░░░░░░░░` 4.9% |
 | **Python** | 9 | 933 | `░░░░░░░░░░` 1.2% |
 | **Markdown** | 8 | 612 | `░░░░░░░░░░` 1.1% |
 | **Assembly** | 8 | 208 | `░░░░░░░░░░` 1.1% |
-| **PHP** | 4 | 221 | `░░░░░░░░░░` 0.5% |
+| **PHP** | 5 | 249 | `░░░░░░░░░░` 0.7% |
 
-**Scan Summary:** 1,524 total files • 752 language files
+**Scan Summary:** 1,532 total files • 760 language files
 
 
 ---
@@ -173,7 +173,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-18 16:57:59 UTC` |
+| **Last Updated** | `2026-04-18 20:52:53 UTC` |
 
 ---
 

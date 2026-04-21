@@ -59,18 +59,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 36.6% |
-| **Java** | 178 | 8,319 | `██░░░░░░░░` 23.4% |
-| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.9% |
-| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.1% |
-| **C++** | 47 | 918 | `█░░░░░░░░░` 6.2% |
-| **JSON** | 37 | 16,119 | `░░░░░░░░░░` 4.9% |
+| **C** | 278 | 17,029 | `████░░░░░░` 36.3% |
+| **Java** | 178 | 8,352 | `██░░░░░░░░` 23.2% |
+| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.8% |
+| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.0% |
+| **C++** | 47 | 918 | `█░░░░░░░░░` 6.1% |
+| **JSON** | 37 | 16,119 | `░░░░░░░░░░` 4.8% |
+| **Assembly** | 14 | 427 | `░░░░░░░░░░` 1.8% |
 | **Python** | 9 | 933 | `░░░░░░░░░░` 1.2% |
-| **Markdown** | 8 | 612 | `░░░░░░░░░░` 1.1% |
-| **Assembly** | 8 | 208 | `░░░░░░░░░░` 1.1% |
+| **Markdown** | 8 | 612 | `░░░░░░░░░░` 1.0% |
 | **PHP** | 5 | 249 | `░░░░░░░░░░` 0.7% |
 
-**Scan Summary:** 1,532 total files • 760 language files
+**Scan Summary:** 1,544 total files • 766 language files
 
 
 ---
@@ -173,7 +173,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-21 03:44:39 UTC` |
+| **Last Updated** | `2026-04-21 06:13:01 UTC` |
 
 ---
 

@@ -59,18 +59,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 37.0% |
-| **Java** | 174 | 8,098 | `██░░░░░░░░` 23.2% |
-| **HTML** | 116 | 3,343 | `██░░░░░░░░` 15.4% |
-| **XML** | 53 | 1,417 | `█░░░░░░░░░` 7.1% |
-| **C++** | 47 | 918 | `█░░░░░░░░░` 6.3% |
-| **JSON** | 38 | 16,254 | `█░░░░░░░░░` 5.1% |
-| **Python** | 9 | 933 | `░░░░░░░░░░` 1.2% |
-| **Markdown** | 9 | 663 | `░░░░░░░░░░` 1.2% |
-| **Assembly** | 8 | 208 | `░░░░░░░░░░` 1.1% |
-| **PHP** | 4 | 221 | `░░░░░░░░░░` 0.5% |
+| **C** | 278 | 17,029 | `████░░░░░░` 36.2% |
+| **Java** | 178 | 8,352 | `██░░░░░░░░` 23.2% |
+| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.8% |
+| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.0% |
+| **C++** | 47 | 918 | `█░░░░░░░░░` 6.1% |
+| **JSON** | 38 | 16,254 | `░░░░░░░░░░` 4.9% |
+| **Assembly** | 14 | 427 | `░░░░░░░░░░` 1.8% |
+| **Python** | 9 | 916 | `░░░░░░░░░░` 1.2% |
+| **Markdown** | 9 | 681 | `░░░░░░░░░░` 1.2% |
+| **PHP** | 5 | 249 | `░░░░░░░░░░` 0.7% |
 
-**Scan Summary:** 1,548 total files • 751 language files
+**Scan Summary:** 1,578 total files • 768 language files
 
 
 ---
@@ -128,7 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
-| - | No recent commits. | - | - |
+| [`88d60f7`](https://github.com/rajghosh06-dev/programming-related/commit/88d60f716ed4e5264fb40f81a9fb6c7ee274c739) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
+| [`f764ef0`](https://github.com/rajghosh06-dev/programming-related/commit/f764ef0f141be0d9569e00914b2faecd149dd808) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
+| [`c4ffc9f`](https://github.com/rajghosh06-dev/programming-related/commit/c4ffc9f47aa42135ba497342fa5e3230f8bb5cee) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
+| [`bf47f26`](https://github.com/rajghosh06-dev/programming-related/commit/bf47f264f49fad4ac4e65ba566e5762b841a3b02) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
+| [`31c95a4`](https://github.com/rajghosh06-dev/programming-related/commit/31c95a44957370c19fe2aac7e2fdcffdab91a307) | chore: sync README automation | rajghosh06-dev | Apr 27, 2026 |
 
 ---
 
@@ -173,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-12 09:55:07 UTC` |
+| **Last Updated** | `2026-04-28 15:09:46 UTC` |
 
 ---
 

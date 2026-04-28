@@ -71,20 +71,6 @@ def run_git(args: list[str]) -> str:
         return ""
 
 
-def commit_exists_on_remote(commit_sha: str) -> bool:
-    try:
-        result = subprocess.run(
-            ["git", "ls-remote", "origin", commit_sha],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
-    return bool(result.stdout.strip())
-
-
 def load_projects() -> list[dict[str, str]]:
     path = DATA_DIR / "project_directory.json"
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
@@ -123,9 +109,6 @@ def get_recent_commits(limit: int = 5) -> list[dict[str, str]]:
             ts = dt.strftime("%b %d, %Y")
         except ValueError:
             ts = date_value
-
-        if not commit_exists_on_remote(full_sha):
-            continue
 
         commits.append(
             {

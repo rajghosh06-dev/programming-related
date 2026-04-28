@@ -13,6 +13,10 @@ on:
       - ".github/readme-automation/validate_readme_assets.py"
       - ".github/workflows/sync-readme.yml"
 
+concurrency:
+  group: sync-readme-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -23,11 +27,16 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      - name: Rebase on the latest branch tip
+        run: git pull --rebase --autostash origin "${{ github.ref_name }}"
 
       - name: Regenerate README and reports
         run: python .github/readme-automation/generate_readme.py

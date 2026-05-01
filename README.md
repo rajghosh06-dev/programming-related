@@ -62,7 +62,7 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 | **C** | 278 | 17,029 | `████░░░░░░` 36.3% |
 | **Java** | 178 | 8,352 | `██░░░░░░░░` 23.2% |
 | **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.8% |
-| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.0% |
+| **XML** | 54 | 1,432 | `█░░░░░░░░░` 7.0% |
 | **C++** | 47 | 918 | `█░░░░░░░░░` 6.1% |
 | **JSON** | 37 | 16,119 | `░░░░░░░░░░` 4.8% |
 | **Assembly** | 14 | 427 | `░░░░░░░░░░` 1.8% |
@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`f452b0a`](https://github.com/rajghosh06-dev/programming-related/commit/f452b0a5f92ebeed09b36af323bce0adea4deaaa) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | Rishit Ghosh | May 01, 2026 |
+| [`bb4cc13`](https://github.com/rajghosh06-dev/programming-related/commit/bb4cc1302d071d28dac984cc70663f3c0cfcdddd) | update: Minor Changes 	- Updated few functionalities in WEEK-0 | Rishit Ghosh | May 01, 2026 |
+| [`bbd77a0`](https://github.com/rajghosh06-dev/programming-related/commit/bbd77a082b5128fd2027ff7ff2463846620a0bcc) | chore: sync README automation | rajghosh06-dev | May 01, 2026 |
 | [`16afa54`](https://github.com/rajghosh06-dev/programming-related/commit/16afa54c9f60d1fea1586e5ed6eb680659dda34e) | chore: sync README automation | rajghosh06-dev | May 01, 2026 |
 | [`4e98ff1`](https://github.com/rajghosh06-dev/programming-related/commit/4e98ff1cd31ee4941b80aeb79f4d5183675e1cc4) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | Rishit Ghosh | May 01, 2026 |
-| [`5e5e1d7`](https://github.com/rajghosh06-dev/programming-related/commit/5e5e1d7ae0643e66bf4fb534862a2566ccb4abe9) | update: Reconfigured all the folder names for modularity 	- Al | Rishit Ghosh | May 01, 2026 |
-| [`ac87ce2`](https://github.com/rajghosh06-dev/programming-related/commit/ac87ce2dec2f5f8acfe736ac06d25f2cfa029242) | chore: sync README automation | rajghosh06-dev | May 01, 2026 |
-| [`470711c`](https://github.com/rajghosh06-dev/programming-related/commit/470711cbee23d2dbffa165abb4797932a672fb86) | chore: sync README automation | rajghosh06-dev | May 01, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-05-01 17:11:55 UTC` |
+| **Last Updated** | `2026-05-01 21:06:37 UTC` |
 
 ---
 

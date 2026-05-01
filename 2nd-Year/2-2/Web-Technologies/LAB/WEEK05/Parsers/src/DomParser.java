@@ -12,22 +12,22 @@ public class DomParser {
             System.out.println("Enter User ID:");
             String uid = sc.next();   // keep consistent naming
 
-            File inputFile = new File("input.xml"); // corrected
+            File inputFile = new File("input.xml");
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder(); // corrected
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
 
             doc.getDocumentElement().normalize();
 
-            NodeList nList = doc.getElementsByTagName("student"); // corrected tag name
+            NodeList nList = doc.getElementsByTagName("student");
             boolean found = false;
 
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    String id = eElement.getElementsByTagName("userid").item(0).getTextContent(); // corrected
+                    String id = eElement.getElementsByTagName("userid").item(0).getTextContent();
 
                     if (id.equals(uid)) {
                         System.out.println("User Details:");
@@ -41,7 +41,7 @@ public class DomParser {
                 }
             }
             if (!found) {
-                System.out.println("User Id " + uid + " not found."); // corrected
+                System.out.println("User Id " + uid + " not found.");
             }
             sc.close();
         } catch (Exception e) {

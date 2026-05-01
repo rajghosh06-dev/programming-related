@@ -4,7 +4,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class UserHandler extends DefaultHandler {
     private String searchId;
     private boolean found = false;
-    private boolean isUserid = false; // corrected naming
+    private boolean isUserid = false;
     private boolean isName = false;
     private boolean isGender = false;
     private boolean isMarks = false;
@@ -36,7 +36,7 @@ public class UserHandler extends DefaultHandler {
         if (isUserid) {
             currentId = new String(ch, start, length);
             isUserid = false;
-            if (currentId.equals(searchId)) { // corrected comparison
+            if (currentId.equals(searchId)) {
                 found = true;
                 System.out.println("User Details");
                 System.out.println("User Id: " + currentId);

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE bookstore SYSTEM "Sample.dtd">
+<!--
+    DTD example (uncomment to validate with Sample.dtd):
+    <!DOCTYPE bookstore SYSTEM "Sample.dtd">
+-->
+<!--
+    XSD example (uncomment to validate with bookstore.xsd):
+    Change the root element to include the XML Schema instance namespace and schema location, for example:
+    <bookstore xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="bookstore.xsd">
+    Then make sure the closing </bookstore> remains present.
+-->
 <!--2026FEB10-->
 <bookstore>
     <book>

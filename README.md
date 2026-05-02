@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`5406480`](https://github.com/rajghosh06-dev/programming-related/commit/540648071b9a51bd08e21a1b1ea5e7974e3d362c) | chore: sync README automation | rajghosh06-dev | May 02, 2026 |
 | [`8cbe1ef`](https://github.com/rajghosh06-dev/programming-related/commit/8cbe1ef93380096150b0318b925a14b1ae8c4386) | chore: sync README automation | rajghosh06-dev | May 02, 2026 |
 | [`c0178b3`](https://github.com/rajghosh06-dev/programming-related/commit/c0178b3dcbfb4b9a54a22df7355a5b4e1fdb3b12) | chore: sync README automation | rajghosh06-dev | May 02, 2026 |
 | [`a46664f`](https://github.com/rajghosh06-dev/programming-related/commit/a46664f6b4fb367e6d15d6bce67e3d078c94d026) | chore: sync README automation | rajghosh06-dev | May 01, 2026 |
 | [`f452b0a`](https://github.com/rajghosh06-dev/programming-related/commit/f452b0a5f92ebeed09b36af323bce0adea4deaaa) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | Rishit Ghosh | May 01, 2026 |
-| [`bb4cc13`](https://github.com/rajghosh06-dev/programming-related/commit/bb4cc1302d071d28dac984cc70663f3c0cfcdddd) | update: Minor Changes 	- Updated few functionalities in WEEK-0 | Rishit Ghosh | May 01, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-05-02 09:20:05 UTC` |
+| **Last Updated** | `2026-05-02 13:46:57 UTC` |
 
 ---
 

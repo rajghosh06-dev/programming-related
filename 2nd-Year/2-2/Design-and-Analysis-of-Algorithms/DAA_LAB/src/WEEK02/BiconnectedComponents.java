@@ -1,6 +1,6 @@
 //LAB6_26FEB09
 //BiconnectedComponents
-package WEEK2;
+package WEEK02;
 
 import java.util.*;
 
@@ -20,7 +20,8 @@ public class BiconnectedComponents
         {
             if (adj[u][w] == 1)
             {
-                if (dfn[w] == 0) { // Tree edge
+                if (dfn[w] == 0)
+                { // Tree edge
                     stack.push(new int[]{u, w});
                     biconnectedComponents(w, u);
                     low[u] = Math.min(low[u], low[w]);

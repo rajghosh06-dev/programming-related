@@ -1,6 +1,6 @@
 // LABx_06APR2026
 // WEEK-8 :: OPTIMAL BINARY SEARCH TREE
-package WEEK8;
+package WEEK08;
 
 import java.util.Scanner;
 

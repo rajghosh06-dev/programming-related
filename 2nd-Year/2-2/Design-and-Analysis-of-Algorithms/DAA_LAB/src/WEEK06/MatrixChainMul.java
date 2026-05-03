@@ -1,6 +1,6 @@
 //LABx_23MAR26
 //MATRIX CHAIN MULTIPLICATION
-package WEEK6;
+package WEEK06;
 
 import java.util.Scanner;
 

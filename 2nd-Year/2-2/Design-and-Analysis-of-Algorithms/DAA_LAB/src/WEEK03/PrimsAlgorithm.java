@@ -1,5 +1,5 @@
 //PRIM's Algorithm
-package WEEK3;
+package WEEK03;
 
 import java.util.Scanner;
 

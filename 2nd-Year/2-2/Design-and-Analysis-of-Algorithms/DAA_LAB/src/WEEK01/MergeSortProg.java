@@ -1,5 +1,5 @@
 // LAB4_26JAN19/MergeSortProg.java :: Merge Sort
-package LAB4_26JAN19;
+package WEEK01;
 
 import java.util.Scanner;
 

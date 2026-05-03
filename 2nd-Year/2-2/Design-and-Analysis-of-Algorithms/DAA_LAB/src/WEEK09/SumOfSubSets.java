@@ -1,6 +1,6 @@
 // LABx_13APR2026
 // WEEK-9 :: SUM OF SUBSETS
-package WEEK9;
+package WEEK09;
 
 import java.util.Scanner;
 public class SumOfSubSets

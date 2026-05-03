@@ -1,6 +1,6 @@
 // LABx_30MAR2026
 // WEEK-7 :: KNAPSACK PROBLEM using TABULAR Method
-package WEEK7;
+package WEEK07;
 
 import java.util.*;
 

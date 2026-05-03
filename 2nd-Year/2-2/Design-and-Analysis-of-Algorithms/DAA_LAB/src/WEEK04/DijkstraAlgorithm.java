@@ -1,6 +1,6 @@
 //LAB8_26FEB16
 //Dijkstra Algorithm
-package WEEK4;
+package WEEK04;
 
 import java.util.*;
 

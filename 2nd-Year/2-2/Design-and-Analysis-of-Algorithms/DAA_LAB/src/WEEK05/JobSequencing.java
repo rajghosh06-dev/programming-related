@@ -1,6 +1,6 @@
 //LAB8_26FEB16
 //JOB Sequencing
-package WEEK5;
+package WEEK05;
 
 import java.util.*;
 
@@ -49,7 +49,8 @@ public class JobSequencing
         System.out.println("\nJob Sequence (Standard):");
         for (int i = 0; i < n; i++)
         {
-            if (slot[i]) System.out.print("J" + result[i] + " ");
+            if (slot[i])
+                System.out.print("J" + result[i] + " ");
         }
         System.out.println("\nTotal Profit: " + totalProfit);
     }
@@ -59,7 +60,8 @@ public class JobSequencing
 
     public static int find(int s)
     {
-        if (s == parent[s]) return s;
+        if (s == parent[s])
+            return s;
         return parent[s] = find(parent[s]);
     }
 
@@ -68,7 +70,8 @@ public class JobSequencing
         jobs.sort((a, b) -> b.profit - a.profit);
 
         parent = new int[n+1];
-        for (int i = 0; i <= n; i++) parent[i] = i;
+        for (int i = 0; i <= n; i++)
+            parent[i] = i;
 
         int totalProfit = 0;
         List<Integer> sequence = new ArrayList<>();
@@ -85,7 +88,8 @@ public class JobSequencing
         }
 
         System.out.println("\nJob Sequence (Fast):");
-        for (int id : sequence) System.out.print("J" + id + " ");
+        for (int id : sequence)
+            System.out.print("J" + id + " ");
         System.out.println("\nTotal Profit: " + totalProfit);
     }
 

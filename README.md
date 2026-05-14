@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`9d30f94`](https://github.com/rajghosh06-dev/programming-related/commit/9d30f94296b2eb32d05dbda663af702aa69cfcfc) | chore: sync README automation | rajghosh06-dev | May 14, 2026 |
 | [`4ac764b`](https://github.com/rajghosh06-dev/programming-related/commit/4ac764b25970feb81d4f4e8793545aca4f573bd3) | chore: sync README automation | rajghosh06-dev | May 14, 2026 |
 | [`ef584e8`](https://github.com/rajghosh06-dev/programming-related/commit/ef584e835796f2cbe21b099ee15356311d517fa8) | chore: sync README automation | rajghosh06-dev | May 14, 2026 |
 | [`1510754`](https://github.com/rajghosh06-dev/programming-related/commit/1510754afd7ae7f6fbef0bd4901531164cc33487) | chore: sync README automation | rajghosh06-dev | May 13, 2026 |
 | [`84750a6`](https://github.com/rajghosh06-dev/programming-related/commit/84750a62ffd7bdc404f499cba3e1536c0ce1cdce) | chore: sync README automation | rajghosh06-dev | May 13, 2026 |
-| [`f6f3649`](https://github.com/rajghosh06-dev/programming-related/commit/f6f36495ad2691b906026201e4b43e3f58d370b9) | chore: sync README automation | rajghosh06-dev | May 13, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-05-14 10:31:14 UTC` |
+| **Last Updated** | `2026-05-14 14:38:11 UTC` |
 
 ---
 

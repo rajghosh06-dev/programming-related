@@ -3,15 +3,9 @@ name: Sync Repository README
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 */4 * * *"
-  push:
-    paths:
-      - ".github/readme-automation/analyze_repo.py"
-      - ".github/readme-automation/generate_readme.py"
-      - ".github/readme-automation/data/project_directory.json"
-      - ".github/readme-automation/update_project_directory.py"
-      - ".github/readme-automation/validate_readme_assets.py"
-      - ".github/workflows/sync-readme.yml"
+    # GitHub Actions cron uses UTC. 18:29 UTC = 23:59 IST.
+    - cron: "29 18 * * *"
+    - cron: "29 18 1 * *"
 
 concurrency:
   group: sync-readme-${{ github.ref }}
@@ -35,16 +29,50 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Decide whether this run should execute
+        id: run_check
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "reason=manual-dispatch" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "${{ github.event.schedule }}" = "29 18 1 * *" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "reason=monthly-run" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          commit_count=$(git rev-list --count --since="24 hours ago" "origin/${{ github.ref_name }}")
+          if [ "$commit_count" -gt 0 ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "reason=daily-run-with-commits" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=daily-run-no-commits" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Log run decision
+        run: |
+          echo "should_run=${{ steps.run_check.outputs.should_run }}"
+          echo "reason=${{ steps.run_check.outputs.reason }}"
+
       - name: Rebase on the latest branch tip
+        if: steps.run_check.outputs.should_run == 'true'
         run: git pull --rebase --autostash origin "${{ github.ref_name }}"
 
       - name: Regenerate README and reports
+        if: steps.run_check.outputs.should_run == 'true'
         run: python .github/readme-automation/generate_readme.py
 
       - name: Validate README assets
+        if: steps.run_check.outputs.should_run == 'true'
         run: python .github/readme-automation/validate_readme_assets.py
 
       - name: Commit updated README if needed
+        if: steps.run_check.outputs.should_run == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: sync README automation"

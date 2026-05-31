@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`6df9451`](https://github.com/rajghosh06-dev/programming-related/commit/6df9451cc688011202917d8f62efa113f1b2ee24) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
 | [`3aaee6d`](https://github.com/rajghosh06-dev/programming-related/commit/3aaee6d94c4c6a3f20c6d192785be369a72552df) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
 | [`d82b069`](https://github.com/rajghosh06-dev/programming-related/commit/d82b069c928eddca2c381ffe10de2256fd674345) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | RISHIT GHOSH | May 30, 2026 |
 | [`69de449`](https://github.com/rajghosh06-dev/programming-related/commit/69de449fb669cafa37fdef9a45db612656e4ced5) | Modified: Workflows | RISHIT GHOSH | May 30, 2026 |
 | [`269ce0d`](https://github.com/rajghosh06-dev/programming-related/commit/269ce0d6d622908c109e80ca517ec76a1b1a51e9) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
-| [`8b71f28`](https://github.com/rajghosh06-dev/programming-related/commit/8b71f28e346252765557cb1e4e6c6940c3af24c4) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-05-30 19:49:52 UTC` |
+| **Last Updated** | `2026-05-31 19:49:46 UTC` |
 
 ---
 

@@ -72,3 +72,4 @@ tools/reports/*.md
 # --- Databases ---
 *.db
 *.sqlite
+.Rproj.user

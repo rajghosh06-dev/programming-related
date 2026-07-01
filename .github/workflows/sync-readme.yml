@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   schedule:
     # GitHub Actions cron uses UTC. 18:29 UTC = 23:59 IST.
-    - cron: "29 18 * * *"
-    - cron: "29 18 1 * *"
+    # Runs on the 1st of every month
+    - cron: "00 00 1 * *"
 
 concurrency:
   group: sync-readme-${{ github.ref }}
@@ -45,13 +45,14 @@ jobs:
             exit 0
           fi
 
-          commit_count=$(git rev-list --count --since="24 hours ago" "origin/${{ github.ref_name }}")
+          # Optional fallback: checks if there were commits in the last month
+          commit_count=$(git rev-list --count --since="1 month ago" "origin/${{ github.ref_name }}")
           if [ "$commit_count" -gt 0 ]; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
-            echo "reason=daily-run-with-commits" >> "$GITHUB_OUTPUT"
+            echo "reason=monthly-run-with-commits" >> "$GITHUB_OUTPUT"
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "reason=daily-run-no-commits" >> "$GITHUB_OUTPUT"
+            echo "reason=monthly-run-no-commits" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Log run decision

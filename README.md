@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
-| [`8b71f28`](https://github.com/rajghosh06-dev/programming-related/commit/8b71f28e346252765557cb1e4e6c6940c3af24c4) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
-| [`f50e353`](https://github.com/rajghosh06-dev/programming-related/commit/f50e3539c13c7172bc8f8b2b139b889d4fb91af8) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
-| [`0f85a47`](https://github.com/rajghosh06-dev/programming-related/commit/0f85a47cae059f22f15f9a972d4ef74455692ac6) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
-| [`59c91d6`](https://github.com/rajghosh06-dev/programming-related/commit/59c91d664f81e8e2bef0f1c2e1e7659605fafae6) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
-| [`be362b5`](https://github.com/rajghosh06-dev/programming-related/commit/be362b55f36e8eb159c4d0f698c38f11df622395) | chore: sync README automation | rajghosh06-dev | May 29, 2026 |
+| [`c7e879c`](https://github.com/rajghosh06-dev/programming-related/commit/c7e879ca777b1ebbf8d0d4b04eef7a0ea64a74d7) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
+| [`b73d37f`](https://github.com/rajghosh06-dev/programming-related/commit/b73d37f333804f89e84f219106d6207cd7d1c3b2) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
+| [`d26993c`](https://github.com/rajghosh06-dev/programming-related/commit/d26993ca106a9f72e662b9952d811e36eaecfa23) | chore: sync README automation | rajghosh06-dev | May 31, 2026 |
+| [`6df9451`](https://github.com/rajghosh06-dev/programming-related/commit/6df9451cc688011202917d8f62efa113f1b2ee24) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
+| [`3aaee6d`](https://github.com/rajghosh06-dev/programming-related/commit/3aaee6d94c4c6a3f20c6d192785be369a72552df) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-05-30 04:15:42 UTC` |
+| **Last Updated** | `2026-06-02 21:33:25 UTC` |
 
 ---
 

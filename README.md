@@ -70,7 +70,7 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 | **Markdown** | 8 | 620 | `░░░░░░░░░░` 1.0% |
 | **PHP** | 5 | 249 | `░░░░░░░░░░` 0.7% |
 
-**Scan Summary:** 1,546 total files • 768 language files
+**Scan Summary:** 1,552 total files • 768 language files
 
 
 ---
@@ -128,11 +128,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`9de3031`](https://github.com/rajghosh06-dev/programming-related/commit/9de30316f8c4393c8944cea7614e326b93c84e5a) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | RISHIT GHOSH | Jul 01, 2026 |
+| [`aafdcd9`](https://github.com/rajghosh06-dev/programming-related/commit/aafdcd9afd301379ab4f873544efad358d999c3e) | update: updated workflows and started new R programming     -  | RISHIT GHOSH | Jul 01, 2026 |
+| [`8f2c225`](https://github.com/rajghosh06-dev/programming-related/commit/8f2c225b401ca6d37d67fd3c387296f03355f98a) | chore: sync README automation | rajghosh06-dev | Jun 02, 2026 |
 | [`c7e879c`](https://github.com/rajghosh06-dev/programming-related/commit/c7e879ca777b1ebbf8d0d4b04eef7a0ea64a74d7) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
 | [`b73d37f`](https://github.com/rajghosh06-dev/programming-related/commit/b73d37f333804f89e84f219106d6207cd7d1c3b2) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
-| [`d26993c`](https://github.com/rajghosh06-dev/programming-related/commit/d26993ca106a9f72e662b9952d811e36eaecfa23) | chore: sync README automation | rajghosh06-dev | May 31, 2026 |
-| [`6df9451`](https://github.com/rajghosh06-dev/programming-related/commit/6df9451cc688011202917d8f62efa113f1b2ee24) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
-| [`3aaee6d`](https://github.com/rajghosh06-dev/programming-related/commit/3aaee6d94c4c6a3f20c6d192785be369a72552df) | chore: sync README automation | rajghosh06-dev | May 30, 2026 |
 
 ---
 
@@ -177,7 +177,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-06-02 21:33:25 UTC` |
+| **Last Updated** | `2026-08-01 03:36:02 UTC` |
 
 ---
 

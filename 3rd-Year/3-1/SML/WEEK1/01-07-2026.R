@@ -1,6 +1,22 @@
-#PRACTICE:
+#WEEK1:
+##[1.1]
+##Example1:
+21*23
+32*62
+1256/2
+x=26
+y=33
+x
+y
+z=x+y
+z
+z=x-y
+z
+
+##Example2:
 sample(1:100,5)
 
+## [1.2]
 #EXAMPLE1:
 rainfall = c(0.1,0.6,33.8,1.9,4.3,33.7,0.3,0.0,0.1)
 rainfall
@@ -16,16 +32,21 @@ A-B
 A*B
 
 #Matrix Calculations:
-##If x is a matric specified by the R command: x = matrix(nrow=3, ncol=3)
-
+##If x is a matrix specified by the R command: x = matrix(nrow=3, ncol=3)
+## [1.3]
+##Example1:
 x = matrix(nrow = 3, ncol = 3, data = c(1,8,2,1,5,4,3,9,6),byrow = TRUE)
 x
 x%*%t(x)
 
+##Example2:
+## (a)
 A = matrix(c(0,3,1,5,1,01,1,2,1),nrow = 3, ncol = 3, byrow = TRUE)
 A
 B = matrix(c(0,0,1,0,1,0,1,0,1),nrow = 3, ncol = 3, byrow = TRUE)
 B
-A+B
-B+A
+A%*%B
+B%*%A
+t(A)
+t(B)
 

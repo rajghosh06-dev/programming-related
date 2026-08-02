@@ -47,5 +47,26 @@
     "stack": "Assembly",
     "description": "Assembly-level coursework and DOS-based practical experiments.",
     "path": "2nd-Year/2-2/Assembly-Language-Programming"
+  },
+  {
+    "project": "Artificial Intelligence",
+    "subject": "AI",
+    "stack": "Python, Jupyter",
+    "description": "Artificial Intelligence lab coursework, Python scripts, basic algorithms, and interactive Jupyter notebooks.",
+    "path": "3rd-Year/3-1/AI"
+  },
+  {
+    "project": "Computer Networks Lab",
+    "subject": "CN",
+    "stack": "Packet Tracer, Configs",
+    "description": "Computer Networks lab simulations, Cisco Packet Tracer topology designs (.pkt), and layout visualizations.",
+    "path": "3rd-Year/3-1/CN"
+  },
+  {
+    "project": "Statistical Machine Learning",
+    "subject": "SML",
+    "stack": "R",
+    "description": "Statistical Machine Learning lab implementations, statistical distributions, hypothesis testing, MLE/MME estimation, and sampling in R.",
+    "path": "3rd-Year/3-1/SML"
   }
 ]

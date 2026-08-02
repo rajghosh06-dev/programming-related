@@ -44,6 +44,8 @@ EXTENSION_LANGUAGE_MAP: Dict[str, str] = {
     ".json": "JSON",
     ".yml": "YAML",
     ".yaml": "YAML",
+    ".r": "R",
+    ".R": "R",
 }
 
 NAME_LANGUAGE_MAP: Dict[str, str] = {

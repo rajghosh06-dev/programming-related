@@ -40,14 +40,17 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 <img src="https://img.shields.io/badge/DAA-C%2B%2B%2C%20Java-0099FF?style=for-the-badge" alt="DAA C++, Java" />
 <img src="https://img.shields.io/badge/OS-C%2C%20Shell-FF006E?style=for-the-badge" alt="OS C, Shell" />
 <img src="https://img.shields.io/badge/ALP-Assembly-00B4D8?style=for-the-badge" alt="ALP Assembly" />
+<img src="https://img.shields.io/badge/AI-Python%2C%20Jupyter-00DDFF?style=for-the-badge" alt="AI Python, Jupyter" />
+<img src="https://img.shields.io/badge/CN-Packet%20Tracer%2C%20Configs-FF00FF?style=for-the-badge" alt="CN Packet Tracer, Configs" />
+<img src="https://img.shields.io/badge/SML-R-39FF14?style=for-the-badge" alt="SML R" />
 </div>
 
 ### 🎯 Portfolio Highlights
 
 | Feature | Details |
 | --- | --- |
-| **Years Covered** | 2024-2026 (1st & 2nd Year CSE) |
-| **Total Projects** | 7 major subject streams |
+| **Years Covered** | 2024-2026 (1st, 2nd & 3rd Year CSE - AI&ML) |
+| **Total Projects** | 10 major subject streams |
 | **Code Files Tracked** | 750+ language files |
 | **Implementation Focus** | Labs, assignments, and practical coursework |
 | **Professional Goal** | Exam revision, portfolio clarity, skill demonstration |
@@ -59,18 +62,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 278 | 17,029 | `████░░░░░░` 36.2% |
-| **Java** | 178 | 8,352 | `██░░░░░░░░` 23.2% |
-| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.8% |
-| **XML** | 54 | 1,428 | `█░░░░░░░░░` 7.0% |
-| **C++** | 47 | 918 | `█░░░░░░░░░` 6.1% |
-| **JSON** | 38 | 16,254 | `░░░░░░░░░░` 4.9% |
-| **Assembly** | 14 | 427 | `░░░░░░░░░░` 1.8% |
-| **Python** | 9 | 916 | `░░░░░░░░░░` 1.2% |
-| **Markdown** | 9 | 681 | `░░░░░░░░░░` 1.2% |
-| **PHP** | 5 | 249 | `░░░░░░░░░░` 0.7% |
+| **C** | 280 | 17,264 | `████░░░░░░` 35.6% |
+| **Java** | 178 | 8,366 | `██░░░░░░░░` 22.6% |
+| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.4% |
+| **XML** | 54 | 1,432 | `█░░░░░░░░░` 6.9% |
+| **C++** | 47 | 918 | `█░░░░░░░░░` 6.0% |
+| **JSON** | 38 | 16,285 | `░░░░░░░░░░` 4.8% |
+| **Assembly** | 14 | 430 | `░░░░░░░░░░` 1.8% |
+| **Python** | 12 | 1,021 | `░░░░░░░░░░` 1.5% |
+| **Markdown** | 9 | 697 | `░░░░░░░░░░` 1.1% |
+| **R** | 9 | 342 | `░░░░░░░░░░` 1.1% |
 
-**Scan Summary:** 1,578 total files • 768 language files
+**Scan Summary:** 1,648 total files • 786 language files
 
 
 ---
@@ -87,6 +90,9 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 | 5 | **Design and Analysis of Algorithms** | DAA | `C++, Java` | ✅ Active |
 | 6 | **Operating System Practice** | OS | `C, Shell` | ✅ Active |
 | 7 | **Assembly Language Programming** | ALP | `Assembly` | ✅ Active |
+| 8 | **Artificial Intelligence** | AI | `Python, Jupyter` | ✅ Active |
+| 9 | **Computer Networks Lab** | CN | `Packet Tracer, Configs` | ✅ Active |
+| 10 | **Statistical Machine Learning** | SML | `R` | ✅ Active |
 <!-- AUTO:PROJECT_DIRECTORY:END -->
 
 > **Source:** Auto-synced from `.github/readme-automation/data/project_directory.json` + Git metadata
@@ -98,7 +104,7 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 ### Languages
 
 <div align="center">
-<table><tr><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" width="54" height="54" /><br /><sub><b>C</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="54" height="54" /><br /><sub><b>Java</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML" width="54" height="54" /><br /><sub><b>HTML</b></sub></td></tr><tr><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="54" height="54" /><br /><sub><b>C++</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="54" height="54" /><br /><sub><b>Python</b></sub></td><td align="center" width="33%"><img src="https://img.shields.io/badge/ASM-FF006E?style=for-the-badge&logo=gnuassembler&logoColor=white" alt="Assembly" width="54" height="54" /><br /><sub><b>Assembly</b></sub></td></tr></table>
+<table><tr><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" width="54" height="54" /><br /><sub><b>C</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="54" height="54" /><br /><sub><b>Java</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML" width="54" height="54" /><br /><sub><b>HTML</b></sub></td></tr><tr><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="54" height="54" /><br /><sub><b>C++</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="54" height="54" /><br /><sub><b>Python</b></sub></td><td align="center" width="33%"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/r/r-original.svg" alt="R" width="54" height="54" /><br /><sub><b>R</b></sub></td></tr><tr><td align="center" width="100%"><img src="https://img.shields.io/badge/ASM-FF006E?style=for-the-badge&logo=gnuassembler&logoColor=white" alt="Assembly" width="54" height="54" /><br /><sub><b>Assembly</b></sub></td></tr></table>
 </div>
 
 ### Frameworks & Libraries
@@ -128,11 +134,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
-| [`88d60f7`](https://github.com/rajghosh06-dev/programming-related/commit/88d60f716ed4e5264fb40f81a9fb6c7ee274c739) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
-| [`f764ef0`](https://github.com/rajghosh06-dev/programming-related/commit/f764ef0f141be0d9569e00914b2faecd149dd808) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
-| [`c4ffc9f`](https://github.com/rajghosh06-dev/programming-related/commit/c4ffc9f47aa42135ba497342fa5e3230f8bb5cee) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
-| [`bf47f26`](https://github.com/rajghosh06-dev/programming-related/commit/bf47f264f49fad4ac4e65ba566e5762b841a3b02) | chore: sync README automation | rajghosh06-dev | Apr 28, 2026 |
-| [`31c95a4`](https://github.com/rajghosh06-dev/programming-related/commit/31c95a44957370c19fe2aac7e2fdcffdab91a307) | chore: sync README automation | rajghosh06-dev | Apr 27, 2026 |
+| [`f51e45a`](https://github.com/rajghosh06-dev/programming-related/commit/f51e45a3f086fbb129a8322b70b23c8b550192b8) | chore: sync README automation | rajghosh06-dev | Aug 01, 2026 |
+| [`9de3031`](https://github.com/rajghosh06-dev/programming-related/commit/9de30316f8c4393c8944cea7614e326b93c84e5a) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | RISHIT GHOSH | Jul 01, 2026 |
+| [`aafdcd9`](https://github.com/rajghosh06-dev/programming-related/commit/aafdcd9afd301379ab4f873544efad358d999c3e) | update: updated workflows and started new R programming     -  | RISHIT GHOSH | Jul 01, 2026 |
+| [`8f2c225`](https://github.com/rajghosh06-dev/programming-related/commit/8f2c225b401ca6d37d67fd3c387296f03355f98a) | chore: sync README automation | rajghosh06-dev | Jun 02, 2026 |
+| [`c7e879c`](https://github.com/rajghosh06-dev/programming-related/commit/c7e879ca777b1ebbf8d0d4b04eef7a0ea64a74d7) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
 
 ---
 
@@ -145,16 +151,22 @@ PROGRAMMING-RELATED/
 ├── 1st-Year/
 │   └── Programming for Problem Solving
 │
-└── 2nd-Year/
-    ├── 2-1/
-    │   ├── Data Structures
-    │   └── Object Oriented Programming
-    │
-    └── 2-2/
-        ├── Web Technologies
-        ├── Design and Analysis of Algorithms
-        ├── Operating Systems
-        └── Assembly Language Programming
+├── 2nd-Year/
+│   ├── 2-1/
+│   │   ├── Data Structures
+│   │   └── Object Oriented Programming
+│   │
+│   └── 2-2/
+│       ├── Web Technologies
+│       ├── Design and Analysis of Algorithms
+│       ├── Operating Systems
+│       └── Assembly Language Programming
+│
+└── 3rd-Year/
+    └── 3-1/
+        ├── Artificial Intelligence
+        ├── Computer Networks
+        └── Statistical Machine Learning
 ```
 
 ### Typical Project Flow
@@ -177,7 +189,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-04-28 15:09:46 UTC` |
+| **Last Updated** | `2026-08-02 16:46:47 UTC` |
 
 ---
 

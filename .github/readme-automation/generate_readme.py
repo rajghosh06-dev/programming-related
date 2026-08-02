@@ -46,6 +46,7 @@ LANGUAGE_ICON_MAP = {
     "HTML": "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
     "Java": "https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg",
     "Python": "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
+    "R": "https://raw.githubusercontent.com/devicons/devicon/master/icons/r/r-original.svg",
 }
 
 FRAMEWORK_ICON_MAP = {
@@ -153,7 +154,7 @@ def render_icon_table(items: list[tuple[str, str]], columns: int) -> str:
 
 def render_subject_matrix(projects: list[dict[str, str]]) -> str:
     chips = []
-    for idx, project in enumerate(projects[:7]):
+    for idx, project in enumerate(projects):
         subject = html.escape(project.get("subject", "TBD"))
         stack = html.escape(project.get("stack", "TBD"))
         color = SUBJECT_COLORS[idx % len(SUBJECT_COLORS)]
@@ -200,7 +201,7 @@ def render_highlights(projects: list[dict[str, str]]) -> str:
             "",
             "| Feature | Details |",
             "| --- | --- |",
-            "| **Years Covered** | 2024-2026 (1st & 2nd Year CSE) |",
+            "| **Years Covered** | 2024-2026 (1st, 2nd & 3rd Year CSE - AI&ML) |",
             f"| **Total Projects** | {len(projects)} major subject streams |",
             "| **Code Files Tracked** | 750+ language files |",
             "| **Implementation Focus** | Labs, assignments, and practical coursework |",
@@ -217,16 +218,22 @@ PROGRAMMING-RELATED/
 ├── 1st-Year/
 │   └── Programming for Problem Solving
 │
-└── 2nd-Year/
-    ├── 2-1/
-    │   ├── Data Structures
-    │   └── Object Oriented Programming
-    │
-    └── 2-2/
-        ├── Web Technologies
-        ├── Design and Analysis of Algorithms
-        ├── Operating Systems
-        └── Assembly Language Programming
+├── 2nd-Year/
+│   ├── 2-1/
+│   │   ├── Data Structures
+│   │   └── Object Oriented Programming
+│   │
+│   └── 2-2/
+│       ├── Web Technologies
+│       ├── Design and Analysis of Algorithms
+│       ├── Operating Systems
+│       └── Assembly Language Programming
+│
+└── 3rd-Year/
+    └── 3-1/
+        ├── Artificial Intelligence
+        ├── Computer Networks
+        └── Statistical Machine Learning
 ```
 """.strip()
 
@@ -253,7 +260,7 @@ def build_readme(report: dict[str, Any], projects: list[dict[str, str]], commits
 
     languages = [
         (lang, LANGUAGE_ICON_MAP[lang])
-        for lang in ["C", "Java", "HTML", "C++", "Python", "Assembly"]
+        for lang in ["C", "Java", "HTML", "C++", "Python", "R", "Assembly"]
         if lang in LANGUAGE_ICON_MAP
     ]
     frameworks = [(fw, FRAMEWORK_ICON_MAP[fw]) for fw in ["Maven", "JDBC"] if fw in FRAMEWORK_ICON_MAP]

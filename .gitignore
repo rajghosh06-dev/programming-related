@@ -7,7 +7,6 @@
 Thumbs.db
 
 # --- Java / Web ---
-*.class
 *.jar
 *.war
 *.ear
@@ -73,3 +72,8 @@ tools/reports/*.md
 *.db
 *.sqlite
 .Rproj.user
+
+# --- Explicitly allow compiled and source files for easy cloning ---
+!*.class
+!*.java
+!*.py

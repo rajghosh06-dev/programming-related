@@ -62,18 +62,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 280 | 17,264 | `████░░░░░░` 35.6% |
-| **Java** | 178 | 8,366 | `██░░░░░░░░` 22.6% |
-| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.4% |
-| **XML** | 54 | 1,432 | `█░░░░░░░░░` 6.9% |
-| **C++** | 47 | 918 | `█░░░░░░░░░` 6.0% |
-| **JSON** | 38 | 16,285 | `░░░░░░░░░░` 4.8% |
-| **Assembly** | 14 | 430 | `░░░░░░░░░░` 1.8% |
-| **Python** | 12 | 1,021 | `░░░░░░░░░░` 1.5% |
-| **Markdown** | 9 | 697 | `░░░░░░░░░░` 1.1% |
-| **R** | 9 | 342 | `░░░░░░░░░░` 1.1% |
+| **C** | 280 | 17,264 | `███░░░░░░░` 34.8% |
+| **Java** | 189 | 9,141 | `██░░░░░░░░` 23.5% |
+| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.0% |
+| **XML** | 54 | 1,432 | `█░░░░░░░░░` 6.7% |
+| **C++** | 47 | 918 | `█░░░░░░░░░` 5.8% |
+| **JSON** | 37 | 16,140 | `░░░░░░░░░░` 4.6% |
+| **Python** | 20 | 1,315 | `░░░░░░░░░░` 2.5% |
+| **Assembly** | 14 | 430 | `░░░░░░░░░░` 1.7% |
+| **R** | 12 | 401 | `░░░░░░░░░░` 1.5% |
+| **Markdown** | 8 | 644 | `░░░░░░░░░░` 1.0% |
 
-**Scan Summary:** 1,648 total files • 786 language files
+**Scan Summary:** 1,599 total files • 804 language files
 
 
 ---
@@ -134,11 +134,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
+| [`0b2d3ed`](https://github.com/rajghosh06-dev/programming-related/commit/0b2d3edeca485c9ec95162cb82ec455f7dd04c6e) | Add newly completed lab exercises and explicitly track compile | Rishit Ghosh | Aug 31, 2026 |
+| [`90f6287`](https://github.com/rajghosh06-dev/programming-related/commit/90f6287a5ab66f53c1ada2da0ad1b1f763ba325f) | feat(3rd-year): add 3-1 AI, CN, SML lab coursework &amp; update RE | RISHIT GHOSH | Aug 02, 2026 |
 | [`f51e45a`](https://github.com/rajghosh06-dev/programming-related/commit/f51e45a3f086fbb129a8322b70b23c8b550192b8) | chore: sync README automation | rajghosh06-dev | Aug 01, 2026 |
 | [`9de3031`](https://github.com/rajghosh06-dev/programming-related/commit/9de30316f8c4393c8944cea7614e326b93c84e5a) | Merge branch &#x27;main&#x27; of github.com:rajghosh06-dev/programming-r | RISHIT GHOSH | Jul 01, 2026 |
 | [`aafdcd9`](https://github.com/rajghosh06-dev/programming-related/commit/aafdcd9afd301379ab4f873544efad358d999c3e) | update: updated workflows and started new R programming     -  | RISHIT GHOSH | Jul 01, 2026 |
-| [`8f2c225`](https://github.com/rajghosh06-dev/programming-related/commit/8f2c225b401ca6d37d67fd3c387296f03355f98a) | chore: sync README automation | rajghosh06-dev | Jun 02, 2026 |
-| [`c7e879c`](https://github.com/rajghosh06-dev/programming-related/commit/c7e879ca777b1ebbf8d0d4b04eef7a0ea64a74d7) | chore: sync README automation | rajghosh06-dev | Jun 01, 2026 |
 
 ---
 
@@ -189,7 +189,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-08-02 16:46:47 UTC` |
+| **Last Updated** | `2026-09-01 04:44:07 UTC` |
 
 ---
 

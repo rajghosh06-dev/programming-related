@@ -1,6 +1,6 @@
 # [WEEK-3]
 ## 3.0 Acceptance/Rejection Sampling in R
-install.packages("remotes")
+#install.packages("remotes")
 remotes::install_github("cran/DISTRIB")
 remotes::install_github("cran/AR")
 install.packages("AR")

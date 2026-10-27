@@ -19,6 +19,7 @@ shapiro.test(Residuals)
 
 
 ## Example-3:
+#install.packages("datarium")
 data("marketing", package = "datarium")
 head(marketing, 4) #Displays first 4 values in the data
 tail(marketing) #Displays last 6 values in the data

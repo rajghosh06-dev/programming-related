@@ -62,18 +62,18 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Language | Files | Lines | Share |
 | --- | ---: | ---: | --- |
-| **C** | 280 | 17,264 | `███░░░░░░░` 34.7% |
-| **Java** | 189 | 9,141 | `██░░░░░░░░` 23.4% |
-| **HTML** | 121 | 3,448 | `██░░░░░░░░` 15.0% |
-| **XML** | 54 | 1,432 | `█░░░░░░░░░` 6.7% |
-| **C++** | 47 | 918 | `█░░░░░░░░░` 5.8% |
-| **JSON** | 37 | 16,140 | `░░░░░░░░░░` 4.6% |
-| **Python** | 21 | 1,378 | `░░░░░░░░░░` 2.6% |
+| **C** | 280 | 17,264 | `███░░░░░░░` 33.3% |
+| **Java** | 211 | 10,042 | `███░░░░░░░` 25.1% |
+| **HTML** | 121 | 3,448 | `█░░░░░░░░░` 14.4% |
+| **XML** | 54 | 1,432 | `█░░░░░░░░░` 6.4% |
+| **C++** | 47 | 918 | `█░░░░░░░░░` 5.6% |
+| **JSON** | 37 | 16,140 | `░░░░░░░░░░` 4.4% |
+| **Python** | 25 | 1,542 | `░░░░░░░░░░` 3.0% |
+| **R** | 20 | 683 | `░░░░░░░░░░` 2.4% |
 | **Assembly** | 14 | 430 | `░░░░░░░░░░` 1.7% |
-| **R** | 13 | 465 | `░░░░░░░░░░` 1.6% |
 | **Markdown** | 8 | 644 | `░░░░░░░░░░` 1.0% |
 
-**Scan Summary:** 1,601 total files • 806 language files
+**Scan Summary:** 1,646 total files • 842 language files
 
 
 ---
@@ -134,11 +134,11 @@ This portfolio demonstrates disciplined coding practices, algorithm implementati
 
 | Commit | Message | Author | Date |
 | --- | --- | --- | --- |
-| [`593fbb3`](https://github.com/rajghosh06-dev/programming-related/commit/593fbb3f900c704b10d83bd794f34d7481ced40b) | feat: add AI Week-8 Best-First Search and SML Week-6 regressio | Rishit Ghosh | Sep 10, 2026 |
-| [`080cc7a`](https://github.com/rajghosh06-dev/programming-related/commit/080cc7a880d5ad42be13da1436a4663a01ce6d8e) | Refactor: Rename Statistical Machine Learning (SML) scripts wi | Rishit Ghosh | Sep 01, 2026 |
-| [`4b1e24a`](https://github.com/rajghosh06-dev/programming-related/commit/4b1e24a56b3d5faab6d8d248c6b96ca495748ac9) | chore: sync README automation | rajghosh06-dev | Sep 01, 2026 |
-| [`0b2d3ed`](https://github.com/rajghosh06-dev/programming-related/commit/0b2d3edeca485c9ec95162cb82ec455f7dd04c6e) | Add newly completed lab exercises and explicitly track compile | Rishit Ghosh | Aug 31, 2026 |
-| [`90f6287`](https://github.com/rajghosh06-dev/programming-related/commit/90f6287a5ab66f53c1ada2da0ad1b1f763ba325f) | feat(3rd-year): add 3-1 AI, CN, SML lab coursework &amp; update RE | RISHIT GHOSH | Aug 02, 2026 |
+| [`d9c5e2c`](https://github.com/rajghosh06-dev/programming-related/commit/d9c5e2cb23cdb06bb4f41b52855db7b9cfadee27) | feat: add CN lab coursework and track 2nd-year Java OOP compil | Rishit Ghosh | Oct 31, 2026 |
+| [`a268ceb`](https://github.com/rajghosh06-dev/programming-related/commit/a268ceb32a47b24f5f21e691b8632e63646e37d4) | chore(3rd-year): clear error output from AI Week-12 TSP notebo | Rishit Ghosh | Oct 30, 2026 |
+| [`eff1973`](https://github.com/rajghosh06-dev/programming-related/commit/eff19730612431580af74b38aebe7e8ff058b516) | fix(3rd-year): correct SML Week-9 filename date and update Wee | Rishit Ghosh | Oct 27, 2026 |
+| [`e1c9aef`](https://github.com/rajghosh06-dev/programming-related/commit/e1c9aeffb72368f742f6199d0f7d47bdd679b739) | feat(3rd-year): add AI Week-05 8-puzzle program and update Wee | Rishit Ghosh | Oct 24, 2026 |
+| [`1f5b5e2`](https://github.com/rajghosh06-dev/programming-related/commit/1f5b5e276bfd2fe182ad4fae522087e5c10923ea) | feat(3rd-year): add AI Week-11, CN Week-10 &amp; 12, and SML addit | Rishit Ghosh | Oct 15, 2026 |
 
 ---
 
@@ -189,7 +189,7 @@ Each subject stream follows disciplined software engineering practices with clea
 | **GitHub** | [@rajghosh06-dev](https://github.com/rajghosh06-dev) |
 | **Organization** | [Code-Crew-Nexus](https://github.com/Code-Crew-Nexus) |
 | **Institution** | B.Tech CSE (AI & ML) @ GCET, Hyderabad |
-| **Last Updated** | `2026-10-01 05:26:45 UTC` |
+| **Last Updated** | `2026-11-01 05:39:29 UTC` |
 
 ---
 

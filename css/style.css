@@ -308,6 +308,122 @@ body.has-maximized {
   color: #ffb3b3;
 }
 
+/* Offline Grep Results Viewport (Tier 1 Navigation) */
+.grep-results-viewport {
+  margin-top: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0f141c;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  font-family: "Cascadia Code", "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.15s ease-out;
+}
+
+.grep-result-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #c9d1d9;
+  border-left: 2px solid transparent;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.grep-result-item:hover {
+  background: #161b22;
+}
+
+.grep-result-item.selected {
+  background: #161b22 !important;
+  border-left: 2px solid #5391fe !important;
+  color: #5391fe !important;
+}
+
+.grep-result-item .grep-pointer {
+  display: inline-block;
+  width: 12px;
+  font-weight: bold;
+  color: #5391fe;
+  flex-shrink: 0;
+}
+
+.grep-result-item .grep-path-line {
+  color: #58a6ff;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.grep-result-item.selected .grep-path-line {
+  color: #79c0ff;
+}
+
+.grep-result-item .grep-text {
+  color: #8b949e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grep-result-item.selected .grep-text {
+  color: #f0f6fc;
+}
+
+/* Windows 11 custom scrollbar for grep viewport */
+.grep-results-viewport::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.grep-results-viewport::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+.grep-results-viewport::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+.grep-results-viewport::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* Tier 2 Context Action Box */
+.grep-action-box {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #161b22;
+  border: 1px solid #5391fe;
+  border-radius: 6px;
+  font-family: "Cascadia Code", "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+  color: #f0f6fc;
+  box-shadow: 0 4px 14px rgba(83, 145, 254, 0.25);
+  animation: fadeIn 0.15s ease-out;
+}
+
+.grep-action-box .action-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #58a6ff;
+}
+
+.grep-action-box .action-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #c9d1d9;
+}
+
+.grep-action-box .action-key {
+  color: #5391fe;
+  font-weight: bold;
+}
+
 /* Actions Panel */
 .action-box {
   margin-top: 10px;
@@ -534,6 +650,40 @@ body.has-maximized {
   50% {
     opacity: 0.5;
   }
+}
+
+/* Local VFS Status Badge */
+.local-vfs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #858585;
+  font-size: 11px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.local-vfs-badge:hover {
+  color: #cccccc;
+}
+
+.local-vfs-badge .vfs-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #6a737d;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.local-vfs-badge.mounted {
+  color: #cccccc !important;
+}
+
+.local-vfs-badge.mounted .vfs-status-dot {
+  background-color: #16c60c !important;
+  box-shadow: 0 0 6px rgba(22, 198, 12, 0.5);
 }
 
 .live-presence-widget {

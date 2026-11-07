@@ -16,6 +16,7 @@ import {
   setupPopoverEvents 
 } from './presence.js';
 import { getAuthorizedWhitelist, isSessionActive } from './auth.js';
+import { initLocalVfs, mountLocalDirectory } from './local_vfs.js';
 
 export { updatePresenceUI };
 
@@ -41,6 +42,8 @@ async function initApp() {
     viewport: document.getElementById("terminalViewport"),
     window: document.getElementById("terminalWindow"),
     grepWarningBox: document.getElementById("grepWarningBox"),
+    grepResultsBox: document.getElementById("grepResultsBox"),
+    grepActionBox: document.getElementById("grepActionBox"),
     statusText: document.getElementById("statusText"),
     statusCount: document.getElementById("statusCount"),
     statusIndicator: document.getElementById("statusIndicator"),
@@ -50,6 +53,20 @@ async function initApp() {
 
   // Setup click-to-pin and popover management
   setupPopoverEvents();
+
+  // Initialize Local VFS Engine
+  initLocalVfs();
+
+  const vfsBadge = document.getElementById("localVfsBadge");
+  if (vfsBadge) {
+    vfsBadge.addEventListener("click", async () => {
+      if (window.__pwshTerminal && typeof window.__pwshTerminal.attachLocalFolder === "function") {
+        await window.__pwshTerminal.attachLocalFolder();
+      } else {
+        await mountLocalDirectory();
+      }
+    });
+  }
 
   // Keep terminal clicked to focus input
   elements.viewport.addEventListener("click", (e) => {

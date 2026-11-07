@@ -51,6 +51,12 @@
 
         <!-- Interactive actions modal panel -->
         <div id="actionBox" class="action-box" style="display: none;" role="dialog" aria-label="Interactive Action Options"></div>
+
+        <!-- In-File Grep Results Viewport -->
+        <div id="grepResultsBox" class="grep-results-viewport" style="display: none;" role="region" aria-label="Grep Search Results"></div>
+
+        <!-- Grep Context Action Box -->
+        <div id="grepActionBox" class="grep-action-box" style="display: none;" role="dialog" aria-label="Grep Context Actions"></div>
       </div>
     </div>
 
@@ -61,6 +67,9 @@
         <span id="statusText">Connecting Programming-Related...</span>
       </div>
       <div class="status-right">
+        <!-- Local VFS Status Badge -->
+        <span id="localVfsBadge" class="status-item local-vfs-badge" title="Local VFS: Disconnected (Click or enter $ to attach local folder)"><span class="vfs-status-dot"></span> Local VFS: Disconnected</span>
+
         <!-- Live Presence Widget (Authenticated Users Only) -->
         <div class="presence-widget-container" id="presenceWidgetContainer" style="display: none !important;">
           <span class="status-badge live-presence-widget" id="livePresenceWidget" role="button" aria-haspopup="true" tabindex="0" style="display: none !important;">

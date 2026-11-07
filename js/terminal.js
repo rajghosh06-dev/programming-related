@@ -34,6 +34,12 @@ import {
   getDeviceId,
   markActive
 } from './presence.js';
+import {
+  mountLocalDirectory,
+  searchContent,
+  readLocalFile,
+  updateLocalVfsBadge
+} from './local_vfs.js';
 
 /**
  * Pinned authoring build version extracted from DistanceVector.pkt in TEST-CISCO
@@ -98,6 +104,8 @@ export class Terminal {
     this.viewport = elements.viewport;
     this.window = elements.window || document.getElementById('terminalWindow');
     this.grepWarningBox = elements.grepWarningBox || document.getElementById('grepWarningBox');
+    this.grepResultsBox = elements.grepResultsBox || document.getElementById('grepResultsBox');
+    this.grepActionBox = elements.grepActionBox || document.getElementById('grepActionBox');
     this.promptTextElement = document.getElementById('promptText') || document.querySelector('.prompt-text');
     this.statusText = elements.statusText || document.getElementById('statusText');
     this.statusCount = elements.statusCount || document.getElementById('statusCount');
@@ -113,6 +121,9 @@ export class Terminal {
     this.currentQuery = "";
     this.actionMode = null; // null | "ITEM" | "SERVE_OS"
     this.grepActive = false;
+    this.grepResults = [];
+    this.grepSelectedIndex = 0;
+    this.grepPendingQuery = "";
     this.commandHistory = [];
     this.history = this.commandHistory;
     this.historyIndex = -1;
@@ -234,6 +245,7 @@ export class Terminal {
     }
     this.hideSuggestions();
     this.hideGrepWarning();
+    this.closeGrepResults();
     this.mode = "INPUT";
     this.actionMode = null;
     this.activeItem = null;
@@ -684,7 +696,13 @@ export class Terminal {
     // 1. In-File Grep Guard on '$'
     if (trimmed.startsWith("$")) {
       this.hideSuggestions();
-      this.showGrepWarning();
+      const q = trimmed.slice(1).trim();
+      this.grepPendingQuery = q;
+      if (!window.__localVfsHandle) {
+        this.showGrepWarning(q);
+      } else {
+        this.hideGrepWarning();
+      }
       return;
     } else {
       this.hideGrepWarning();
@@ -739,19 +757,41 @@ export class Terminal {
   }
 
   /**
-   * Inline RED warning box when '$' is typed for direct cloning into .\tmp\txt-idx
+   * Inline PowerShell warning block when '$' is typed for in-file content search
    */
-  showGrepWarning() {
+  showGrepWarning(query = "") {
     this.grepActive = true;
+    this.grepPendingQuery = query;
+    if (!this.grepWarningBox) {
+      this.grepWarningBox = document.getElementById("grepWarningBox");
+    }
     if (!this.grepWarningBox) return;
 
     this.grepWarningBox.innerHTML = `
-      <div><strong>[!] In-file content search requires local indexing.</strong></div>
-      <div style="margin: 4px 0;">Cloning into <code class="clone-cmd">.\\tmp\\txt-idx</code> for deep offline text indexing.</div>
-      <div class="grep-actions">
-        Press [<span class="key-badge">ENTER</span>] to clone directly &nbsp;|&nbsp; [<span class="key-badge">ESC</span>] to dismiss
+      <div><strong>[!] In-file content search (Deep Grep Indexing)</strong></div>
+      <div class="grep-actions" style="margin-top: 8px; line-height: 1.6;">
+        <div class="grep-opt" data-key="enter" style="cursor: pointer;">[<span class="key-badge">ENTER</span>] Download clone script (clone-index.bat)</div>
+        <div class="grep-opt" data-key="0" style="cursor: pointer;">[<span class="key-badge">0</span>]     Attach local cloned folder (Chrome / Edge)</div>
+        <div class="grep-opt" data-key="esc" style="cursor: pointer;">[<span class="key-badge">ESC</span>]   Dismiss</div>
       </div>
     `;
+
+    const opts = this.grepWarningBox.querySelectorAll(".grep-opt");
+    opts.forEach(el => {
+      el.addEventListener("click", () => {
+        const k = el.dataset.key;
+        if (k === "enter") this.executeDirectClone();
+        else if (k === "0") this.attachLocalFolder();
+        else if (k === "esc") {
+          this.hideGrepWarning();
+          if (this.input) {
+            this.input.value = "";
+            this.input.focus();
+          }
+        }
+      });
+    });
+
     this.grepWarningBox.style.display = "block";
     this.scrollBottom();
   }
@@ -761,6 +801,282 @@ export class Terminal {
     if (this.grepWarningBox) {
       this.grepWarningBox.style.display = "none";
       this.grepWarningBox.innerHTML = "";
+    }
+  }
+
+  /**
+   * Attach local folder via File System Access API
+   */
+  async attachLocalFolder(customHandle = null) {
+    try {
+      const result = await mountLocalDirectory(customHandle);
+      this.hideGrepWarning();
+      this.appendRaw(`[OK] Local VFS mounted: ${result.repository}\n\n`);
+      if (this.grepPendingQuery) {
+        const q = this.grepPendingQuery;
+        this.grepPendingQuery = "";
+        await this.runGrepSearch(q);
+      } else {
+        this.updatePromptDisplay();
+        this.updateCaret();
+        this.scrollBottom();
+        if (this.input) {
+          this.input.value = "";
+          this.input.focus();
+        }
+      }
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        this.appendRaw(`[!] Local VFS mount error: ${err.message}\n\n`);
+      }
+      this.scrollBottom();
+      if (this.input) this.input.focus();
+    }
+  }
+
+  /**
+   * Execute 100% offline deep grep search across mounted local directory handle
+   */
+  async runGrepSearch(query) {
+    if (!query || !query.trim()) {
+      this.appendRaw("Usage: $ <search_pattern> (e.g. $ dijkstra)\n\n");
+      this.scrollBottom();
+      return;
+    }
+
+    const trimmed = query.trim();
+    this.closeGrepResults();
+    this.appendRaw(`${this.getPromptPrefix()}$ ${trimmed}\n[*] Searching local repository for '${trimmed}'...\n`);
+    this.scrollBottom();
+
+    try {
+      const results = await searchContent(trimmed);
+      if (!results || results.length === 0) {
+        this.appendRaw(`No matches found for '${trimmed}'.\n\n`);
+        this.updatePromptDisplay();
+        this.updateCaret();
+        this.scrollBottom();
+        if (this.input) {
+          this.input.value = "";
+          this.input.focus();
+        }
+        return;
+      }
+
+      const fileCount = new Set(results.map(r => r.path)).size;
+      const hitCount = results.length;
+      this.appendRaw(`Matches found in ${fileCount} files (${hitCount} hits): [Use ↑/↓, Enter to select, ESC to exit]\n\n`);
+      this.scrollBottom();
+
+      this.grepResults = results;
+      this.grepSelectedIndex = 0;
+      this.mode = "GREP_NAV";
+      this.renderGrepResults();
+    } catch (err) {
+      this.appendRaw(`[ERR] Grep failed: ${err.message}\n\n`);
+      this.updatePromptDisplay();
+      this.updateCaret();
+      this.scrollBottom();
+      if (this.input) this.input.focus();
+    }
+  }
+
+  /**
+   * Renders Tier 1 interactive scrollable search results list (.grep-results-viewport)
+   */
+  renderGrepResults() {
+    if (!this.grepResultsBox) {
+      this.grepResultsBox = document.getElementById("grepResultsBox");
+    }
+    if (!this.grepResultsBox) return;
+
+    if (!this.grepResults || this.grepResults.length === 0) {
+      this.grepResultsBox.style.display = "none";
+      this.grepResultsBox.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+    for (let i = 0; i < this.grepResults.length; i++) {
+      const item = this.grepResults[i];
+      const isSelected = i === this.grepSelectedIndex;
+      const pointer = isSelected ? ">" : "&nbsp;";
+      const winPath = this.escapeHTML(item.path.replace(/\//g, "\\"));
+      const lineNum = item.lineNum;
+      const lineText = this.escapeHTML(item.lineText || "");
+
+      html += `
+        <div class="grep-result-item ${isSelected ? "selected" : ""}" data-index="${i}">
+          <span class="grep-pointer">${pointer}</span>
+          <span class="grep-path-line">${winPath}:${lineNum}</span>
+          <span class="grep-text">${lineText}</span>
+        </div>
+      `;
+    }
+
+    this.grepResultsBox.innerHTML = html;
+    this.grepResultsBox.style.display = "block";
+
+    const items = this.grepResultsBox.querySelectorAll(".grep-result-item");
+    items.forEach(el => {
+      el.addEventListener("click", () => {
+        const idx = parseInt(el.dataset.index, 10);
+        this.grepSelectedIndex = idx;
+        this.openGrepActionBox();
+      });
+    });
+
+    const selectedEl = this.grepResultsBox.querySelector(".grep-result-item.selected");
+    if (selectedEl) {
+      selectedEl.scrollIntoView({ block: "nearest" });
+    }
+
+    this.scrollBottom();
+  }
+
+  /**
+   * Opens Tier 2 Context Action Box
+   */
+  openGrepActionBox() {
+    if (!this.grepActionBox) {
+      this.grepActionBox = document.getElementById("grepActionBox");
+    }
+    if (!this.grepActionBox) return;
+
+    const item = this.grepResults[this.grepSelectedIndex];
+    if (!item) return;
+
+    this.mode = "GREP_ACTION";
+
+    const winPath = this.escapeHTML(item.path.replace(/\//g, "\\"));
+    this.grepActionBox.innerHTML = `
+      <div class="action-title">Selected File: [FILE] ${winPath} (Line ${item.lineNum} matched)</div>
+      <div class="action-options">
+        <span>Choose action:</span>
+        <span class="action-opt" data-action="1" style="cursor: pointer;">[<span class="action-key">1</span>] View File (cat)</span>
+        <span class="action-opt" data-action="2" style="cursor: pointer;">[<span class="action-key">2</span>] Jump &amp; Browse (cd + ls)</span>
+        <span class="action-opt" data-action="3" style="cursor: pointer;">[<span class="action-key">3</span>] Copy Path</span>
+        <span class="action-opt" data-action="esc" style="cursor: pointer;">[<span class="action-key">ESC</span>] Back to Search</span>
+      </div>
+    `;
+    this.grepActionBox.style.display = "block";
+
+    const opts = this.grepActionBox.querySelectorAll(".action-opt");
+    opts.forEach(el => {
+      el.addEventListener("click", () => {
+        const act = el.dataset.action;
+        if (act === "1") this.executeGrepAction(1);
+        else if (act === "2") this.executeGrepAction(2);
+        else if (act === "3") this.executeGrepAction(3);
+        else if (act === "esc") this.closeGrepActionBox();
+      });
+    });
+
+    this.scrollBottom();
+  }
+
+  /**
+   * Closes Tier 2 Context Action Box and returns to Tier 1 Results List
+   */
+  closeGrepActionBox() {
+    if (this.grepActionBox) {
+      this.grepActionBox.style.display = "none";
+      this.grepActionBox.innerHTML = "";
+    }
+    this.mode = "GREP_NAV";
+    this.renderGrepResults();
+    if (this.input) this.input.focus();
+  }
+
+  /**
+   * Fully closes grep results and resets terminal mode to INPUT
+   */
+  closeGrepResults() {
+    if (this.grepResultsBox) {
+      this.grepResultsBox.style.display = "none";
+      this.grepResultsBox.innerHTML = "";
+    }
+    if (this.grepActionBox) {
+      this.grepActionBox.style.display = "none";
+      this.grepActionBox.innerHTML = "";
+    }
+    this.mode = "INPUT";
+    this.grepResults = [];
+    this.grepSelectedIndex = 0;
+    this.updatePromptDisplay();
+    this.updateCaret();
+    if (this.input) {
+      this.input.value = "";
+      this.input.focus();
+    }
+  }
+
+  /**
+   * Dispatches Tier 2 contextual action
+   * [1] View File (cat)
+   * [2] Jump & Browse (cd + ls)
+   * [3] Copy Path
+   */
+  async executeGrepAction(act) {
+    const item = this.grepResults[this.grepSelectedIndex];
+    if (!item) return;
+
+    if (act === 1) {
+      this.closeGrepResults();
+      try {
+        const text = await readLocalFile(item.path);
+        const lines = text.split(/\r?\n/);
+        const winPath = item.path.replace(/\//g, "\\");
+        const prefix = this.getPromptPrefix();
+        this.appendRaw(`${prefix}Get-Content .\\${winPath}\n\n`);
+
+        let html = `<div class="cat-output" style="margin: 6px 0 12px 0; font-family: var(--font-mono, monospace); font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-all;">`;
+        for (let i = 0; i < lines.length; i++) {
+          const lineNum = i + 1;
+          const lineNumPad = String(lineNum).padStart(4, " ");
+          const escaped = this.escapeHTML(lines[i]);
+          if (lineNum === item.lineNum) {
+            html += `<div style="background: rgba(83, 145, 254, 0.25); color: #5391fe; border-left: 3px solid #5391fe; padding: 1px 6px; font-weight: bold;">${lineNumPad} | ${escaped}</div>`;
+          } else {
+            html += `<div style="color: #cccccc; padding: 1px 6px;">${lineNumPad} | ${escaped}</div>`;
+          }
+        }
+        html += `</div>\n`;
+        this.appendHTML(html);
+      } catch (err) {
+        this.appendRaw(`[ERR] Failed to read local file '${item.path}': ${err.message}\n\n`);
+      }
+      this.updatePromptDisplay();
+      this.updateCaret();
+      this.scrollBottom();
+      if (this.input) this.input.focus();
+      return;
+    }
+
+    if (act === 2) {
+      this.closeGrepResults();
+      const normalized = item.path.replace(/\\/g, "/");
+      const parentFolder = normalized.includes("/") ? normalized.substring(0, normalized.lastIndexOf("/")) : "";
+      this.cwd = parentFolder;
+      this.updatePromptDisplay();
+      this.runLs(this.cwd);
+      this.updateCaret();
+      this.scrollBottom();
+      if (this.input) this.input.focus();
+      return;
+    }
+
+    if (act === 3) {
+      const winPath = item.path.replace(/\//g, "\\");
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(winPath);
+        }
+      } catch (e) {}
+      this.appendRaw(`[OK] Copied path to clipboard: ${winPath}\n\n`);
+      this.scrollBottom();
+      if (this.input) this.input.focus();
+      return;
     }
   }
 
@@ -1143,6 +1459,11 @@ pause
         this.executeDirectClone();
         return;
       }
+      if (e.key === "0") {
+        e.preventDefault();
+        this.attachLocalFolder();
+        return;
+      }
       if (e.key === "Escape") {
         e.preventDefault();
         this.hideGrepWarning();
@@ -1150,6 +1471,62 @@ pause
         this.updateCaret();
         return;
       }
+    }
+
+    // Tier 1: Grep Navigation
+    if (this.mode === "GREP_NAV") {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (this.grepResults && this.grepResults.length > 0) {
+          this.grepSelectedIndex = (this.grepSelectedIndex + 1) % this.grepResults.length;
+          this.renderGrepResults();
+        }
+        return;
+      }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (this.grepResults && this.grepResults.length > 0) {
+          this.grepSelectedIndex = (this.grepSelectedIndex - 1 + this.grepResults.length) % this.grepResults.length;
+          this.renderGrepResults();
+        }
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        this.openGrepActionBox();
+        return;
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        this.closeGrepResults();
+        return;
+      }
+      return;
+    }
+
+    // Tier 2: Grep Context Action Box
+    if (this.mode === "GREP_ACTION") {
+      if (e.key === "1") {
+        e.preventDefault();
+        this.executeGrepAction(1);
+        return;
+      }
+      if (e.key === "2") {
+        e.preventDefault();
+        this.executeGrepAction(2);
+        return;
+      }
+      if (e.key === "3") {
+        e.preventDefault();
+        this.executeGrepAction(3);
+        return;
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        this.closeGrepActionBox();
+        return;
+      }
+      return;
     }
 
     // Suggestions navigation (@ or / or Tab completion)
@@ -2748,7 +3125,17 @@ pause
         this.appendRaw(`No repository files found matching '@${q}'.\n\n`);
       }
     } else if (cmd.startsWith("$")) {
-      this.showGrepWarning();
+      const q = cmd.slice(1).trim();
+      this.grepPendingQuery = q;
+      if (window.__localVfsHandle) {
+        if (!q) {
+          this.appendRaw("Usage: $ <search_pattern> (e.g. $ dijkstra)\n\n");
+        } else {
+          await this.runGrepSearch(q);
+        }
+      } else {
+        this.showGrepWarning(q);
+      }
     } else if (cmd.length > 0) {
       this.appendRaw(
         `${cmd} : The term '${cmd}' is not recognized as the name of a cmdlet, function, script file, or operable program.\n` +
@@ -3327,6 +3714,7 @@ pause
     this.actions.innerHTML = "";
     this.hideSuggestions();
     this.hideGrepWarning();
+    this.closeGrepResults();
     this.mode = "INPUT";
     this.actionMode = null;
     this.activeItem = null;

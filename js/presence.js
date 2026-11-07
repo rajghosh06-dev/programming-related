@@ -116,20 +116,28 @@ export function getFirebaseDb() {
 }
 
 /**
- * Generates an authentic Windows device identifier: DESKTOP-XXXXXXX
+ * Generates and strictly validates an authentic Windows device identifier: DESKTOP-XXXXXXX
+ * Purges invalid formats or test tokens (WIN1, WIN2, K1, K2, SAIKRISHNA, MOCK)
+ * and strictly enforces /^DESKTOP-[A-Z0-9]{7}$/.
  */
 export function getDeviceId() {
-  let deviceId = localStorage.getItem("pwsh_terminal_device_id");
-  if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const current = localStorage.getItem("pwsh_terminal_device_id");
+  const testTokens = ["WIN1", "WIN2", "K1", "K2", "SAIKRISHNA", "MOCK"];
+  const hasTestToken = current && testTokens.some(token => current.includes(token));
+  const isValidFormat = current && /^DESKTOP-[A-Z0-9]{7}$/.test(current);
+
+  if (!current || hasTestToken || !isValidFormat) {
+    localStorage.removeItem("pwsh_terminal_device_id");
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let code = "";
     for (let i = 0; i < 7; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    deviceId = `DESKTOP-${code}`;
+    const deviceId = `DESKTOP-${code}`;
     localStorage.setItem("pwsh_terminal_device_id", deviceId);
+    return deviceId;
   }
-  return deviceId;
+  return current;
 }
 
 /**
@@ -641,10 +649,10 @@ export function updatePresenceUI(presenceMap, totalCount) {
           const canEnd = isAdmin && !isThisSession;
           activeHtml += `
             <div class="presence-user-group">
-              <div class="presence-item">
-                <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
-                <span class="presence-status-dot ${overallStatus}">[●]</span>
-                <span style="color: #888888;">${group.displayUser} - Sign-in screen${statusLabel}</span>
+              <div class="presence-user-row presence-item">
+                <span class="presence-toggle-slot"><span class="presence-toggle-spacer"></span></span>
+                <span class="presence-status-dot status-dot ${overallStatus}">[●]</span>
+                <span class="presence-user-name" style="color: #888888;">${group.displayUser} - Sign-in screen${statusLabel}</span>
                 ${canEnd ? `<button class="end-session-btn" data-session-id="${sess.sessionId}" title="Terminate visitor session remotely">[End Session]</button>` : ''}
               </div>
             </div>`;
@@ -654,30 +662,30 @@ export function updatePresenceUI(presenceMap, totalCount) {
           const isThisSession = sess && sess.sessionId === currentSessionId;
           const deviceLabel = sess ? (sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session")) : "";
           const sessStatus = sess ? (sess.status === "active" ? "active" : "idle") : overallStatus;
-          const sessDot = `<span class="presence-status-dot ${sessStatus}">[●]</span>`;
+          const sessDot = `<span class="presence-status-dot status-dot ${sessStatus}">[●]</span>`;
 
           if (isThisSession) {
             activeHtml += `
               <div class="presence-user-group">
-                <div class="presence-item">
-                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                <div class="presence-user-row presence-item">
+                  <span class="presence-toggle-slot"><span class="presence-toggle-spacer"></span></span>
                   ${sessDot}
-                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}</span>
-                  <span class="session-device" style="margin-left: 6px;">${deviceLabel}</span>
+                  <span class="presence-user-name">${group.displayUser}</span>
+                  <span class="presence-device-tag">${deviceLabel}</span>
                   <span class="session-current-badge">${sessStatus === "active" ? "(this session)" : "(this session, Idle)"}</span>
                 </div>
               </div>`;
           } else if (isAdmin) {
             // Admin viewing single-session peer:
             // Render [●] <user>  <device> followed directly by [End Session]
-            const idleTag = sessStatus === "idle" ? `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px; margin-left: 4px;">(Idle)</span>` : "";
+            const idleTag = sessStatus === "idle" ? `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px; margin-left: 2px;">(Idle)</span>` : "";
             activeHtml += `
               <div class="presence-user-group">
-                <div class="presence-item">
-                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                <div class="presence-user-row presence-item">
+                  <span class="presence-toggle-slot"><span class="presence-toggle-spacer"></span></span>
                   ${sessDot}
-                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}</span>
-                  <span class="session-device" style="margin-left: 6px;">${deviceLabel}</span>
+                  <span class="presence-user-name">${group.displayUser}</span>
+                  <span class="presence-device-tag">${deviceLabel}</span>
                   ${idleTag}
                   <button class="end-session-btn" data-session-id="${sess.sessionId}" title="Terminate session remotely">[End Session]</button>
                 </div>
@@ -686,10 +694,10 @@ export function updatePresenceUI(presenceMap, totalCount) {
             // Regular user viewing peer:
             activeHtml += `
               <div class="presence-user-group">
-                <div class="presence-item">
-                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                <div class="presence-user-row presence-item">
+                  <span class="presence-toggle-slot"><span class="presence-toggle-spacer"></span></span>
                   ${sessDot}
-                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}${statusLabel}</span>
+                  <span class="presence-user-name">${group.displayUser}</span>${statusLabel}
                 </div>
               </div>`;
           }
@@ -708,11 +716,11 @@ export function updatePresenceUI(presenceMap, totalCount) {
             const isThisSession = sess.sessionId === currentSessionId;
             const deviceLabel = sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session");
             const sessStatus = sess.status === "active" ? "active" : "idle";
-            const sessDot = `<span class="presence-status-dot ${sessStatus}">[●]</span>`;
+            const sessDot = `<span class="presence-status-dot status-dot ${sessStatus}">[●]</span>`;
 
             if (isThisSession) {
               subItemsHtml += `
-                <div class="presence-sub-item">
+                <div class="presence-subsession-row presence-sub-item">
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
                   <span class="session-current-badge">${sessStatus === "active" ? "(this session)" : "(this session, Idle)"}</span>
@@ -724,7 +732,7 @@ export function updatePresenceUI(presenceMap, totalCount) {
                 : `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px;">(Idle)</span>`;
 
               subItemsHtml += `
-                <div class="presence-sub-item">
+                <div class="presence-subsession-row presence-sub-item">
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
                   ${statusTag}
@@ -735,10 +743,11 @@ export function updatePresenceUI(presenceMap, totalCount) {
 
           activeHtml += `
             <div class="presence-user-group">
-              <div class="presence-item">
-                <span class="presence-toggle-btn" data-user="${userKey}" role="button" tabindex="0">${isExpanded ? '[▲]' : '[▼]'}</span>
-                <span class="presence-status-dot ${overallStatus}">[●]</span>
-                <span class="presence-user-label" style="color: #cccccc;">${group.displayUser} (${sessCount})${statusLabel}</span>
+              <div class="presence-user-row presence-item">
+                <span class="presence-toggle-slot"><span class="presence-toggle-btn" data-user="${userKey}" role="button" tabindex="0">${isExpanded ? '[▲]' : '[▼]'}</span></span>
+                <span class="presence-status-dot status-dot ${overallStatus}">[●]</span>
+                <span class="presence-user-name">${group.displayUser}</span>
+                <span class="presence-session-count" style="color: #888888; font-size: 11px;">(${sessCount})</span>${statusLabel}
                 ${endAllBtnHtml}
               </div>
               ${isExpanded ? `<div class="presence-sub-sessions">${subItemsHtml}</div>` : ''}
@@ -755,9 +764,10 @@ export function updatePresenceUI(presenceMap, totalCount) {
       for (const handle of Object.keys(whitelist)) {
         if (!activeHandles.has(handle.toLowerCase())) {
           offlineHtml += `
-            <div class="presence-item">
-              <span class="presence-status-dot offline">[○]</span>
-              <span style="color: #777777;">${handle} - Offline</span>
+            <div class="presence-offline-row presence-item">
+              <span class="presence-toggle-slot"><span class="presence-toggle-spacer"></span></span>
+              <span class="presence-status-dot status-dot offline">[○]</span>
+              <span class="presence-user-name" style="color: #777777;">${handle} - Offline</span>
             </div>`;
         }
       }

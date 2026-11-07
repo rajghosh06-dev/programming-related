@@ -44,13 +44,34 @@ export const COMPATIBLE_PKT_VERSION_PREFIX = "9.0.1";
  * Generates an authentic Windows setup device identifier:
  * Format: "DESKTOP-" followed by 7 random uppercase alphanumeric characters (e.g., "DESKTOP-7K4M9J2").
  */
-function generateDesktopId() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+export function generateDesktopId() {
+  const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let code = "";
   for (let i = 0; i < 7; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return `DESKTOP-${code}`;
+}
+
+/**
+ * Validates and retrieves an authentic Windows device identifier.
+ * Purges invalid formats or test tokens (WIN1, WIN2, K1, K2, SAIKRISHNA, MOCK)
+ * and strictly enforces /^DESKTOP-[A-Z0-9]{7}$/.
+ * @returns {string} Validated deviceId
+ */
+export function getOrCreateDeviceId() {
+  const current = localStorage.getItem("pwsh_terminal_device_id");
+  const testTokens = ["WIN1", "WIN2", "K1", "K2", "SAIKRISHNA", "MOCK"];
+  const hasTestToken = current && testTokens.some(token => current.includes(token));
+  const isValidFormat = current && /^DESKTOP-[A-Z0-9]{7}$/.test(current);
+
+  if (!current || hasTestToken || !isValidFormat) {
+    localStorage.removeItem("pwsh_terminal_device_id");
+    const deviceId = generateDesktopId();
+    localStorage.setItem("pwsh_terminal_device_id", deviceId);
+    return deviceId;
+  }
+  return current;
 }
 
 export class Terminal {
@@ -154,12 +175,7 @@ export class Terminal {
     if (customUser && customUser.trim().length > 0) {
       this.userOrDevice = customUser.trim();
     } else {
-      let deviceId = localStorage.getItem("pwsh_terminal_device_id");
-      if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
-        deviceId = generateDesktopId();
-        localStorage.setItem("pwsh_terminal_device_id", deviceId);
-      }
-      this.userOrDevice = deviceId;
+      this.userOrDevice = getOrCreateDeviceId();
     }
     this.deviceId = this.userOrDevice;
   }

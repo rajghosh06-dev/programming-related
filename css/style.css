@@ -475,11 +475,15 @@ body.has-maximized {
   background: #444444;
 }
 
-/* Presence Widget & Popover */
+/* Presence Widget & Popover (Hidden by default for unauthenticated users) */
 .presence-widget-container {
   position: relative;
-  display: inline-flex;
+  display: none !important;
   align-items: center;
+}
+
+.presence-widget-container.authenticated {
+  display: inline-flex !important;
 }
 
 .live-presence-widget {

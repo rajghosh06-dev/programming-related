@@ -174,12 +174,71 @@ export function resetPresenceToAnonymous() {
   } catch (e) {}
 }
 
+let activeUnsubscribe = null;
+
+/**
+ * Detaches the real-time presence listener from Firebase
+ */
+export function unsubscribeFromPresence() {
+  if (typeof activeUnsubscribe === "function") {
+    try {
+      activeUnsubscribe();
+    } catch (e) {}
+    activeUnsubscribe = null;
+  }
+  presenceListeners = [];
+}
+
+/**
+ * Hides the entire live presence widget and popover (unauthenticated view)
+ */
+export function hidePresenceWidget() {
+  const container = document.getElementById("presenceWidgetContainer");
+  const widget = document.getElementById("livePresenceWidget");
+  const popover = document.getElementById("presencePopover");
+  if (container) {
+    container.classList.remove("authenticated");
+    container.style.setProperty("display", "none", "important");
+  }
+  if (widget) {
+    widget.style.setProperty("display", "none", "important");
+  }
+  if (popover) {
+    popover.classList.remove("visible");
+    popover.style.setProperty("display", "none", "important");
+  }
+}
+
+/**
+ * Reveals the live presence widget for authenticated users
+ */
+export function showPresenceWidget() {
+  const container = document.getElementById("presenceWidgetContainer");
+  const widget = document.getElementById("livePresenceWidget");
+  const popover = document.getElementById("presencePopover");
+  if (container) {
+    container.classList.add("authenticated");
+    container.style.removeProperty("display");
+    container.style.display = "inline-flex";
+  }
+  if (widget) {
+    widget.style.removeProperty("display");
+    widget.style.display = "inline-flex";
+  }
+  if (popover) {
+    popover.style.removeProperty("display");
+  }
+}
+
 /**
  * Subscribes to real-time presence changes
  * @param {Function} callback - Called with (presenceMap, activeCount)
  */
 export function subscribeToPresence(callback) {
   if (typeof callback !== "function") return;
+  if (activeUnsubscribe) {
+    unsubscribeFromPresence();
+  }
   presenceListeners.push(callback);
 
   const database = getFirebaseDb();
@@ -198,7 +257,7 @@ export function subscribeToPresence(callback) {
 
   const allPresenceRef = ref(database, "presence");
   try {
-    onValue(allPresenceRef, (snap) => {
+    activeUnsubscribe = onValue(allPresenceRef, (snap) => {
       const val = snap.val() || {};
       cachedPresenceMap = val;
       const count = Object.keys(val).length;

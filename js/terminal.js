@@ -99,6 +99,9 @@ export class Terminal {
       this.initPromptConfig();
       this.initBootBanner();
       this.scheduleSessionExpiration(activeSession.remainingMs);
+      if (window.__startPresenceSubscription) {
+        window.__startPresenceSubscription();
+      }
     } else {
       this.currentUser = null;
       this.currentRole = null;
@@ -106,6 +109,9 @@ export class Terminal {
       this.authState = "AUTH_USERNAME";
       this.initPromptConfig();
       this.initAuthGate();
+      if (window.__stopPresenceSubscription) {
+        window.__stopPresenceSubscription();
+      }
     }
 
     this.bindEvents();
@@ -116,26 +122,21 @@ export class Terminal {
 
   /**
    * Initializes prompt drive and username/device-id from localStorage
+   * Preserves authentic DESKTOP-XXXXXXX uniform prompt naming across all users
    */
   initPromptConfig() {
     this.drive = localStorage.getItem("pwsh_terminal_drive") || "D";
 
-    if (this.currentRole === "ADMIN") {
-      this.userOrDevice = "Administrator";
-    } else if (this.currentUser) {
-      this.userOrDevice = this.currentUser;
+    const customUser = localStorage.getItem("pwsh_terminal_username");
+    if (customUser && customUser.trim().length > 0) {
+      this.userOrDevice = customUser.trim();
     } else {
-      const customUser = localStorage.getItem("pwsh_terminal_username");
-      if (customUser && customUser.trim().length > 0) {
-        this.userOrDevice = customUser.trim();
-      } else {
-        let deviceId = localStorage.getItem("pwsh_terminal_device_id");
-        if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
-          deviceId = generateDesktopId();
-          localStorage.setItem("pwsh_terminal_device_id", deviceId);
-        }
-        this.userOrDevice = deviceId;
+      let deviceId = localStorage.getItem("pwsh_terminal_device_id");
+      if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
+        deviceId = generateDesktopId();
+        localStorage.setItem("pwsh_terminal_device_id", deviceId);
       }
+      this.userOrDevice = deviceId;
     }
   }
 
@@ -200,6 +201,9 @@ export class Terminal {
     }
     clearSession();
     resetPresenceToAnonymous();
+    if (typeof window.__stopPresenceSubscription === "function") {
+      window.__stopPresenceSubscription();
+    }
     this.currentUser = null;
     this.currentRole = null;
     this.initAuthGate(reason);
@@ -668,6 +672,9 @@ pause
         this.currentRole = this.pendingAuthRole;
         saveSession(this.currentUser, this.currentRole);
         updatePresenceUser(this.currentUser);
+        if (typeof window.__startPresenceSubscription === "function") {
+          window.__startPresenceSubscription();
+        }
         this.scheduleSessionExpiration(SESSION_TTL_MS);
 
         this.mode = "INPUT";
@@ -2260,7 +2267,7 @@ pause
 
     for (const [userHandle, userMeta] of Object.entries(whitelist)) {
       const role = userMeta.role || "USER";
-      const displayUser = role === "ADMIN" ? "Administrator" : userHandle;
+      const displayUser = userHandle;
       const hash = await getUserPasswordHash(userHandle);
       const pwdStatus = hash ? `<span style="color:#16c60c;">CONFIGURED</span>` : `<span style="color:#e5c07b;">PENDING</span>`;
 
@@ -2307,7 +2314,7 @@ pause
     for (const [sid, sess] of entries) {
       const rawUser = sess.user || "anonymous";
       const isAdmin = rawUser.toLowerCase() === "rajghosh06-dev";
-      const displayUser = isAdmin ? "Administrator" : rawUser;
+      const displayUser = rawUser;
       const isAnonymous = rawUser.startsWith("anonymous-");
       const userType = isAdmin ? `<span style="color:#4ec9b0; font-weight:bold;">Admin</span>` : (isAnonymous ? `<span style="color:#888888;">Visitor</span>` : `<span style="color:#cccccc;">User</span>`);
       const statusDot = sess.status === "active" ? `<span style="color:#16c60c;">[●] Active</span>` : `<span style="color:#e5c07b;">[●] Idle</span>`;

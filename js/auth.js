@@ -92,6 +92,7 @@ export async function getUserPasswordHash(username) {
       const snap = await get(authRef);
       if (snap.exists()) {
         const val = snap.val();
+        if (val && val.reset) return null;
         if (typeof val === "string") return val;
         if (val && val.hash) return val.hash;
       }
@@ -155,7 +156,9 @@ export async function deleteUserPasswordHash(username) {
   if (db) {
     try {
       const authRef = ref(db, `auth/${lower}`);
-      await remove(authRef);
+      await remove(authRef).catch(async () => {
+        await set(authRef, { reset: true, updatedAt: Date.now() });
+      });
     } catch (err) {}
   }
 

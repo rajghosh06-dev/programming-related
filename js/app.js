@@ -6,10 +6,16 @@ import {
   REPO_CONFIG 
 } from './api.js';
 import { Terminal } from './terminal.js';
-import { initPresenceEngine, subscribeToPresence } from './presence.js';
-import { getAuthorizedWhitelist } from './auth.js';
+import { 
+  initPresenceEngine, 
+  subscribeToPresence, 
+  unsubscribeFromPresence,
+  showPresenceWidget,
+  hidePresenceWidget 
+} from './presence.js';
+import { getAuthorizedWhitelist, isSessionActive } from './auth.js';
 
-function updatePresenceUI(presenceMap, count) {
+export function updatePresenceUI(presenceMap, count) {
   const countText = document.getElementById("presenceCountText");
   const activeSection = document.getElementById("presenceActiveSection");
   const offlineSection = document.getElementById("presenceOfflineSection");
@@ -28,14 +34,7 @@ function updatePresenceUI(presenceMap, count) {
       const status = sess.status === "active" ? "active" : "idle";
       const statusLabel = status === "idle" ? " (Idle)" : "";
 
-      if (u === "rajghosh06-dev" || u.toLowerCase() === "rajghosh06-dev") {
-        activeUserHandles.add("rajghosh06-dev");
-        activeHtml += `
-          <div class="presence-item">
-            <span class="presence-status-dot ${status}">[●]</span>
-            <span style="color: #4ec9b0; font-weight: bold;">Administrator${statusLabel}</span>
-          </div>`;
-      } else if (u.startsWith("anonymous-")) {
+      if (u.startsWith("anonymous-")) {
         activeHtml += `
           <div class="presence-item">
             <span class="presence-status-dot ${status}">[●]</span>
@@ -60,7 +59,6 @@ function updatePresenceUI(presenceMap, count) {
       const whitelist = getAuthorizedWhitelist();
       let offlineHtml = "";
       for (const handle of Object.keys(whitelist)) {
-        if (handle.toLowerCase() === "rajghosh06-dev") continue; // Never expose admin secret handle
         if (!activeUserHandles.has(handle.toLowerCase())) {
           offlineHtml += `
             <div class="presence-item">
@@ -73,6 +71,19 @@ function updatePresenceUI(presenceMap, count) {
     }
   }
 }
+
+export function startPresenceSubscription() {
+  showPresenceWidget();
+  subscribeToPresence(updatePresenceUI);
+}
+
+export function stopPresenceSubscription() {
+  hidePresenceWidget();
+  unsubscribeFromPresence();
+}
+
+window.__startPresenceSubscription = startPresenceSubscription;
+window.__stopPresenceSubscription = stopPresenceSubscription;
 
 async function initApp() {
   const elements = {
@@ -137,9 +148,15 @@ async function initApp() {
     }
   });
 
-  // Initialize Cloud Presence
+  // Initialize Cloud Presence Heartbeat Engine
   initPresenceEngine();
-  subscribeToPresence(updatePresenceUI);
+
+  // Presence visibility gating: visible ONLY for authenticated users
+  if (isSessionActive()) {
+    startPresenceSubscription();
+  } else {
+    stopPresenceSubscription();
+  }
 
   try {
     const cachedEntry = loadCachedIndex();

@@ -84,6 +84,10 @@ export class Terminal {
     this.commandHistory = [];
     this.historyIndex = -1;
 
+    // Virtual File System (VFS) State
+    this.cwd = "";
+    this.indexer = { files: this.items };
+
     // Authentication Subsystem
     this.isMaskedInput = false;
     this.rawPasswordBuffer = "";
@@ -147,10 +151,27 @@ export class Terminal {
       }
       this.userOrDevice = deviceId;
     }
+    this.deviceId = this.userOrDevice;
+  }
+
+  get deviceId() {
+    return this.userOrDevice;
+  }
+
+  set deviceId(v) {
+    this.userOrDevice = v;
+  }
+
+  formatPromptPath() {
+    const base = `${this.drive}:\\${this.userOrDevice}\\Programming-Related`;
+    if (!this.cwd || this.cwd === "") {
+      return base;
+    }
+    return `${base}\\${this.cwd.replace(/\//g, '\\')}`;
   }
 
   getPromptPath() {
-    return `${this.drive}:\\${this.userOrDevice}\\Programming-Related`;
+    return this.formatPromptPath();
   }
 
   getPromptPrefix() {
@@ -171,6 +192,7 @@ export class Terminal {
 
   initAuthGate(alertMessage = null) {
     this.stopSessionCountdown();
+    this.cwd = "";
     this.mode = "AUTH";
     this.authState = "AUTH_USERNAME";
     this.isMaskedInput = false;
@@ -300,6 +322,7 @@ export class Terminal {
       this.sessionTimer = null;
     }
     this.stopSessionCountdown();
+    this.cwd = "";
     clearSession();
     resetPresenceToAnonymous();
     if (typeof window.__stopPresenceSubscription === "function") {
@@ -620,6 +643,34 @@ pause
           this.hideSuggestions();
           this.input.focus();
         };
+      } else if (item.type === "dir_complete") {
+        div.innerHTML = `
+          <span class="item-name" style="color: #4ec9b0;"><span class="badge-dir">[DIR]</span> ${item.name}</span>
+          <span class="item-meta" style="color: #569cd6; font-size: 11px;">Directory</span>
+        `;
+        div.onclick = () => {
+          const needsQuotes = /[\s-]/.test(item.name);
+          const formatted = needsQuotes ? `"${item.name}"` : item.name;
+          const cmd = item.cmdPrefix || "cd";
+          this.input.value = `${cmd} ${formatted}`;
+          this.hideSuggestions();
+          this.input.focus();
+          this.updateCaret();
+        };
+      } else if (item.type === "file_complete") {
+        div.innerHTML = `
+          <span class="item-name" style="color: #cccccc;"><span class="badge-file">[FILE]</span> ${item.name}</span>
+          <span class="item-meta" style="color: #888888; font-size: 11px;">${item.length ? item.length + ' bytes' : 'File'}</span>
+        `;
+        div.onclick = () => {
+          const needsQuotes = /[\s-]/.test(item.name);
+          const formatted = needsQuotes ? `"${item.name}"` : item.name;
+          const cmd = item.cmdPrefix || "cat";
+          this.input.value = `${cmd} ${formatted}`;
+          this.hideSuggestions();
+          this.input.focus();
+          this.updateCaret();
+        };
       } else if (item.type === "tree" || item.type === "dir") {
         div.innerHTML = `
           <span class="item-name" style="color: #4ec9b0;"><span class="badge-dir">[DIR]</span> ${item.path.split("/").pop()}</span>
@@ -659,6 +710,27 @@ pause
       }
     }
     this.ensureSelectedVisible();
+  }
+
+  applySelectedSuggestion() {
+    if (!this.filteredResults || this.filteredResults.length === 0) return;
+    const selected = this.filteredResults[this.selectedIndex];
+    if (!selected) return;
+
+    if (selected.type === "cmd") {
+      this.input.value = selected.usage ? selected.usage : `/${selected.name} `;
+    } else if (selected.type === "dir_complete") {
+      const needsQuotes = /[\s-]/.test(selected.name);
+      const formatted = needsQuotes ? `"${selected.name}"` : selected.name;
+      const cmd = selected.cmdPrefix || "cd";
+      this.input.value = `${cmd} ${formatted}`;
+    } else if (selected.type === "file_complete") {
+      const needsQuotes = /[\s-]/.test(selected.name);
+      const formatted = needsQuotes ? `"${selected.name}"` : selected.name;
+      const cmd = selected.cmdPrefix || "cat";
+      this.input.value = `${cmd} ${formatted}`;
+    }
+    this.updateCaret();
   }
 
   hideSuggestions() {
@@ -865,12 +937,21 @@ pause
       }
     }
 
-    // Suggestions navigation (@ or /)
+    // Suggestions navigation (@ or / or Tab completion)
     if (this.suggestions.style.display === "block" && this.filteredResults.length > 0) {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        this.selectedIndex = (this.selectedIndex + 1) % this.filteredResults.length;
+        this.updateActiveSuggestion();
+        this.applySelectedSuggestion();
+        return;
+      }
+
       if (e.key === "ArrowDown") {
         e.preventDefault();
         this.selectedIndex = (this.selectedIndex + 1) % this.filteredResults.length;
         this.updateActiveSuggestion();
+        this.applySelectedSuggestion();
         return;
       }
 
@@ -878,6 +959,7 @@ pause
         e.preventDefault();
         this.selectedIndex = (this.selectedIndex - 1 + this.filteredResults.length) % this.filteredResults.length;
         this.updateActiveSuggestion();
+        this.applySelectedSuggestion();
         return;
       }
 
@@ -887,6 +969,11 @@ pause
         if (selected) {
           if (selected.type === "cmd") {
             this.input.value = selected.usage ? selected.usage : `/${selected.name} `;
+            this.hideSuggestions();
+            this.input.focus();
+            this.updateCaret();
+          } else if (selected.type === "dir_complete" || selected.type === "file_complete") {
+            this.applySelectedSuggestion();
             this.hideSuggestions();
             this.input.focus();
             this.updateCaret();
@@ -938,15 +1025,95 @@ pause
     // Tab autocomplete
     if (e.key === "Tab") {
       e.preventDefault();
-      const val = this.input.value.trim().toLowerCase();
+      const currentVal = this.input.value;
+      const trimmed = currentVal.trim();
+
+      // 1. Context-aware directory autocomplete for cd / chdir / set-location
+      const cdMatch = currentVal.match(/^(\s*(?:cd|chdir|set-location))(?:\s+(.*))?$/i);
+      if (cdMatch) {
+        const cmdPrefix = cdMatch[1].trim();
+        const argPart = cdMatch[2] !== undefined ? cdMatch[2] : "";
+        const cleanQuery = argPart.trim().replace(/^["']|["']$/g, "").toLowerCase();
+
+        const dirs = this.getImmediateChildren(this.cwd).filter(c => c.isDir);
+        const matches = dirs.filter(d => d.name.toLowerCase().startsWith(cleanQuery));
+
+        if (matches.length === 1) {
+          const targetName = matches[0].name;
+          const needsQuotes = /[\s-]/.test(targetName);
+          const formatted = needsQuotes ? `"${targetName}"` : targetName;
+          this.input.value = `${cmdPrefix} ${formatted}`;
+          this.hideSuggestions();
+          this.updateCaret();
+          return;
+        } else if (matches.length > 1) {
+          this.filteredResults = matches.map(m => ({
+            type: "dir_complete",
+            name: m.name,
+            cmdPrefix: cmdPrefix
+          }));
+          this.selectedIndex = 0;
+          this.renderSuggestions();
+          this.applySelectedSuggestion();
+          return;
+        }
+        return;
+      }
+
+      // 2. Context-aware file autocomplete for cat / type / get-content
+      const catMatch = currentVal.match(/^(\s*(?:cat|type|get-content))(?:\s+(.*))?$/i);
+      if (catMatch) {
+        const cmdPrefix = catMatch[1].trim();
+        const argPart = catMatch[2] !== undefined ? catMatch[2] : "";
+        const cleanQuery = argPart.trim().replace(/^["']|["']$/g, "").toLowerCase();
+
+        const files = this.getImmediateChildren(this.cwd).filter(c => !c.isDir);
+        const matches = files.filter(f => f.name.toLowerCase().startsWith(cleanQuery));
+
+        if (matches.length === 1) {
+          const targetName = matches[0].name;
+          const needsQuotes = /[\s-]/.test(targetName);
+          const formatted = needsQuotes ? `"${targetName}"` : targetName;
+          this.input.value = `${cmdPrefix} ${formatted}`;
+          this.hideSuggestions();
+          this.updateCaret();
+          return;
+        } else if (matches.length > 1) {
+          this.filteredResults = matches.map(m => ({
+            type: "file_complete",
+            name: m.name,
+            length: m.length,
+            cmdPrefix: cmdPrefix
+          }));
+          this.selectedIndex = 0;
+          this.renderSuggestions();
+          this.applySelectedSuggestion();
+          return;
+        }
+        return;
+      }
+
+      // 3. Global search on '@'
+      if (trimmed.startsWith("@")) {
+        const query = trimmed.slice(1).toLowerCase();
+        this.filteredResults = this.items.filter(item => item.path.toLowerCase().includes(query));
+        if (this.filteredResults.length > 0) {
+          this.selectedIndex = 0;
+          this.renderSuggestions();
+        }
+        return;
+      }
+
+      // 4. Fallback to known command autocomplete
       const knownCmds = [
-        "ls", "dir", "clear", "cls", "help", 
+        "ls", "dir", "clear", "cls", "help", "pwd", "cd", "cat", "type",
         "/clear", "/cls", "/re-fetch", "/cache", "/serve", 
         "/install-cisco-pkt-compatible", "/install-cisco-pkt", 
         "/install-winget", "/install-wt", "/install-pwsh", 
-        "/set-user", "/set-drive", "/reset-prompt", "/help"
+        "/set-user", "/set-drive", "/reset-prompt", "/help",
+        "/users", "/sessions", "/logout"
       ];
-      const match = knownCmds.find(c => c.startsWith(val) && c !== val);
+      const match = knownCmds.find(c => c.startsWith(trimmed.toLowerCase()) && c !== trimmed.toLowerCase());
       if (match) {
         this.input.value = match;
         this.updateCaret();
@@ -2293,15 +2460,23 @@ pause
         `(winget -> silent MSI with Explorer context menus -> Portable ZIP with Machine PATH registration).\n\n`
       );
     } 
-    // 3. Standard PowerShell directory listing & utilities
-    else if (raw === "ls" || raw === "dir" || raw.startsWith("ls ") || raw.startsWith("dir ")) {
-      const targetFolder = cmd.replace(/^(ls|dir)\s*/i, "").trim();
+    // 3. Standard PowerShell native cmdlets & utilities
+    else if (/^(cd|chdir|set-location)(?:\s+|$)/i.test(cmd.trim())) {
+      const match = cmd.trim().match(/^(cd|chdir|set-location)(?:\s+(.*))?$/i);
+      const target = match && match[2] ? match[2].trim() : "";
+      this.executeCd(target);
+    } else if (/^(ls|dir|get-childitem)(?:\s+|$)/i.test(cmd.trim())) {
+      const match = cmd.trim().match(/^(ls|dir|get-childitem)(?:\s+(.*))?$/i);
+      const targetFolder = match && match[2] ? match[2].trim() : "";
       this.renderDirectoryListing(targetFolder);
+    } else if (/^(pwd|get-location)$/i.test(cmd.trim())) {
+      this.executePwd();
+    } else if (/^(cat|type|get-content)(?:\s+|$)/i.test(cmd.trim())) {
+      const match = cmd.trim().match(/^(cat|type|get-content)(?:\s+(.*))?$/i);
+      const target = match && match[2] ? match[2].trim() : "";
+      await this.executeCat(target);
     } else if (raw === "repo" || raw === "info" || raw === "status") {
       this.renderRepoInfo();
-    } else if (raw.startsWith("cat ") || raw.startsWith("type ")) {
-      const target = cmd.slice(cmd.indexOf(" ") + 1).trim();
-      this.previewFileContent(target);
     } else if (cmd.startsWith("@")) {
       const q = cmd.slice(1).trim().toLowerCase();
       const match = this.items.find(f => f.path.toLowerCase().includes(q));
@@ -2332,6 +2507,7 @@ pause
     try {
       const res = await refetchRepositoryIndex();
       this.items = res.items;
+      this.indexer.files = this.items;
       this.fileMap = new Map();
       this.items.forEach(i => this.fileMap.set(i.path, i));
 
@@ -2495,9 +2671,11 @@ pause
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/logout</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sign out of the current terminal session<br><br>
 
         <span class="ps-header">5. Standard PowerShell Commands:</span><br>
+        &nbsp;&nbsp;<span style="color: #ffe082;">cd &lt;dir&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change directory (e.g. <span style="color:#569cd6;">cd "2nd-Year"</span>, <span style="color:#569cd6;">cd ..</span>, <span style="color:#569cd6;">cd ~</span>)<br>
+        &nbsp;&nbsp;<span style="color: #ffe082;">pwd</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Print current virtual directory path<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls / dir</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List current directory contents with authentic styling<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls &lt;folder&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List contents of folder (e.g. <span style="color:#569cd6;">ls 1st-Year</span>)<br>
-        &nbsp;&nbsp;<span style="color: #ffe082;">cat &lt;file&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Preview file details and stream directly<br>
+        &nbsp;&nbsp;<span style="color: #ffe082;">cat &lt;file&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Display file contents directly in terminal<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">repo / info</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Display repository metadata and branch information<br><br>
 
         <span class="ps-header">6. Context-Aware Item Actions:</span><br>
@@ -2525,94 +2703,319 @@ pause
     `);
   }
 
+  escapeHTML(str) {
+    if (!str) return "";
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  resolvePath(targetPath) {
+    if (!targetPath) return this.cwd;
+    let clean = targetPath.trim().replace(/^["']|["']$/g, "").replace(/\\/g, "/");
+
+    // Root navigations
+    if (clean === "" || clean === "~" || clean === "/" || clean === "\\") {
+      return "";
+    }
+
+    // Strip leading drive or repo root if passed e.g. D:/DESKTOP-XXXXXXX/Programming-Related/...
+    const repoMatch = clean.match(/Programming-Related\/?(.*)$/i);
+    if (repoMatch) {
+      clean = repoMatch[1];
+    }
+
+    // If starts with / or ~, treat as from root
+    let isFromRoot = false;
+    if (clean.startsWith("/")) {
+      isFromRoot = true;
+      clean = clean.replace(/^\/+/, "");
+    } else if (clean.startsWith("~/")) {
+      isFromRoot = true;
+      clean = clean.slice(2);
+    }
+
+    let parts = (isFromRoot || !this.cwd) ? [] : this.cwd.split("/");
+    const segments = clean.split("/").filter(s => s.length > 0 && s !== ".");
+
+    for (const seg of segments) {
+      if (seg === "..") {
+        if (parts.length > 0) {
+          parts.pop();
+        }
+      } else {
+        parts.push(seg);
+      }
+    }
+
+    return parts.join("/");
+  }
+
+  isDirectory(targetPath) {
+    if (!targetPath || targetPath === "") return true; // root is always a directory
+    const norm = targetPath.toLowerCase().replace(/^\/+|\/+$/g, "");
+    
+    // Check if directly indexed as tree/dir
+    const exact = this.items.find(i => i.path.toLowerCase() === norm);
+    if (exact && (exact.type === "tree" || exact.type === "dir")) return true;
+
+    // Check if any indexed item starts with norm + "/"
+    const hasChildren = this.items.some(i => i.path.toLowerCase().startsWith(norm + "/"));
+    return hasChildren;
+  }
+
+  isFile(targetPath) {
+    if (!targetPath || targetPath === "") return false;
+    const norm = targetPath.toLowerCase().replace(/^\/+|\/+$/g, "");
+    const exact = this.items.find(i => i.path.toLowerCase() === norm);
+    if (exact && exact.type !== "tree" && exact.type !== "dir") return true;
+    return false;
+  }
+
+  getImmediateChildren(dir = this.cwd) {
+    const normDir = (dir || "").replace(/^\/+|\/+$/g, "");
+    const prefix = normDir ? normDir.toLowerCase() + "/" : "";
+    const childrenMap = new Map();
+
+    for (const item of this.items) {
+      const itemPath = item.path;
+      const lowerPath = itemPath.toLowerCase();
+
+      if (normDir === "") {
+        const slashIdx = itemPath.indexOf("/");
+        if (slashIdx === -1) {
+          // Direct item at root
+          const isDir = item.type === "tree" || item.type === "dir";
+          childrenMap.set(lowerPath, {
+            name: itemPath,
+            isDir: isDir,
+            mode: isDir ? "da---" : "-a---",
+            date: "31-10-2026  09:00 AM",
+            length: isDir ? "" : (item.size ? item.size.toString() : "0"),
+            item: item
+          });
+        } else {
+          // Nested item, top level is directory
+          const dirName = itemPath.slice(0, slashIdx);
+          const lowerDir = dirName.toLowerCase();
+          if (!childrenMap.has(lowerDir)) {
+            childrenMap.set(lowerDir, {
+              name: dirName,
+              isDir: true,
+              mode: "da---",
+              date: "31-10-2026  09:00 AM",
+              length: "",
+              item: null
+            });
+          }
+        }
+      } else {
+        if (lowerPath === normDir.toLowerCase() && (item.type === "tree" || item.type === "dir")) {
+          continue;
+        }
+        if (lowerPath.startsWith(prefix)) {
+          const rest = itemPath.slice(prefix.length);
+          const slashIdx = rest.indexOf("/");
+          if (slashIdx === -1) {
+            const isDir = item.type === "tree" || item.type === "dir";
+            const lowerChild = rest.toLowerCase();
+            childrenMap.set(lowerChild, {
+              name: rest,
+              isDir: isDir,
+              mode: isDir ? "da---" : "-a---",
+              date: "31-10-2026  09:00 AM",
+              length: isDir ? "" : (item.size ? item.size.toString() : "0"),
+              item: item
+            });
+          } else {
+            const subDirName = rest.slice(0, slashIdx);
+            const lowerSubDir = subDirName.toLowerCase();
+            if (!childrenMap.has(lowerSubDir)) {
+              childrenMap.set(lowerSubDir, {
+                name: subDirName,
+                isDir: true,
+                mode: "da---",
+                date: "31-10-2026  09:00 AM",
+                length: "",
+                item: null
+              });
+            }
+          }
+        }
+      }
+    }
+
+    return Array.from(childrenMap.values()).sort((a, b) => {
+      if (a.isDir && !b.isDir) return -1;
+      if (!a.isDir && b.isDir) return 1;
+      return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+    });
+  }
+
+  executeCd(target) {
+    const rawTarget = (target || "").trim();
+    if (!rawTarget || rawTarget === "~" || rawTarget === "/" || rawTarget === "\\") {
+      this.cwd = "";
+      this.updatePromptDisplay();
+      return;
+    }
+
+    const cleanTarget = rawTarget.replace(/^["']|["']$/g, "").trim();
+    const resolved = this.resolvePath(cleanTarget);
+
+    if (this.isDirectory(resolved)) {
+      this.cwd = resolved;
+      this.updatePromptDisplay();
+    } else {
+      const displayTarget = cleanTarget.replace(/\//g, "\\");
+      let fullDisplayPath;
+      if (/^[A-Za-z]:\\/.test(displayTarget)) {
+        fullDisplayPath = displayTarget;
+      } else if (this.cwd) {
+        fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${this.cwd.replace(/\//g, '\\')}\\${displayTarget}`;
+      } else {
+        fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${displayTarget}`;
+      }
+      this.appendRaw(`Set-Location : Cannot find path '${fullDisplayPath}' because it does not exist.\n\n`);
+    }
+  }
+
+  executePwd() {
+    const fullPath = this.getPromptPath();
+    this.appendHTML(`
+      <div style="margin: 4px 0 10px 0; font-family: var(--font-mono); line-height: 1.5;">
+        <span class="ps-header">Path</span><br>
+        <span class="ps-header">----</span><br>
+        <span style="color: #ffffff;">${fullPath}</span>
+      </div>
+      <br>
+    `);
+  }
+
+  async executeCat(target) {
+    const rawTarget = (target || "").trim();
+    if (!rawTarget) {
+      this.appendRaw("Usage: cat <filename>\n\n");
+      return;
+    }
+
+    const cleanTarget = rawTarget.replace(/^["']|["']$/g, "").trim();
+    const resolved = this.resolvePath(cleanTarget);
+
+    // If target is directory
+    if (this.isDirectory(resolved)) {
+      this.appendRaw(`Get-Content : Cannot read '${cleanTarget}' because it is a directory.\n\n`);
+      return;
+    }
+
+    // Check if target file exists in repository
+    if (!this.isFile(resolved)) {
+      const displayTarget = cleanTarget.replace(/\//g, "\\");
+      let fullDisplayPath;
+      if (/^[A-Za-z]:\\/.test(displayTarget)) {
+        fullDisplayPath = displayTarget;
+      } else if (this.cwd) {
+        fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${this.cwd.replace(/\//g, '\\')}\\${displayTarget}`;
+      } else {
+        fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${displayTarget}`;
+      }
+      this.appendRaw(`Get-Content : Cannot find path '${fullDisplayPath}' because it does not exist.\n\n`);
+      return;
+    }
+
+    // Check binary extensions
+    const ext = resolved.split('.').pop().toLowerCase();
+    const binaryExts = new Set([
+      'pkt', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'pdf', 'zip', 'tar', 
+      'gz', '7z', 'exe', 'bin', 'iso', 'dll', 'mp4', 'mp3', 'docx', 'xlsx', 'pptx'
+    ]);
+    if (binaryExts.has(ext)) {
+      this.appendRaw(
+        `[WARN] Binary file detected: '${cleanTarget}'. Terminal streaming suppressed.\n` +
+        `Use '@${cleanTarget}' to download or inspect in GitHub.\n\n`
+      );
+      return;
+    }
+
+    // Stream text content
+    try {
+      let content = null;
+
+      // Primary: GitHub Raw stream
+      try {
+        const rawUrl = `https://raw.githubusercontent.com/rajghosh06-dev/Programming-Related/main/${encodeURI(resolved)}`;
+        const res = await fetch(rawUrl);
+        if (res.ok) {
+          content = await res.text();
+        }
+      } catch (e) {}
+
+      // Fallback: local file if offline or hosted locally
+      if (content === null) {
+        try {
+          const localRes = await fetch(`./${encodeURI(resolved)}`);
+          if (localRes.ok) {
+            content = await localRes.text();
+          }
+        } catch (e) {}
+      }
+
+      if (content !== null) {
+        this.appendHTML(`
+          <div class="cat-output" style="margin: 6px 0 12px 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-all; color: #cccccc;">${this.escapeHTML(content)}</div>
+        `);
+      } else {
+        this.appendRaw(`[ERR] Failed to load content for '${cleanTarget}'. Network or repository resource unavailable.\n\n`);
+      }
+    } catch (err) {
+      this.appendRaw(`[ERR] Could not read file '${cleanTarget}': ${err.message}\n\n`);
+    }
+  }
+
   async previewFileContent(filePath) {
-    if (!filePath) {
-      this.appendRaw("Usage: cat <file_path>\n\n");
-      return;
-    }
-
-    const match = this.items.find(f => f.path.toLowerCase() === filePath.toLowerCase() || f.path.toLowerCase().endsWith("/" + filePath.toLowerCase()));
-    if (!match) {
-      this.appendRaw(`Cannot find path '${filePath}' because it does not exist in repository index.\n\n`);
-      return;
-    }
-
-    this.promptItemAction(match);
+    return this.executeCat(filePath);
   }
 
   /**
    * Renders PowerShell 'ls' or 'dir' listing with dynamic prompt path
    */
   renderDirectoryListing(subFolder = "") {
-    let dirPath = this.getPromptPath();
-    if (subFolder) {
-      dirPath += "\\" + subFolder.replace(/\//g, "\\");
-    }
-
-    let topEntries = [
-      { mode: "da---", date: "31-10-2026  09:03 AM", length: "", name: ".github", isDir: true },
-      { mode: "da---", date: "23-05-2026  10:48 PM", length: "", name: ".idea", isDir: true },
-      { mode: "da---", date: "23-05-2026  10:48 PM", length: "", name: "1st-Year", isDir: true },
-      { mode: "da---", date: "23-05-2026  10:48 PM", length: "", name: "2nd-Year", isDir: true },
-      { mode: "da---", date: "01-07-2026  11:17 AM", length: "", name: "3rd-Year", isDir: true },
-      { mode: "d----", date: "31-10-2026  08:42 AM", length: "", name: "CN", isDir: true },
-      { mode: "da---", date: "23-05-2026  10:49 PM", length: "", name: "tools", isDir: true },
-      { mode: "-a---", date: "12-04-2026  02:36 PM", length: "1132", name: ".gitattributes", isDir: false },
-      { mode: "-a---", date: "31-08-2026  07:00 PM", length: "1188", name: ".gitignore", isDir: false },
-      { mode: "------", date: "27-02-2026  10:21 PM", length: "1090", name: "LICENSE", isDir: false },
-      { mode: "------", date: "12-04-2026  03:20 PM", length: "1896", name: "note.md", isDir: false },
-      { mode: "-a---", date: "31-10-2026  09:00 AM", length: "13641", name: "README.md", isDir: false }
-    ];
-
-    if (subFolder) {
-      const normalizedSub = subFolder.replace(/\\/g, "/").replace(/\/$/, "");
-      const prefix = normalizedSub + "/";
-      const directChildren = new Map();
-
-      this.items.forEach(item => {
-        if (item.path.startsWith(prefix)) {
-          const rest = item.path.slice(prefix.length);
-          const slashIdx = rest.indexOf("/");
-          if (slashIdx === -1) {
-            directChildren.set(rest, {
-              mode: item.type === "tree" ? "d----" : "-a---",
-              date: "31-10-2026  09:00 AM",
-              length: item.type === "tree" ? "" : (item.size ? item.size.toString() : "0"),
-              name: rest,
-              isDir: item.type === "tree"
-            });
-          } else {
-            const folderName = rest.slice(0, slashIdx);
-            if (!directChildren.has(folderName)) {
-              directChildren.set(folderName, {
-                mode: "da---",
-                date: "31-10-2026  09:00 AM",
-                length: "",
-                name: folderName,
-                isDir: true
-              });
-            }
-          }
+    let targetDir = this.cwd;
+    if (subFolder && subFolder.trim().length > 0) {
+      const cleanSub = subFolder.replace(/^["']|["']$/g, "").trim();
+      targetDir = this.resolvePath(cleanSub);
+      if (!this.isDirectory(targetDir)) {
+        const displayTarget = cleanSub.replace(/\//g, "\\");
+        let fullDisplayPath;
+        if (/^[A-Za-z]:\\/.test(displayTarget)) {
+          fullDisplayPath = displayTarget;
+        } else if (this.cwd) {
+          fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${this.cwd.replace(/\//g, '\\')}\\${displayTarget}`;
+        } else {
+          fullDisplayPath = `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${displayTarget}`;
         }
-      });
-
-      if (directChildren.size > 0) {
-        topEntries = Array.from(directChildren.values()).sort((a, b) => {
-          if (a.isDir && !b.isDir) return -1;
-          if (!a.isDir && b.isDir) return 1;
-          return a.name.localeCompare(b.name);
-        });
+        this.appendRaw(`Get-ChildItem : Cannot find path '${fullDisplayPath}' because it does not exist.\n\n`);
+        return;
       }
     }
 
+    const dirPath = targetDir
+      ? `${this.drive}:\\${this.userOrDevice}\\Programming-Related\\${targetDir.replace(/\//g, '\\')}`
+      : `${this.drive}:\\${this.userOrDevice}\\Programming-Related`;
+
+    const entries = this.getImmediateChildren(targetDir);
+
     // Build authentic HTML directory listing with green headers (#16C60C) and blue directory background (#005FB8)
     let rowsHtml = "";
-    topEntries.forEach(entry => {
+    entries.forEach(entry => {
       const modeCol = entry.mode.padEnd(7, " ");
       const dateCol = entry.date.padEnd(22, " ");
       const lengthCol = (entry.length || "").padStart(14, " ");
       const nameHtml = entry.isDir
-        ? `<span class="ps-dir">${entry.name}</span>`
+        ? `<span class="ps-dir badge-folder">${entry.name}</span>`
         : `<span class="ps-file">${entry.name}</span>`;
 
       rowsHtml += `<div class="ps-row">${modeCol}${dateCol}${lengthCol} ${nameHtml}</div>`;

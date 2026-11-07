@@ -41,6 +41,7 @@ const OFFLINE_FALLBACK = [
   { path: "2nd-Year/2-1/DATA STRUCTURES [C Language]/24R11A6685/TEMP/ParenthesisChecker.c", type: "blob", size: 1420, mode: "100644" },
   { path: "2nd-Year/2-1/DATA STRUCTURES [C Language]/24R11A6685/TREE/BTree.c", type: "blob", size: 3890, mode: "100644" },
   { path: "2nd-Year/2-1/DATA STRUCTURES [C Language]/24R11A6685/WEEK1/AdditionPolinomial.c", type: "blob", size: 1980, mode: "100644" },
+  { path: "2nd-Year/2-2/Assembly-Language-Programming", type: "tree", size: 0, mode: "040000" },
   { path: "3rd-Year", type: "tree", size: 0, mode: "040000" },
   { path: "CN", type: "tree", size: 0, mode: "040000" },
   { path: "CN/SocketProgramming/client.c", type: "blob", size: 1650, mode: "100644" },

@@ -394,7 +394,8 @@ body.has-maximized {
   line-height: 1.5;
 }
 
-.ps-dir {
+.ps-dir,
+.badge-folder {
   background-color: var(--dir-blue-bg);
   color: #ffffff;
   padding: 0 4px;

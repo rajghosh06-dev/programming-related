@@ -37,7 +37,7 @@ let terminationUnsubscribe = null;
 let popoverEventsInitialized = false;
 const expandedUsers = new Set();
 
-let isWindowFocused = typeof document !== "undefined" && typeof document.hasFocus === "function" ? document.hasFocus() : true;
+let currentSessionStatus = "active";
 let isInactive = false;
 let inactivityTimer = null;
 let presenceHeartbeatInterval = null;
@@ -45,45 +45,58 @@ let presenceHeartbeatInterval = null;
 /**
  * Resets 90-second inactivity timer and handles active/idle transition
  */
-function resetInactivityTimer(onStatusChange) {
-  if (isInactive) {
-    isInactive = false;
-    if (typeof onStatusChange === "function") {
-      onStatusChange();
-    }
-  }
+export function resetInactivityTimer() {
   if (inactivityTimer) {
     clearTimeout(inactivityTimer);
   }
   inactivityTimer = setTimeout(() => {
     isInactive = true;
-    if (typeof onStatusChange === "function") {
-      onStatusChange();
-    }
+    updatePresenceStatus("idle");
   }, 90000); // 90 seconds
+}
+
+/**
+ * Immediately marks session active and resets inactivity timer
+ */
+export function markActive() {
+  isInactive = false;
+  if (currentSessionStatus !== "active") {
+    updatePresenceStatus("active");
+  }
+  resetInactivityTimer();
 }
 
 /**
  * Evaluates the current presence status based on window focus, visibility, and user activity
  */
 export function getEvaluatedStatus() {
-  const isHidden = typeof document !== "undefined" && document.hidden;
+  const isHidden = typeof document !== "undefined" && (document.hidden || document.visibilityState === "hidden");
   if (isHidden) return "idle";
-  return (isWindowFocused && !isInactive) ? "active" : "idle";
+  return isInactive ? "idle" : "active";
 }
 
 /**
  * Explicitly updates the local session presence status in Firebase RTDB
  */
 export function updatePresenceStatus(status) {
+  currentSessionStatus = status;
   if (status === "active") {
-    isWindowFocused = true;
     isInactive = false;
-  } else if (status === "idle") {
-    isWindowFocused = false;
+  }
+  const sessionId = getSessionId();
+  if (cachedPresenceMap && cachedPresenceMap[sessionId]) {
+    cachedPresenceMap[sessionId].status = status;
+  }
+  // Immediately dispatch to local presence listeners so UI updates instantly
+  if (cachedPresenceMap) {
+    for (const listener of presenceListeners) {
+      try {
+        const nonTerminated = Object.values(cachedPresenceMap).filter(s => s && !s.terminated);
+        listener(cachedPresenceMap, nonTerminated.length);
+      } catch (e) {}
+    }
   }
   const database = getFirebaseDb();
-  const sessionId = getSessionId();
   if (!database || !sessionId) return;
   try {
     const userPresenceRef = ref(database, `presence/${sessionId}`);
@@ -212,42 +225,28 @@ export function initPresenceEngine() {
       }
     });
 
-    // Dynamic focus & visibility listeners
-    const updateActivityStatus = (status) => {
-      updatePresenceStatus(status);
-    };
-
-    // User activity listeners to reset 90-second inactivity timer
-    const onUserActivity = () => {
-      resetInactivityTimer(() => updateActivityStatus(getEvaluatedStatus()));
-    };
-
-    resetInactivityTimer(() => updateActivityStatus(getEvaluatedStatus()));
-
-    ["mousemove", "keydown", "click", "scroll"].forEach((evt) => {
-      window.addEventListener(evt, onUserActivity, { passive: true });
+    // Immediate Activity Reactivation: listen to user activity globally
+    ['keydown', 'mousedown', 'pointerdown', 'input', 'click', 'scroll'].forEach((evt) => {
+      window.addEventListener(evt, () => markActive(), { passive: true });
     });
 
+    // Window focus immediately reactivates active state
     window.addEventListener("focus", () => {
-      isWindowFocused = true;
-      updateActivityStatus("active");
+      markActive();
     });
 
-    window.addEventListener("blur", () => {
-      isWindowFocused = false;
-      updateActivityStatus("idle");
-    });
-
+    // Smart idle triggering (No false positives from blur):
+    // Do NOT immediately mark as 'idle' on window.onblur.
+    // Only transition to 'idle' if document is hidden or 90s timer expires.
     document.addEventListener("visibilitychange", () => {
-      const isHidden = document.hidden;
-      const status = isHidden ? "idle" : (document.hasFocus() ? "active" : "idle");
-      if (!isHidden && document.hasFocus()) {
-        isWindowFocused = true;
-      } else if (isHidden) {
-        isWindowFocused = false;
+      if (document.hidden || document.visibilityState === "hidden") {
+        updatePresenceStatus("idle");
+      } else {
+        markActive();
       }
-      updateActivityStatus(status);
     });
+
+    resetInactivityTimer();
 
     // Heartbeat Guard: periodic presence heartbeat interval (never write hardcoded "active")
     if (presenceHeartbeatInterval) {
@@ -255,7 +254,7 @@ export function initPresenceEngine() {
     }
     presenceHeartbeatInterval = setInterval(() => {
       if (!database || !sessionId) return;
-      const currentEvaluated = (isWindowFocused && !isInactive && !document.hidden) ? "active" : "idle";
+      const currentEvaluated = getEvaluatedStatus();
       try {
         update(userPresenceRef, {
           status: currentEvaluated,
@@ -268,6 +267,8 @@ export function initPresenceEngine() {
     console.warn("[Presence] Presence listener error:", err.message);
   }
 }
+
+export const initPresence = initPresenceEngine;
 
 /**
  * Updates the user attribute when a user successfully signs in or initializes their account
@@ -639,7 +640,10 @@ export function updatePresenceUI(presenceMap, totalCount) {
         // Parent Summary Dot:
         // If ALL sessions of a user are idle: Parent dot is Yellow.
         // If AT LEAST ONE session of a user is active: Parent dot is Green.
-        const hasActiveSession = group.sessions.some(s => s.status === "active");
+        const hasActiveSession = group.sessions.some(s => {
+          const st = (s.sessionId === currentSessionId) ? currentSessionStatus : s.status;
+          return st === "active";
+        });
         const overallStatus = hasActiveSession ? "active" : "idle";
         const statusLabel = overallStatus === "idle" ? " (Idle)" : "";
 
@@ -661,7 +665,7 @@ export function updatePresenceUI(presenceMap, totalCount) {
           const sess = group.sessions[0];
           const isThisSession = sess && sess.sessionId === currentSessionId;
           const deviceLabel = sess ? (sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session")) : "";
-          const sessStatus = sess ? (sess.status === "active" ? "active" : "idle") : overallStatus;
+          const sessStatus = isThisSession ? currentSessionStatus : (sess ? (sess.status === "active" ? "active" : "idle") : overallStatus);
           const sessDot = `<span class="presence-status-dot status-dot ${sessStatus}">[●]</span>`;
 
           if (isThisSession) {
@@ -711,28 +715,47 @@ export function updatePresenceUI(presenceMap, totalCount) {
             ? `<button class="end-all-btn" data-user="${userKey}" title="Terminate all sessions for ${group.displayUser}">[End All]</button>` 
             : "";
 
+          // Calculate duplicate device counts to append (Session 2), etc.
+          const deviceCounts = new Map();
+          for (const s of group.sessions) {
+            const dev = s.device || (s.sessionId ? s.sessionId.slice(-8) : "Session");
+            deviceCounts.set(dev, (deviceCounts.get(dev) || 0) + 1);
+          }
+          const deviceSeen = new Map();
+
           let subItemsHtml = "";
-          for (const sess of group.sessions) {
+          for (let idx = 0; idx < group.sessions.length; idx++) {
+            const sess = group.sessions[idx];
             const isThisSession = sess.sessionId === currentSessionId;
-            const deviceLabel = sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session");
-            const sessStatus = sess.status === "active" ? "active" : "idle";
+            const baseDevice = sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session");
+            const seenCount = (deviceSeen.get(baseDevice) || 0) + 1;
+            deviceSeen.set(baseDevice, seenCount);
+            const isDuplicate = (deviceCounts.get(baseDevice) || 0) > 1;
+            const deviceLabel = isDuplicate && seenCount > 1 ? `${baseDevice} (Session ${seenCount})` : baseDevice;
+
+            const isLast = idx === group.sessions.length - 1;
+            const branchChar = isLast ? "└── " : "├── ";
+            const branchSpan = `<span class="presence-tree-branch">${branchChar}</span>`;
+            const sessStatus = isThisSession ? currentSessionStatus : (sess.status === "active" ? "active" : "idle");
             const sessDot = `<span class="presence-status-dot status-dot ${sessStatus}">[●]</span>`;
 
             if (isThisSession) {
               subItemsHtml += `
                 <div class="presence-subsession-row presence-sub-item">
+                  ${branchSpan}
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
                   <span class="session-current-badge">${sessStatus === "active" ? "(this session)" : "(this session, Idle)"}</span>
                 </div>`;
             } else {
               const canEnd = isAdmin || (isTargetViewer && !isThisSession);
-              const statusTag = sessStatus === "active"
-                ? `<span class="session-status-tag active" style="color: #16c60c; font-size: 10px;">(Active)</span>`
-                : `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px;">(Idle)</span>`;
+              const statusTag = sessStatus === "idle"
+                ? `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px;">(Idle)</span>`
+                : "";
 
               subItemsHtml += `
                 <div class="presence-subsession-row presence-sub-item">
+                  ${branchSpan}
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
                   ${statusTag}

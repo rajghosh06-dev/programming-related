@@ -31,7 +31,8 @@ import {
   teardownTerminationListener,
   terminateSession,
   terminateAllSessionsForUser,
-  getDeviceId
+  getDeviceId,
+  markActive
 } from './presence.js';
 
 /**
@@ -447,10 +448,12 @@ export class Terminal {
 
   bindEvents() {
     this.input.addEventListener("input", (e) => {
+      markActive();
       this.handleInput(e);
       this.updateCaret();
     });
     this.input.addEventListener("keydown", (e) => {
+      markActive();
       this.handleKeydown(e);
       this.updateCaret();
     });
@@ -920,7 +923,12 @@ pause
     await handlePasswordInit(user, password, this);
   }
 
+  handleKeyDown(e) {
+    return this.handleKeydown(e);
+  }
+
   handleKeydown(e) {
+    markActive();
     if (this.isInputDisabled || (this.input && this.input.disabled)) {
       e.preventDefault();
       return;

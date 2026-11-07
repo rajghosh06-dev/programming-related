@@ -955,7 +955,7 @@ export class Terminal {
         <span>Choose action:</span>
         <span class="action-opt" data-action="1" style="cursor: pointer;">[<span class="action-key">1</span>] View File (cat)</span>
         <span class="action-opt" data-action="2" style="cursor: pointer;">[<span class="action-key">2</span>] Jump &amp; Browse (cd + ls)</span>
-        <span class="action-opt" data-action="3" style="cursor: pointer;">[<span class="action-key">3</span>] Copy Path</span>
+        <span class="action-opt" data-action="3" style="cursor: pointer;">[<span class="action-key">3</span>] Copy Content</span>
         <span class="action-opt" data-action="esc" style="cursor: pointer;">[<span class="action-key">ESC</span>] Back to Search</span>
       </div>
     `;
@@ -1066,16 +1066,26 @@ export class Terminal {
       return;
     }
 
-    if (act === 3) {
-      const winPath = item.path.replace(/\//g, "\\");
+    if (act === 3 || act === "3") {
       try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(winPath);
+        let content = "";
+        if (window.localVfs && typeof window.localVfs.readLocalFile === "function") {
+          content = await window.localVfs.readLocalFile(item.path);
+        } else if (item.fileHandle && typeof item.fileHandle.getFile === "function") {
+          const file = await item.fileHandle.getFile();
+          content = await file.text();
+        } else {
+          content = await readLocalFile(item.path);
         }
-      } catch (e) {}
-      this.appendRaw(`[OK] Copied path to clipboard: ${winPath}\n\n`);
-      this.scrollBottom();
-      if (this.input) this.input.focus();
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(content);
+        }
+        this.printSuccess(`[OK] Copied file content to clipboard: ${item.filename}`);
+      } catch (err) {
+        this.printError(`[ERR] Failed to copy content to clipboard: ${err.message}`);
+      }
+      this.resetPrompt();
       return;
     }
   }

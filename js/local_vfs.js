@@ -21,10 +21,14 @@ const IGNORED_DIRS = new Set([
   ".system_generated"
 ]);
 
-const ALLOWED_EXTS = new Set([
-  ".c", ".cpp", ".h", ".java", ".py", ".html", ".css", ".js",
-  ".json", ".md", ".txt", ".sql", ".xml", ".csv", ".bat", ".ps1"
-]);
+export const ALLOWED_EXTENSIONS = [
+  '.c', '.cpp', '.h', '.hpp',
+  '.java', '.py',
+  '.r', '.rmd',
+  '.html', '.css', '.js', '.json',
+  '.md', '.txt', '.sql', '.xml', '.csv',
+  '.bat', '.ps1', '.sh'
+];
 
 /**
  * Open IndexedDB store for caching directory handles across reloads
@@ -245,10 +249,8 @@ export async function searchContent(pattern, options = {}) {
   const maxResults = options.maxResults || 500;
 
   async function processFile(entry, name, currentPath) {
-    const lastDot = name.lastIndexOf(".");
-    if (lastDot === -1) return;
-    const ext = name.slice(lastDot).toLowerCase();
-    if (!ALLOWED_EXTS.has(ext)) return;
+    const ext = '.' + name.split('.').pop().toLowerCase();
+    if (!ALLOWED_EXTENSIONS.includes(ext)) return;
 
     try {
       const file = await entry.getFile();
@@ -331,4 +333,15 @@ export async function readLocalFile(path, options = {}) {
   const fileHandle = await current.getFileHandle(parts[parts.length - 1]);
   const file = await fileHandle.getFile();
   return await file.text();
+}
+
+if (typeof window !== "undefined") {
+  window.localVfs = {
+    readLocalFile,
+    searchContent,
+    mountLocalDirectory,
+    initLocalVfs,
+    updateLocalVfsBadge,
+    ALLOWED_EXTENSIONS
+  };
 }

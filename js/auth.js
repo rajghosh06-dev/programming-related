@@ -173,6 +173,69 @@ export async function deleteUserPasswordHash(username) {
 }
 
 /**
+ * Handles the post-password-initialization workflow:
+ * 1. Computes salted SHA-256 hash and writes to Firebase RTDB and local vault
+ * 2. Displays success confirmation and yellow warning
+ * 3. Displays countdown / redirect notice
+ * 4. Locks CLI input
+ * 5. Sets sessionStorage flash flag and triggers window.location.reload()
+ * @param {string} userOrPassword 
+ * @param {string|object} passwordOrTerminal 
+ * @param {object} [maybeTerminal] 
+ */
+export async function handlePasswordInit(userOrPassword, passwordOrTerminal, maybeTerminal) {
+  let username, password, terminal;
+  if (maybeTerminal !== undefined) {
+    username = userOrPassword;
+    password = passwordOrTerminal;
+    terminal = maybeTerminal;
+  } else if (passwordOrTerminal && typeof passwordOrTerminal === "object") {
+    password = userOrPassword;
+    terminal = passwordOrTerminal;
+    username = terminal.pendingAuthUser || (terminal.currentUser);
+  } else {
+    password = userOrPassword;
+    terminal = this ? (this.terminal || this) : window.__pwshTerminal;
+    username = terminal ? (terminal.pendingAuthUser || terminal.currentUser) : null;
+  }
+
+  const hash = await hashPassword(password);
+  await setUserPasswordHash(username, hash);
+
+  if (terminal && typeof terminal.appendHTML === "function") {
+    terminal.appendHTML(`
+      <span style="color: #16c60c;">[OK] Password created successful! Please remember.</span><br>
+      <span style="color: #e5c07b;">[!] If you forget your password, please contact the administrator!</span><br><br>
+      <span style="color: #569cd6;" id="authRefreshNotice">[*] Password initialized successfully. Refreshing in 3 seconds...</span><br><br>
+    `);
+    if (typeof terminal.scrollBottom === "function") {
+      terminal.scrollBottom();
+    }
+  }
+
+  sessionStorage.setItem("auth_init_flash", "1");
+
+  if (terminal && typeof terminal.setInputDisabled === "function") {
+    terminal.setInputDisabled(true);
+  } else if (this && this.terminal && typeof this.terminal.setInputDisabled === "function") {
+    this.terminal.setInputDisabled(true);
+  }
+
+  let remaining = 3;
+  const noticeEl = document.getElementById("authRefreshNotice");
+  const timer = setInterval(() => {
+    remaining--;
+    if (noticeEl && remaining > 0) {
+      noticeEl.textContent = `[*] Password initialized successfully. Refreshing in ${remaining} second${remaining === 1 ? '' : 's'}...`;
+    }
+    if (remaining <= 0) {
+      clearInterval(timer);
+      window.location.reload();
+    }
+  }, 1000);
+}
+
+/**
  * Adds a new user to the authorized list (Admin tool)
  */
 export function addAuthorizedUser(username, role = "USER") {

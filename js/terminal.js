@@ -16,7 +16,8 @@ import {
   saveSession,
   clearSession,
   getCurrentSession,
-  isSessionActive
+  isSessionActive,
+  handlePasswordInit
 } from './auth.js';
 import {
   updatePresenceUser,
@@ -89,6 +90,7 @@ export class Terminal {
     this.pendingAuthRole = null;
     this.tempInitPassword = null;
     this.sessionTimer = null;
+    this.isInputDisabled = false;
 
     const activeSession = getCurrentSession();
     if (activeSession) {
@@ -171,18 +173,45 @@ export class Terminal {
 
     this.output.textContent = "";
     let html = `PowerShell 7.6.9 - Authentication Subsystem\nRepository: Programming-Related\n\n`;
-    if (alertMessage) {
+
+    const flashNotice = sessionStorage.getItem("auth_init_flash");
+    if (flashNotice) {
+      sessionStorage.removeItem("auth_init_flash");
+      html += `<span style="color: #16c60c;">[OK] Account setup complete. Please sign-in to continue.</span>\n\n`;
+    } else if (alertMessage) {
       html += `<span style="color: #e5c07b;">[!] ${alertMessage}</span>\n\n`;
     }
+
     this.appendHTML(html.replace(/\n/g, "<br>"));
     if (this.promptTextElement) {
       this.promptTextElement.textContent = "Enter Username: ";
     }
     this.input.value = "";
+    this.setInputDisabled(false);
     this.hideSuggestions();
     this.hideGrepWarning();
     this.updateCaret();
     this.scrollBottom();
+  }
+
+  renderAuthGate(alertMessage = null) {
+    return this.initAuthGate(alertMessage);
+  }
+
+  setInputDisabled(disabled) {
+    this.isInputDisabled = !!disabled;
+    if (this.input) {
+      this.input.disabled = !!disabled;
+      if (disabled) {
+        this.input.blur();
+      } else {
+        this.input.focus();
+      }
+    }
+    if (this.caretElement) {
+      this.caretElement.style.display = disabled ? "none" : "";
+    }
+    this.updateCaret();
   }
 
   scheduleSessionExpiration(ms) {
@@ -288,6 +317,7 @@ export class Terminal {
 
     // Viewport click to refocus input
     this.viewport.addEventListener("click", (e) => {
+      if (this.isInputDisabled || (this.input && this.input.disabled)) return;
       if (!e.target.closest(".action-btn") && 
           !e.target.closest("a") && 
           !e.target.closest(".suggestion-item") &&
@@ -299,6 +329,7 @@ export class Terminal {
 
     // Window focus/blur restoration
     window.addEventListener("focus", () => {
+      if (this.isInputDisabled || (this.input && this.input.disabled)) return;
       this.input.focus();
       this.updateCaret();
     });
@@ -307,6 +338,7 @@ export class Terminal {
     });
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") {
+        if (this.isInputDisabled || (this.input && this.input.disabled)) return;
         this.input.focus();
         this.updateCaret();
       }
@@ -642,23 +674,7 @@ pause
         return;
       }
 
-      const hash = await hashPassword(confirmPwd);
-      await setUserPasswordHash(this.pendingAuthUser, hash);
-      this.tempInitPassword = null;
-
-      this.appendHTML(`
-        <span style="color: #16c60c;">[OK] Password created successful! Please remember.</span><br>
-        <span style="color: #e5c07b;">[!] If you forget your password, please contact the administrator!</span><br><br>
-        Please sign-in to continue.<br><br>
-      `);
-
-      this.authState = "AUTH_USERNAME";
-      this.isMaskedInput = false;
-      this.rawPasswordBuffer = "";
-      this.input.value = "";
-      this.promptTextElement.textContent = "Enter Username: ";
-      this.updateCaret();
-      this.scrollBottom();
+      await this.handlePasswordInit(confirmPwd);
     } else if (this.authState === "AUTH_PASSWORD") {
       const pwd = val || "";
       const mask = "*".repeat(pwd.length);
@@ -698,7 +714,17 @@ pause
     }
   }
 
+  async handlePasswordInit(password) {
+    const user = this.pendingAuthUser;
+    this.tempInitPassword = null;
+    await handlePasswordInit(user, password, this);
+  }
+
   handleKeydown(e) {
+    if (this.isInputDisabled || (this.input && this.input.disabled)) {
+      e.preventDefault();
+      return;
+    }
     // Mode: AUTH (CLI Authentication Subsystem)
     if (this.mode === "AUTH") {
       if (this.isMaskedInput) {

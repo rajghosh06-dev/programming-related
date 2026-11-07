@@ -36,6 +36,7 @@ import {
 } from './presence.js';
 import {
   mountLocalDirectory,
+  unmountLocalDirectory,
   searchContent,
   readLocalFile,
   updateLocalVfsBadge
@@ -271,7 +272,13 @@ export class Terminal {
   }
 
   printSuccess(text) {
-    this.resetPrompt(text);
+    this.appendRaw(`${text}\n`);
+    this.scrollBottom();
+  }
+
+  printWarning(text) {
+    this.appendRaw(`${text}\n`);
+    this.scrollBottom();
   }
 
   printError(text) {
@@ -730,6 +737,7 @@ export class Terminal {
         { name: "add-user", desc: "Add user to access list (Admin)", usage: "/add-user " },
         { name: "remove-user", desc: "Remove user from access list (Admin)", usage: "/remove-user " },
         { name: "sessions", desc: "List active presence sessions (Admin)", usage: "/sessions" },
+        { name: "unmount", desc: "Detach local folder & clear VFS index", usage: "/unmount" },
         { name: "logout", desc: "Sign out of terminal session", usage: "/logout" },
         { name: "help", desc: "Show command reference", usage: "/help" }
       ];
@@ -1720,7 +1728,7 @@ pause
         "/install-cisco-pkt-compatible", "/install-cisco-pkt", 
         "/install-winget", "/install-wt", "/install-pwsh", 
         "/set-user", "/set-drive", "/reset-prompt", "/help",
-        "/users", "/sessions", "/logout"
+        "/users", "/sessions", "/unmount", "/unmount-vfs", "/logout"
       ];
       const match = knownCmds.find(c => c.startsWith(trimmed.toLowerCase()) && c !== trimmed.toLowerCase());
       if (match) {
@@ -3023,7 +3031,26 @@ pause
     }
 
     // 3. Built-in Slash Commands
-    if (raw === "/re-fetch") {
+    if (raw === "/unmount" || raw === "/unmount-vfs") {
+      if (!window.__localVfsHandle) {
+        this.printWarning("[!] Local VFS is not currently mounted.");
+        this.resetPrompt();
+        return;
+      }
+
+      const result = await (window.localVfs && window.localVfs.unmountLocalDirectory
+        ? window.localVfs.unmountLocalDirectory()
+        : unmountLocalDirectory());
+
+      if (result.success) {
+        this.printSuccess(`[OK] ${result.message}`);
+        this.printLine("In-file content search ($) will now prompt to attach a folder or clone.");
+      } else {
+        this.printWarning(`[!] ${result.message}`);
+      }
+      this.resetPrompt();
+      return;
+    } else if (raw === "/re-fetch") {
       await this.executeRefetch();
     } else if (raw === "/cache") {
       this.renderCacheStatus();
@@ -3314,6 +3341,7 @@ pause
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/re-fetch</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalidates cache &amp; refetches tree (6x session quota)<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/cache</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prints cache status, TTL countdown, and quota remaining<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/help</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Displays this reference guide<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/unmount</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detaches the local folder handle and clears offline VFS index<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/set-user &lt;name&gt;</span>&nbsp;&nbsp;Changes prompt username directory (saved to localStorage)<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/set-drive &lt;ltr&gt;</span>&nbsp;&nbsp;Changes prompt drive letter (e.g. /set-drive C)<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/reset-prompt</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resets prompt back to newly generated DESKTOP-XXXXXXX on D:<br>
@@ -3718,6 +3746,8 @@ pause
   resetPrompt(statusMessage = "") {
     if (statusMessage) {
       this.appendRaw(`${this.getPromptPrefix()}${this.input.value}\n${statusMessage}\n\n`);
+    } else {
+      this.appendRaw("\n");
     }
     this.input.value = "";
     this.actions.style.display = "none";

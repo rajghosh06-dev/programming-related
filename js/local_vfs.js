@@ -203,6 +203,34 @@ export async function mountLocalDirectory(customHandle = null) {
 }
 
 /**
+ * Safely detaches the local filesystem directory handle, clears persistent IndexedDB records,
+ * and updates the status ribbon badge to disconnected.
+ * @returns {Promise<{success: boolean, message: string}>}
+ */
+export async function unmountLocalDirectory() {
+  if (!window.__localVfsHandle) {
+    return { success: false, message: "Local VFS is not currently mounted." };
+  }
+
+  window.__localVfsHandle = null;
+
+  // Purge handle from IndexedDB
+  try {
+    await clearStoredHandle();
+  } catch (err) {
+    console.warn("Failed to clear local VFS from IndexedDB:", err);
+  }
+
+  // Reset status bar badge to disconnected
+  updateLocalVfsBadge(false);
+
+  return {
+    success: true,
+    message: "Local VFS directory unmounted successfully."
+  };
+}
+
+/**
  * Initialize Local VFS on startup (restore from cache if permission granted)
  */
 export async function initLocalVfs() {
@@ -340,8 +368,10 @@ if (typeof window !== "undefined") {
     readLocalFile,
     searchContent,
     mountLocalDirectory,
+    unmountLocalDirectory,
     initLocalVfs,
     updateLocalVfsBadge,
+    clearStoredHandle,
     ALLOWED_EXTENSIONS
   };
 }

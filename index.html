@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PowerShell</title>
+  <!-- Authentic Windows Terminal PowerShell SVG Favicon Data URI -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f141c'/%3E%3Cpath d='M6 9l7 7-7 7v-3l4-4-4-4V9zm9 13h11v3H15v-3z' fill='%23ffffff'/%3E%3Cpath d='M6 9l7 7-7 7v-3l4-4-4-4V9z' fill='%233884ff' opacity='0.4'/%3E%3C/svg%3E">
+  
+  <!-- Cascadia Code Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,300..700;1,300..700&family=Cascadia+Mono:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Outer Windows 11 Terminal Window -->
+  <div class="terminal-window" id="terminalWindow">
+    
+    <!-- Terminal Viewport Canvas (display: block with 24px top padding) -->
+    <div class="terminal-viewport" id="terminalViewport">
+      <!-- Output History -->
+      <div id="outputHistory" class="terminal-history"></div>
+
+      <!-- Active Interactive Line Wrapper -->
+      <div class="active-line-wrapper" id="activeLineWrapper">
+        <div class="prompt-line">
+          <span class="prompt-text" id="promptText">PS D:\DESKTOP-XXXXXXX\Programming-Related&gt;</span>
+          <div class="input-container" id="inputContainer">
+            <input 
+              type="text" 
+              id="cliInput" 
+              class="cli-input" 
+              autocomplete="off" 
+              spellcheck="false" 
+              autofocus 
+              placeholder=""
+              aria-label="PowerShell Command Prompt"
+            >
+            <span class="custom-caret" id="customCaret" aria-hidden="true"></span>
+            <span class="caret-mirror" id="caretMirror" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- In-File Grep '$' Token Warning Box -->
+        <div id="grepWarningBox" class="grep-warning-box" style="display: none;" role="alert"></div>
+
+        <!-- Suggestion dropdown for @ file search and / slash commands (4-line compact frame) -->
+        <div id="suggestionBox" class="suggestion-box" style="display: none;" role="listbox" aria-label="Search suggestions"></div>
+
+        <!-- Interactive actions modal panel -->
+        <div id="actionBox" class="action-box" style="display: none;" role="dialog" aria-label="Interactive Action Options"></div>
+      </div>
+    </div>
+
+    <!-- Terminal Status Bar -->
+    <div class="terminal-statusbar" id="statusBar">
+      <div class="status-left">
+        <span class="status-indicator online" id="statusIndicator">[*]</span>
+        <span id="statusText">Connecting rajghosh06-dev/Programming-Related...</span>
+      </div>
+      <div class="status-right">
+        <span class="status-badge" id="statusCount">0 items</span>
+        <span class="status-badge">24h TTL</span>
+        <span class="status-badge">PWSH 7.6.9</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

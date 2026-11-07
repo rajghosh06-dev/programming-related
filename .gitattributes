@@ -1,0 +1,22 @@
+# Auto-detect text files and normalize line endings to LF
+* text=auto
+
+# Windows executable scripts MUST use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# POSIX scripts, web markup, stylesheets, scripts, and markdown MUST use LF
+*.sh text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.pkt binary
+*.pdf binary

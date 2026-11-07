@@ -1,0 +1,13 @@
+# Local runners & caches
+.runner/
+tmp/
+*.log
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Node / Scratch inspection tools
+node_modules/
+*.tmp

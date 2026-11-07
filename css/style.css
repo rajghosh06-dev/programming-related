@@ -571,7 +571,8 @@ body.has-maximized {
   position: absolute;
   bottom: 28px;
   right: 0;
-  width: 320px;
+  width: 360px;
+  max-width: 90vw;
   background: #141414;
   border: 1px solid #333333;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85);
@@ -671,7 +672,21 @@ body.has-maximized {
   font-size: 10px;
 }
 
-.end-session-btn {
+.session-status-tag {
+  font-size: 10px;
+  font-family: inherit;
+}
+
+.session-status-tag.active {
+  color: #16c60c;
+}
+
+.session-status-tag.idle {
+  color: #e5c07b;
+}
+
+.end-session-btn,
+.end-all-btn {
   background: #2d1517;
   color: #f85149;
   border: 1px solid #da3633;
@@ -681,11 +696,19 @@ body.has-maximized {
   border-radius: 3px;
   cursor: pointer;
   margin-left: 8px;
+  line-height: 1.2;
 }
 
-.end-session-btn:hover {
+.end-session-btn:hover,
+.end-all-btn:hover {
   background: #da3633;
   color: #ffffff;
+}
+
+.end-session-btn:disabled,
+.end-all-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .presence-section {

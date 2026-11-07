@@ -37,6 +37,63 @@ let terminationUnsubscribe = null;
 let popoverEventsInitialized = false;
 const expandedUsers = new Set();
 
+let isWindowFocused = typeof document !== "undefined" && typeof document.hasFocus === "function" ? document.hasFocus() : true;
+let isInactive = false;
+let inactivityTimer = null;
+let presenceHeartbeatInterval = null;
+
+/**
+ * Resets 90-second inactivity timer and handles active/idle transition
+ */
+function resetInactivityTimer(onStatusChange) {
+  if (isInactive) {
+    isInactive = false;
+    if (typeof onStatusChange === "function") {
+      onStatusChange();
+    }
+  }
+  if (inactivityTimer) {
+    clearTimeout(inactivityTimer);
+  }
+  inactivityTimer = setTimeout(() => {
+    isInactive = true;
+    if (typeof onStatusChange === "function") {
+      onStatusChange();
+    }
+  }, 90000); // 90 seconds
+}
+
+/**
+ * Evaluates the current presence status based on window focus, visibility, and user activity
+ */
+export function getEvaluatedStatus() {
+  const isHidden = typeof document !== "undefined" && document.hidden;
+  if (isHidden) return "idle";
+  return (isWindowFocused && !isInactive) ? "active" : "idle";
+}
+
+/**
+ * Explicitly updates the local session presence status in Firebase RTDB
+ */
+export function updatePresenceStatus(status) {
+  if (status === "active") {
+    isWindowFocused = true;
+    isInactive = false;
+  } else if (status === "idle") {
+    isWindowFocused = false;
+  }
+  const database = getFirebaseDb();
+  const sessionId = getSessionId();
+  if (!database || !sessionId) return;
+  try {
+    const userPresenceRef = ref(database, `presence/${sessionId}`);
+    update(userPresenceRef, {
+      status: status || getEvaluatedStatus(),
+      lastActive: serverTimestamp()
+    }).catch(() => {});
+  } catch (e) {}
+}
+
 /**
  * Initializes Firebase App and Realtime Database instances safely
  */
@@ -132,7 +189,7 @@ export function initPresenceEngine() {
         // Automatically purge session node when WebSocket closes or tab is dismissed
         onDisconnect(userPresenceRef).remove().catch(() => {});
 
-        const initialStatus = document.hasFocus() && document.visibilityState === "visible" ? "active" : "idle";
+        const initialStatus = getEvaluatedStatus();
         set(userPresenceRef, {
           user: getCurrentPresenceUser(),
           status: initialStatus,
@@ -149,21 +206,55 @@ export function initPresenceEngine() {
 
     // Dynamic focus & visibility listeners
     const updateActivityStatus = (status) => {
+      updatePresenceStatus(status);
+    };
+
+    // User activity listeners to reset 90-second inactivity timer
+    const onUserActivity = () => {
+      resetInactivityTimer(() => updateActivityStatus(getEvaluatedStatus()));
+    };
+
+    resetInactivityTimer(() => updateActivityStatus(getEvaluatedStatus()));
+
+    ["mousemove", "keydown", "click", "scroll"].forEach((evt) => {
+      window.addEventListener(evt, onUserActivity, { passive: true });
+    });
+
+    window.addEventListener("focus", () => {
+      isWindowFocused = true;
+      updateActivityStatus("active");
+    });
+
+    window.addEventListener("blur", () => {
+      isWindowFocused = false;
+      updateActivityStatus("idle");
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      const isHidden = document.hidden;
+      const status = isHidden ? "idle" : (document.hasFocus() ? "active" : "idle");
+      if (!isHidden && document.hasFocus()) {
+        isWindowFocused = true;
+      } else if (isHidden) {
+        isWindowFocused = false;
+      }
+      updateActivityStatus(status);
+    });
+
+    // Heartbeat Guard: periodic presence heartbeat interval (never write hardcoded "active")
+    if (presenceHeartbeatInterval) {
+      clearInterval(presenceHeartbeatInterval);
+    }
+    presenceHeartbeatInterval = setInterval(() => {
       if (!database || !sessionId) return;
+      const currentEvaluated = (isWindowFocused && !isInactive && !document.hidden) ? "active" : "idle";
       try {
         update(userPresenceRef, {
-          status: status,
+          status: currentEvaluated,
           lastActive: serverTimestamp()
         }).catch(() => {});
       } catch (e) {}
-    };
-
-    window.addEventListener("focus", () => updateActivityStatus("active"));
-    window.addEventListener("blur", () => updateActivityStatus("idle"));
-    document.addEventListener("visibilitychange", () => {
-      const status = document.visibilityState === "visible" ? "active" : "idle";
-      updateActivityStatus(status);
-    });
+    }, 30000);
 
   } catch (err) {
     console.warn("[Presence] Presence listener error:", err.message);
@@ -178,11 +269,13 @@ export function updatePresenceUser(username) {
   const sessionId = getSessionId();
   if (!database || !sessionId) return;
 
+  const currentStatus = getEvaluatedStatus();
+
   try {
     const userPresenceRef = ref(database, `presence/${sessionId}`);
     update(userPresenceRef, {
       user: username,
-      status: "active",
+      status: currentStatus,
       sessionId: sessionId,
       device: getDeviceId(),
       loginTime: getSessionLoginTime(),
@@ -203,12 +296,14 @@ export function resetPresenceToAnonymous() {
   const sessionId = getSessionId();
   if (!database || !sessionId) return;
 
+  const currentStatus = getEvaluatedStatus();
+
   try {
     const userPresenceRef = ref(database, `presence/${sessionId}`);
     const shortId = sessionId.slice(-4);
     update(userPresenceRef, {
       user: `anonymous-${shortId}`,
-      status: "active",
+      status: currentStatus,
       sessionId: sessionId,
       device: getDeviceId(),
       loginTime: Date.now(),
@@ -305,6 +400,44 @@ export async function terminateSession(targetSessionId) {
       } catch (e) {}
     }, 400);
   } catch (err) {}
+}
+
+/**
+ * Terminates all sessions belonging to a specific user (Admin capability)
+ * @param {string} userKey
+ */
+export async function terminateAllSessionsForUser(userKey) {
+  if (!userKey) return;
+  const lower = userKey.trim().toLowerCase();
+  const presenceMap = cachedPresenceMap || {};
+  const terminatePromises = [];
+  const targetSessionIds = new Set();
+
+  for (const [sid, sess] of Object.entries(presenceMap)) {
+    if (sess && sess.user && sess.user.toLowerCase() === lower && !sess.terminated) {
+      targetSessionIds.add(sid);
+      terminatePromises.push(terminateSession(sid));
+    }
+  }
+
+  // Also query Firebase RTDB presence directly to ensure full coverage
+  const database = getFirebaseDb();
+  if (database) {
+    try {
+      const snap = await get(ref(database, "presence"));
+      if (snap.exists()) {
+        const data = snap.val() || {};
+        for (const [sid, sess] of Object.entries(data)) {
+          if (sess && sess.user && sess.user.toLowerCase() === lower && !sess.terminated && !targetSessionIds.has(sid)) {
+            targetSessionIds.add(sid);
+            terminatePromises.push(terminateSession(sid));
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  await Promise.all(terminatePromises);
 }
 
 let activeUnsubscribe = null;
@@ -492,30 +625,84 @@ export function updatePresenceUI(presenceMap, totalCount) {
       for (const [userKey, group] of userGroups.entries()) {
         const sessCount = group.sessions.length;
         const isExpanded = expandedUsers.has(userKey);
-        const overallStatus = group.sessions.some(s => s.status === "active") ? "active" : "idle";
+        const isTargetViewer = userKey === currentUser.toLowerCase();
+        const isAdmin = currentRole === "ADMIN" || currentUser.toLowerCase() === "rajghosh06-dev";
+
+        // Parent Summary Dot:
+        // If ALL sessions of a user are idle: Parent dot is Yellow.
+        // If AT LEAST ONE session of a user is active: Parent dot is Green.
+        const hasActiveSession = group.sessions.some(s => s.status === "active");
+        const overallStatus = hasActiveSession ? "active" : "idle";
         const statusLabel = overallStatus === "idle" ? " (Idle)" : "";
 
         if (group.isAnonymous) {
+          const sess = group.sessions[0];
+          const isThisSession = sess && sess.sessionId === currentSessionId;
+          const canEnd = isAdmin && !isThisSession;
           activeHtml += `
             <div class="presence-user-group">
               <div class="presence-item">
                 <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
                 <span class="presence-status-dot ${overallStatus}">[●]</span>
                 <span style="color: #888888;">${group.displayUser} - Sign-in screen${statusLabel}</span>
+                ${canEnd ? `<button class="end-session-btn" data-session-id="${sess.sessionId}" title="Terminate visitor session remotely">[End Session]</button>` : ''}
               </div>
             </div>`;
         } else if (sessCount === 1) {
-          // Exactly 1 session: [   ] [●] <user>
-          activeHtml += `
-            <div class="presence-user-group">
-              <div class="presence-item">
-                <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
-                <span class="presence-status-dot ${overallStatus}">[●]</span>
-                <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}${statusLabel}</span>
-              </div>
-            </div>`;
+          // Exactly 1 session:
+          const sess = group.sessions[0];
+          const isThisSession = sess && sess.sessionId === currentSessionId;
+          const deviceLabel = sess ? (sess.device || (sess.sessionId ? sess.sessionId.slice(-8) : "Session")) : "";
+          const sessStatus = sess ? (sess.status === "active" ? "active" : "idle") : overallStatus;
+          const sessDot = `<span class="presence-status-dot ${sessStatus}">[●]</span>`;
+
+          if (isThisSession) {
+            activeHtml += `
+              <div class="presence-user-group">
+                <div class="presence-item">
+                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                  ${sessDot}
+                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}</span>
+                  <span class="session-device" style="margin-left: 6px;">${deviceLabel}</span>
+                  <span class="session-current-badge">${sessStatus === "active" ? "(this session)" : "(this session, Idle)"}</span>
+                </div>
+              </div>`;
+          } else if (isAdmin) {
+            // Admin viewing single-session peer:
+            // Render [●] <user>  <device> followed directly by [End Session]
+            const idleTag = sessStatus === "idle" ? `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px; margin-left: 4px;">(Idle)</span>` : "";
+            activeHtml += `
+              <div class="presence-user-group">
+                <div class="presence-item">
+                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                  ${sessDot}
+                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}</span>
+                  <span class="session-device" style="margin-left: 6px;">${deviceLabel}</span>
+                  ${idleTag}
+                  <button class="end-session-btn" data-session-id="${sess.sessionId}" title="Terminate session remotely">[End Session]</button>
+                </div>
+              </div>`;
+          } else {
+            // Regular user viewing peer:
+            activeHtml += `
+              <div class="presence-user-group">
+                <div class="presence-item">
+                  <span class="presence-toggle placeholder">[&nbsp;&nbsp;&nbsp;]</span>
+                  ${sessDot}
+                  <span class="presence-user-label" style="color: #cccccc;">${group.displayUser}${statusLabel}</span>
+                </div>
+              </div>`;
+          }
         } else {
-          // > 1 sessions: [▼] [●] <user> (N)
+          // Multi-Session Users (sessCount > 1):
+          // Parent header: [▼] [●] <user> (N)
+          // If viewer is ADMIN (and target is not viewer):
+          // Include an [End All] button on the parent row next to the count.
+          const canEndAll = isAdmin && !isTargetViewer;
+          const endAllBtnHtml = canEndAll 
+            ? `<button class="end-all-btn" data-user="${userKey}" title="Terminate all sessions for ${group.displayUser}">[End All]</button>` 
+            : "";
+
           let subItemsHtml = "";
           for (const sess of group.sessions) {
             const isThisSession = sess.sessionId === currentSessionId;
@@ -528,17 +715,19 @@ export function updatePresenceUI(presenceMap, totalCount) {
                 <div class="presence-sub-item">
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
-                  <span class="session-current-badge">(this session)</span>
+                  <span class="session-current-badge">${sessStatus === "active" ? "(this session)" : "(this session, Idle)"}</span>
                 </div>`;
             } else {
-              const isAdmin = currentRole === "ADMIN" || currentUser.toLowerCase() === "rajghosh06-dev";
-              const isOwn = currentUser.toLowerCase() === userKey;
-              const canEnd = isAdmin || isOwn;
+              const canEnd = isAdmin || (isTargetViewer && !isThisSession);
+              const statusTag = sessStatus === "active"
+                ? `<span class="session-status-tag active" style="color: #16c60c; font-size: 10px;">(Active)</span>`
+                : `<span class="session-status-tag idle" style="color: #e5c07b; font-size: 10px;">(Idle)</span>`;
 
               subItemsHtml += `
                 <div class="presence-sub-item">
                   ${sessDot}
                   <span class="session-device">${deviceLabel}</span>
+                  ${statusTag}
                   ${canEnd ? `<button class="end-session-btn" data-session-id="${sess.sessionId}" title="Terminate session remotely">[End Session]</button>` : ''}
                 </div>`;
             }
@@ -550,6 +739,7 @@ export function updatePresenceUI(presenceMap, totalCount) {
                 <span class="presence-toggle-btn" data-user="${userKey}" role="button" tabindex="0">${isExpanded ? '[▲]' : '[▼]'}</span>
                 <span class="presence-status-dot ${overallStatus}">[●]</span>
                 <span class="presence-user-label" style="color: #cccccc;">${group.displayUser} (${sessCount})${statusLabel}</span>
+                ${endAllBtnHtml}
               </div>
               ${isExpanded ? `<div class="presence-sub-sessions">${subItemsHtml}</div>` : ''}
             </div>`;
@@ -635,6 +825,18 @@ export function setupPopoverEvents() {
           endBtn.disabled = true;
           endBtn.textContent = "[Ending...]";
           await terminateSession(sid);
+        }
+        return;
+      }
+
+      const endAllBtn = e.target.closest(".end-all-btn");
+      if (endAllBtn) {
+        e.stopPropagation();
+        const targetUser = endAllBtn.getAttribute("data-user");
+        if (targetUser) {
+          endAllBtn.disabled = true;
+          endAllBtn.textContent = "[Ending All...]";
+          await terminateAllSessionsForUser(targetUser);
         }
         return;
       }

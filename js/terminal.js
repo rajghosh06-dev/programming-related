@@ -30,6 +30,7 @@ import {
   setupTerminationListener,
   teardownTerminationListener,
   terminateSession,
+  terminateAllSessionsForUser,
   getDeviceId
 } from './presence.js';
 
@@ -2419,6 +2420,40 @@ pause
       this.updateCaret();
       this.scrollBottom();
       return;
+    } else if (raw.startsWith("/terminate-user")) {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        const parts = cmd.split(/\s+/);
+        if (parts.length < 2 || !parts[1].trim()) {
+          this.appendRaw("Usage: /terminate-user <username>\nExample: /terminate-user saikrishna-dev-oss\n\n");
+        } else {
+          const target = parts[1].trim();
+          await terminateAllSessionsForUser(target);
+          this.appendRaw(`[OK] All active sessions for user '${target}' terminated remotely.\n\n`);
+        }
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    } else if (raw.startsWith("/terminate")) {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        const parts = cmd.split(/\s+/);
+        if (parts.length < 2 || !parts[1].trim()) {
+          this.appendRaw("Usage: /terminate <sessionId>\n\n");
+        } else {
+          const target = parts[1].trim();
+          await terminateSession(target);
+          this.appendRaw(`[OK] Session '${target}' terminated remotely.\n\n`);
+        }
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
     }
 
     // 3. Built-in Slash Commands
@@ -2620,11 +2655,12 @@ pause
     let html = `
       <div style="margin: 6px 0 12px 0; font-family: var(--font-mono); line-height: 1.6;">
         <span class="ps-header">Active Real-Time Presence Sessions (${entries.length})</span><br><br>
-        <table style="border-collapse: collapse; width: 100%; max-width: 680px; font-size: 12px;">
+        <table style="border-collapse: collapse; width: 100%; max-width: 720px; font-size: 12px;">
           <thead>
             <tr style="border-bottom: 1px solid #333333; text-align: left; color: #16c60c;">
               <th style="padding: 4px 12px 4px 0;">SESSION ID</th>
               <th style="padding: 4px 12px;">IDENTITY</th>
+              <th style="padding: 4px 12px;">DEVICE</th>
               <th style="padding: 4px 12px;">STATE</th>
               <th style="padding: 4px 12px;">TYPE</th>
             </tr>
@@ -2636,6 +2672,7 @@ pause
       const rawUser = sess.user || "anonymous";
       const isAdmin = rawUser.toLowerCase() === "rajghosh06-dev";
       const displayUser = rawUser;
+      const device = sess.device || (sid ? sid.slice(-8) : "Session");
       const isAnonymous = rawUser.startsWith("anonymous-");
       const userType = isAdmin ? `<span style="color:#4ec9b0; font-weight:bold;">Admin</span>` : (isAnonymous ? `<span style="color:#888888;">Visitor</span>` : `<span style="color:#cccccc;">User</span>`);
       const statusDot = sess.status === "active" ? `<span style="color:#16c60c;">[●] Active</span>` : `<span style="color:#e5c07b;">[●] Idle</span>`;
@@ -2644,6 +2681,7 @@ pause
         <tr style="border-bottom: 1px solid #1c1c1c;">
           <td style="padding: 4px 12px 4px 0; color: #888888; font-size: 11px;">${sid.slice(-10)}</td>
           <td style="padding: 4px 12px; color: #ffffff;">${displayUser}</td>
+          <td style="padding: 4px 12px; color: #aaaaaa; font-size: 11px;">${device}</td>
           <td style="padding: 4px 12px;">${statusDot}</td>
           <td style="padding: 4px 12px;">${userType}</td>
         </tr>

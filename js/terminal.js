@@ -109,9 +109,12 @@ export class Terminal {
     this.filteredResults = [];
     this.selectedIndex = 0;
     this.activeItem = null;
+    this.selectedItem = null;
+    this.currentQuery = "";
     this.actionMode = null; // null | "ITEM" | "SERVE_OS"
     this.grepActive = false;
     this.commandHistory = [];
+    this.history = this.commandHistory;
     this.historyIndex = -1;
 
     // Virtual File System (VFS) State
@@ -163,6 +166,55 @@ export class Terminal {
     this.updateStatus();
     this.updatePromptDisplay();
     this.updateCaret();
+  }
+
+  get history() {
+    return this.commandHistory;
+  }
+
+  set history(val) {
+    this.commandHistory = val;
+  }
+
+  printLine(text) {
+    this.appendRaw(`${text}\n`);
+    this.scrollBottom();
+  }
+
+  printSuccess(text) {
+    this.resetPrompt(text);
+  }
+
+  printError(text) {
+    this.appendRaw(`${text}\n`);
+    this.scrollBottom();
+  }
+
+  async downloadFile(path, filename) {
+    const fname = filename || (path ? path.split("/").pop() : "file");
+    this.printLine(`[*] Downloading ${fname}...`);
+    const rawUrl = `https://raw.githubusercontent.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}/${REPO_CONFIG.branch}/${path}`;
+    try {
+      const response = await fetch(rawUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+      this.printSuccess(`[OK] Download complete: ${fname}`);
+    } catch (err) {
+      this.printError(`[ERR] Failed to download file: ${err.message}`);
+      // Fallback: window.open as last resort
+      window.open(rawUrl, "_blank");
+      this.resetPrompt(`Opened download URL in new tab: ${fname}`);
+    }
   }
 
   /**
@@ -597,6 +649,7 @@ export class Terminal {
     // 3. File & Folder Indexing on '@'
     if (trimmed.startsWith("@")) {
       const query = trimmed.slice(1).toLowerCase();
+      this.currentQuery = query;
       this.filteredResults = this.items.filter(item => item.path.toLowerCase().includes(query));
       this.selectedIndex = 0;
       this.renderSuggestions();
@@ -1056,28 +1109,28 @@ pause
     }
 
     // Normal Command Line Navigation (History)
-    if (e.key === "ArrowUp" && !this.input.value.startsWith("@") && !this.input.value.startsWith("/") && !this.input.value.startsWith("$")) {
-      if (this.commandHistory.length > 0) {
+    if (e.key === "ArrowUp") {
+      if (this.history.length > 0) {
         e.preventDefault();
-        if (this.historyIndex === -1) {
-          this.historyIndex = this.commandHistory.length - 1;
+        if (this.historyIndex === -1 || this.historyIndex >= this.history.length) {
+          this.historyIndex = this.history.length - 1;
         } else if (this.historyIndex > 0) {
           this.historyIndex--;
         }
-        this.input.value = this.commandHistory[this.historyIndex] || "";
+        this.input.value = this.history[this.historyIndex] || "";
         this.updateCaret();
       }
       return;
     }
 
-    if (e.key === "ArrowDown" && !this.input.value.startsWith("@") && !this.input.value.startsWith("/") && !this.input.value.startsWith("$")) {
-      if (this.commandHistory.length > 0 && this.historyIndex !== -1) {
+    if (e.key === "ArrowDown") {
+      if (this.history.length > 0 && this.historyIndex !== -1) {
         e.preventDefault();
-        if (this.historyIndex < this.commandHistory.length - 1) {
+        if (this.historyIndex < this.history.length - 1) {
           this.historyIndex++;
-          this.input.value = this.commandHistory[this.historyIndex];
+          this.input.value = this.history[this.historyIndex];
         } else {
-          this.historyIndex = -1;
+          this.historyIndex = this.history.length;
           this.input.value = "";
         }
         this.updateCaret();
@@ -1165,6 +1218,7 @@ pause
       // 3. Global search on '@'
       if (trimmed.startsWith("@")) {
         const query = trimmed.slice(1).toLowerCase();
+        this.currentQuery = query;
         this.filteredResults = this.items.filter(item => item.path.toLowerCase().includes(query));
         if (this.filteredResults.length > 0) {
           this.selectedIndex = 0;
@@ -1195,8 +1249,10 @@ pause
       e.preventDefault();
       const cmd = this.input.value;
       if (cmd.trim().length > 0) {
-        this.commandHistory.push(cmd);
-        this.historyIndex = -1;
+        if (this.history.length === 0 || this.history[this.history.length - 1] !== cmd) {
+          this.history.push(cmd);
+        }
+        this.historyIndex = this.history.length;
       }
       this.handleCommand(cmd.trim());
     }
@@ -1207,6 +1263,7 @@ pause
    */
   promptItemAction(item) {
     this.activeItem = item;
+    this.selectedItem = item;
     this.mode = "ACTION";
     this.actionMode = "ITEM";
     this.hideSuggestions();
@@ -1274,6 +1331,17 @@ pause
 
   async executeAction(actionKey) {
     if (!this.activeItem) return;
+
+    // History Tracking for @ Invocations
+    const historyName = this.selectedItem ? (this.selectedItem.name || this.selectedItem.path.split("/").pop()) : (this.activeItem.name || this.activeItem.path.split("/").pop() || this.currentQuery);
+    const historyCmd = `@${historyName || this.currentQuery || ""}`;
+    if (historyCmd.length > 1) {
+      if (this.history.length === 0 || this.history[this.history.length - 1] !== historyCmd) {
+        this.history.push(historyCmd);
+      }
+      this.historyIndex = this.history.length;
+    }
+
     const isDir = this.activeItem.type === "tree" || this.activeItem.type === "dir";
     const rawUrl = `https://raw.githubusercontent.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}/${REPO_CONFIG.branch}/${this.activeItem.path}`;
 
@@ -1318,20 +1386,8 @@ pause
         this.resetPrompt(`[!] Clipboard write failed: ${err.message}`);
       }
     } else if (actionKey === "4") {
-      const a = document.createElement("a");
-      a.href = rawUrl;
-      a.download = this.activeItem.path.split("/").pop();
-      document.body.appendChild(a);
-      requestAnimationFrame(() => {
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => {
-          this.input.focus();
-          this.updateCaret();
-          this.scrollBottom();
-        }, 50);
-      });
-      this.resetPrompt(`Download initiated: ${this.activeItem.path}`);
+      const filename = this.activeItem.path.split("/").pop();
+      await this.downloadFile(this.activeItem.path, filename);
     } else if (actionKey === "Escape" || actionKey === "esc") {
       this.resetPrompt("Action aborted.");
     }
@@ -2584,8 +2640,10 @@ pause
       this.renderRepoInfo();
     } else if (cmd.startsWith("@")) {
       const q = cmd.slice(1).trim().toLowerCase();
+      this.currentQuery = q;
       const match = this.items.find(f => f.path.toLowerCase().includes(q));
       if (match) {
+        this.selectedItem = match;
         this.promptItemAction(match);
       } else {
         this.appendRaw(`No repository files found matching '@${q}'.\n\n`);

@@ -11,66 +11,13 @@ import {
   subscribeToPresence, 
   unsubscribeFromPresence,
   showPresenceWidget,
-  hidePresenceWidget 
+  hidePresenceWidget,
+  updatePresenceUI,
+  setupPopoverEvents 
 } from './presence.js';
 import { getAuthorizedWhitelist, isSessionActive } from './auth.js';
 
-export function updatePresenceUI(presenceMap, count) {
-  const countText = document.getElementById("presenceCountText");
-  const activeSection = document.getElementById("presenceActiveSection");
-  const offlineSection = document.getElementById("presenceOfflineSection");
-
-  if (countText) {
-    countText.textContent = `${count} Live ${count === 1 ? 'User' : 'Users'}`;
-  }
-
-  if (activeSection) {
-    let activeHtml = "";
-    const activeUserHandles = new Set();
-    const sessions = Object.values(presenceMap || {});
-
-    for (const sess of sessions) {
-      const u = sess.user || "anonymous";
-      const status = sess.status === "active" ? "active" : "idle";
-      const statusLabel = status === "idle" ? " (Idle)" : "";
-
-      if (u.startsWith("anonymous-")) {
-        activeHtml += `
-          <div class="presence-item">
-            <span class="presence-status-dot ${status}">[●]</span>
-            <span style="color: #888888;">${u} - Sign-in screen${statusLabel}</span>
-          </div>`;
-      } else {
-        activeUserHandles.add(u.toLowerCase());
-        activeHtml += `
-          <div class="presence-item">
-            <span class="presence-status-dot ${status}">[●]</span>
-            <span style="color: #cccccc;">${u}${statusLabel}</span>
-          </div>`;
-      }
-    }
-
-    if (!activeHtml) {
-      activeHtml = `<div class="presence-item" style="color: #666666;">No active sessions</div>`;
-    }
-    activeSection.innerHTML = activeHtml;
-
-    if (offlineSection) {
-      const whitelist = getAuthorizedWhitelist();
-      let offlineHtml = "";
-      for (const handle of Object.keys(whitelist)) {
-        if (!activeUserHandles.has(handle.toLowerCase())) {
-          offlineHtml += `
-            <div class="presence-item">
-              <span class="presence-status-dot offline">[○]</span>
-              <span style="color: #777777;">${handle} - Offline</span>
-            </div>`;
-        }
-      }
-      offlineSection.innerHTML = offlineHtml || `<div class="presence-item" style="color:#555555;">All authorized users online</div>`;
-    }
-  }
-}
+export { updatePresenceUI };
 
 export function startPresenceSubscription() {
   showPresenceWidget();
@@ -101,20 +48,8 @@ async function initApp() {
     sessionTimerClock: document.getElementById("sessionTimerClock")
   };
 
-  // Setup presence popover toggle
-  const presenceWidget = document.getElementById("livePresenceWidget");
-  const presencePopover = document.getElementById("presencePopover");
-  if (presenceWidget && presencePopover) {
-    presenceWidget.addEventListener("click", (e) => {
-      e.stopPropagation();
-      presencePopover.classList.toggle("visible");
-    });
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest("#presenceWidgetContainer")) {
-        presencePopover.classList.remove("visible");
-      }
-    });
-  }
+  // Setup click-to-pin and popover management
+  setupPopoverEvents();
 
   // Keep terminal clicked to focus input
   elements.viewport.addEventListener("click", (e) => {

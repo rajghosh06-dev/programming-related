@@ -18,12 +18,19 @@ import {
   getCurrentSession,
   isSessionActive,
   handlePasswordInit,
-  formatRemainingTime
+  formatRemainingTime,
+  syncSessionTimer,
+  clearSessionTimer,
+  listenToSessionTimer
 } from './auth.js';
 import {
   updatePresenceUser,
   resetPresenceToAnonymous,
-  getCachedPresenceMap
+  getCachedPresenceMap,
+  setupTerminationListener,
+  teardownTerminationListener,
+  terminateSession,
+  getDeviceId
 } from './presence.js';
 
 /**
@@ -111,6 +118,7 @@ export class Terminal {
       this.initBootBanner();
       this.scheduleSessionExpiration(activeSession.remainingMs);
       this.startSessionCountdown();
+      setupTerminationListener();
       if (window.__startPresenceSubscription) {
         window.__startPresenceSubscription();
       }
@@ -122,6 +130,7 @@ export class Terminal {
       this.initPromptConfig();
       this.initAuthGate();
       this.stopSessionCountdown();
+      teardownTerminationListener();
       if (window.__stopPresenceSubscription) {
         window.__stopPresenceSubscription();
       }
@@ -290,12 +299,30 @@ export class Terminal {
 
       if (remainingMs <= 0) {
         this.stopSessionCountdown();
+        if (this.currentUser) {
+          clearSessionTimer(this.currentUser);
+        }
         this.logout("Session expired after 3 hours. Please sign in again.");
       }
     };
 
     updateClock();
     this.sessionCountdownInterval = setInterval(updateClock, 1000);
+
+    // Synchronize with Firebase shared timer node
+    if (this.currentUser) {
+      syncSessionTimer(this.currentUser).then(() => {
+        updateClock();
+      }).catch(() => {});
+
+      if (this.sessionTimerUnsubscribe) {
+        this.sessionTimerUnsubscribe();
+      }
+      this.sessionTimerUnsubscribe = listenToSessionTimer(this.currentUser, () => {
+        this.stopSessionCountdown();
+        this.logout("Session expired after 3 hours. Please sign in again.");
+      });
+    }
   }
 
   /**
@@ -305,6 +332,10 @@ export class Terminal {
     if (this.sessionCountdownInterval) {
       clearInterval(this.sessionCountdownInterval);
       this.sessionCountdownInterval = null;
+    }
+    if (this.sessionTimerUnsubscribe) {
+      this.sessionTimerUnsubscribe();
+      this.sessionTimerUnsubscribe = null;
     }
     const widget = this.sessionTimerWidget || document.getElementById("sessionTimerWidget");
     const clock = this.sessionTimerClock || document.getElementById("sessionTimerClock");
@@ -323,6 +354,7 @@ export class Terminal {
       this.sessionTimer = null;
     }
     this.stopSessionCountdown();
+    teardownTerminationListener();
     this.cwd = "";
     clearSession();
     resetPresenceToAnonymous();
@@ -835,8 +867,9 @@ pause
       if (storedHash && storedHash.toLowerCase() === hash.toLowerCase()) {
         this.currentUser = this.pendingAuthUser;
         this.currentRole = this.pendingAuthRole;
-        saveSession(this.currentUser, this.currentRole);
+        await saveSession(this.currentUser, this.currentRole);
         updatePresenceUser(this.currentUser);
+        setupTerminationListener();
         if (typeof window.__startPresenceSubscription === "function") {
           window.__startPresenceSubscription();
         }

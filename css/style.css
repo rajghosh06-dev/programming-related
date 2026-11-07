@@ -571,7 +571,7 @@ body.has-maximized {
   position: absolute;
   bottom: 28px;
   right: 0;
-  width: 290px;
+  width: 320px;
   background: #141414;
   border: 1px solid #333333;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85);
@@ -586,18 +586,106 @@ body.has-maximized {
 }
 
 .presence-popover.visible,
+.presence-popover.pinned,
 .presence-widget-container:hover .presence-popover {
   display: block;
 }
 
-.presence-header {
+.popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 5px;
+  margin-bottom: 6px;
+}
+
+.popover-title {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.5px;
   color: #4ec9b0;
-  border-bottom: 1px solid #282828;
-  padding-bottom: 5px;
-  margin-bottom: 6px;
+}
+
+.popover-close-btn {
+  background: transparent;
+  border: none;
+  color: #858585;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.popover-close-btn:hover {
+  color: #ffffff;
+}
+
+.presence-toggle-btn {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  user-select: none;
+  color: #5391fe;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+.presence-toggle.placeholder {
+  font-family: var(--font-mono);
+  user-select: none;
+  color: transparent;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+.presence-user-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.presence-sub-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 18px;
+  margin-top: 3px;
+  margin-bottom: 4px;
+}
+
+.presence-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #aaaaaa;
+}
+
+.session-device {
+  color: #cccccc;
+  font-size: 10px;
+}
+
+.session-current-badge {
+  color: #888888;
+  font-style: italic;
+  font-size: 10px;
+}
+
+.end-session-btn {
+  background: #2d1517;
+  color: #f85149;
+  border: 1px solid #da3633;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-family: inherit;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.end-session-btn:hover {
+  background: #da3633;
+  color: #ffffff;
 }
 
 .presence-section {

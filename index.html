@@ -68,7 +68,10 @@
             <span id="presenceCountText">0 Live Users</span>
           </span>
           <div id="presencePopover" class="presence-popover" role="tooltip" aria-hidden="true">
-            <div class="presence-header">ACTIVE SESSIONS &amp; USER PRESENCE</div>
+            <div class="popover-header">
+              <span class="popover-title">ACTIVE SESSIONS &amp; USER PRESENCE</span>
+              <button class="popover-close-btn" id="closePresencePopover" title="Close (Esc)">[×]</button>
+            </div>
             <div class="presence-section" id="presenceActiveSection"></div>
             <div class="presence-divider" style="margin: 6px 0; border-top: 1px dashed #262626;"></div>
             <div class="presence-section" id="presenceOfflineSection"></div>

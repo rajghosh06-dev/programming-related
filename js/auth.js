@@ -4,8 +4,8 @@
  * first-time password initialization, and authorized whitelist verification.
  */
 
-import { getFirebaseDb } from './presence.js';
-import { ref, get, set, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getFirebaseDb, getCachedPresenceMap } from './presence.js';
+import { ref, get, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 export const SESSION_TTL_MS = 3 * 60 * 60 * 1000; // 3 Hours (10,800,000 ms)
 export const PASSWORD_SALT_PREFIX = "pr-salt-2026:";
@@ -264,10 +264,142 @@ export async function removeAuthorizedUser(username) {
  * Session Lifecycle Management via sessionStorage
  */
 
-export function saveSession(user, role) {
+/**
+ * Synchronizes user session start time with Firebase RTDB shared timer node
+ * Uses authorized /auth/{canonicalUser}/session_timer and active presence sessions
+ * @param {string} username
+ * @returns {Promise<number>} finalStartTime in ms
+ */
+export async function syncSessionTimer(username) {
+  if (!username) return Date.now();
+  const lower = username.trim().toLowerCase();
+  const db = getFirebaseDb();
+  let existingStartTime = null;
+
+  // 1. Try Firebase RTDB SDK at user's auth timer node (/auth/{lower}/session_timer)
+  if (db) {
+    try {
+      const timerRef = ref(db, `auth/${lower}/session_timer`);
+      const snap = await get(timerRef);
+      if (snap.exists()) {
+        const val = snap.val();
+        existingStartTime = typeof val === "object" && val !== null ? val.startTime : val;
+      }
+    } catch (e) {
+      console.debug("[Auth] Firebase timer SDK read failed:", e.message);
+    }
+  }
+
+  // 2. Fallback to existing active sessions from presence map or /presence.json
+  if (existingStartTime === null || typeof existingStartTime !== "number") {
+    try {
+      const presenceMap = typeof getCachedPresenceMap === "function" ? getCachedPresenceMap() : {};
+      for (const sess of Object.values(presenceMap || {})) {
+        if (sess && sess.user && sess.user.toLowerCase() === lower && typeof sess.loginTime === "number") {
+          if (existingStartTime === null || sess.loginTime < existingStartTime) {
+            existingStartTime = sess.loginTime;
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  if (existingStartTime === null || typeof existingStartTime !== "number") {
+    try {
+      const res = await fetch(`https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/presence.json`);
+      if (res.ok) {
+        const pData = await res.json();
+        for (const sess of Object.values(pData || {})) {
+          if (sess && sess.user && sess.user.toLowerCase() === lower && typeof sess.loginTime === "number") {
+            if (existingStartTime === null || sess.loginTime < existingStartTime) {
+              existingStartTime = sess.loginTime;
+            }
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  const now = Date.now();
+  let finalStartTime = now;
+
+  // If an existing startTime is found and Date.now() - startTime < 10,800,000 (3 hours):
+  if (typeof existingStartTime === "number" && (now - existingStartTime) >= 0 && (now - existingStartTime) < SESSION_TTL_MS) {
+    finalStartTime = existingStartTime;
+  } else {
+    // Else write startTime = Date.now() to /auth/{canonicalUser}/session_timer
+    finalStartTime = now;
+    const payload = { startTime: finalStartTime, user: username, updatedAt: now };
+    if (db) {
+      try {
+        const timerRef = ref(db, `auth/${lower}/session_timer`);
+        await set(timerRef, payload);
+      } catch (e) {}
+    }
+  }
+
+  // Store this synchronized startTime in sessionStorage (auth_login_time)
+  sessionStorage.setItem("auth_login_time", finalStartTime.toString());
+  return finalStartTime;
+}
+
+/**
+ * Removes /auth/{canonicalUser}/session_timer when timer reaches 00:00:00
+ * @param {string} username
+ */
+export async function clearSessionTimer(username) {
+  if (!username) return;
+  const lower = username.trim().toLowerCase();
+  const db = getFirebaseDb();
+  if (db) {
+    try {
+      const timerRef = ref(db, `auth/${lower}/session_timer`);
+      await remove(timerRef);
+    } catch (e) {}
+  }
+}
+
+/**
+ * Listens to /auth/{canonicalUser}/session_timer to trigger auto-logout across all sessions when deleted
+ * @param {string} username
+ * @param {Function} onExpired
+ * @returns {Function} unsubscribe
+ */
+export function listenToSessionTimer(username, onExpired) {
+  if (!username) return () => {};
+  const lower = username.trim().toLowerCase();
+  const db = getFirebaseDb();
+  if (!db) return () => {};
+
+  try {
+    let initialSeen = false;
+    const timerRef = ref(db, `auth/${lower}/session_timer`);
+    const unsubscribe = onValue(timerRef, (snap) => {
+      if (!initialSeen) {
+        if (snap.exists()) {
+          initialSeen = true;
+        }
+        return;
+      }
+      if (!snap.exists()) {
+        if (typeof onExpired === "function") {
+          onExpired();
+        }
+      }
+    });
+    return unsubscribe;
+  } catch (e) {
+    return () => {};
+  }
+}
+
+export async function saveSession(user, role) {
   sessionStorage.setItem("auth_user", user);
   sessionStorage.setItem("auth_role", role);
-  sessionStorage.setItem("auth_login_time", Date.now().toString());
+  if (!sessionStorage.getItem("auth_login_time")) {
+    sessionStorage.setItem("auth_login_time", Date.now().toString());
+  }
+  return await syncSessionTimer(user);
 }
 
 export function clearSession() {

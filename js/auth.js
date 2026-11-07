@@ -23,6 +23,8 @@ export const DEFAULT_WHITELIST = {
   "rayainwarrior-dev": { role: "USER" }
 };
 
+export const AUTHORIZED_USERS = DEFAULT_WHITELIST;
+
 const LOCAL_STORAGE_PWD_KEY = "pwsh_auth_credentials_vault";
 const LOCAL_STORAGE_WHITELIST_KEY = "pwsh_auth_whitelist_custom";
 
@@ -77,14 +79,32 @@ export function checkUserWhitelist(username) {
 }
 
 /**
- * Retrieves the stored password hash for a user from Firebase RTDB or fallback vault
+ * Purges local vault storage entries for a specific user
+ * @param {string} lower 
+ */
+export function purgeLocalVaultEntry(lower) {
+  try {
+    localStorage.removeItem(`vault_pwd_${lower}`);
+    const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
+    if (raw) {
+      const vault = JSON.parse(raw);
+      if (vault[lower]) {
+        delete vault[lower];
+        localStorage.setItem(LOCAL_STORAGE_PWD_KEY, JSON.stringify(vault));
+      }
+    }
+  } catch (e) {}
+}
+
+/**
+ * Retrieves the stored password hash for a user from Firebase RTDB (Single Source of Truth)
  * @param {string} username 
  * @returns {Promise<string|null>}
  */
 export async function getUserPasswordHash(username) {
   const lower = username.trim().toLowerCase();
 
-  // Try Firebase Realtime Database
+  // Primary: Firebase Realtime Database
   const db = getFirebaseDb();
   if (db) {
     try {
@@ -92,23 +112,61 @@ export async function getUserPasswordHash(username) {
       const snap = await get(authRef);
       if (snap.exists()) {
         const val = snap.val();
-        if (val && val.reset) return null;
+        if (val === null || val === undefined || (typeof val !== "string" && val.hash === undefined) || val.reset) {
+          // Node exists but has no valid hash or was reset -> purge local vault and return null
+          purgeLocalVaultEntry(lower);
+          return null;
+        }
         if (typeof val === "string") return val;
         if (val && val.hash) return val.hash;
+      } else {
+        // Firebase explicitly responds that the user record is null / does not exist.
+        // User has NO password configured. Purge local vault and strictly return null.
+        purgeLocalVaultEntry(lower);
+        return null;
       }
     } catch (err) {
-      console.debug("[Auth] Firebase read fallback to local vault:", err.message);
+      console.debug("[Auth] Firebase read network exception, checking emergency offline vault:", err.message);
+      // Emergency offline fallback ONLY if network completely fails
+      try {
+        const directVault = localStorage.getItem(`vault_pwd_${lower}`);
+        if (directVault) return directVault;
+        const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
+        if (raw) {
+          const vault = JSON.parse(raw);
+          if (vault[lower]) return vault[lower].hash || vault[lower];
+        }
+      } catch (e) {}
+    }
+  } else {
+    // REST API fallback check
+    try {
+      const url = `https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/auth/${lower}.json`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const val = await res.json();
+        if (val === null || val === undefined || (typeof val !== "string" && val.hash === undefined) || val.reset) {
+          purgeLocalVaultEntry(lower);
+          return null;
+        }
+        if (typeof val === "string") return val;
+        if (val && val.hash) return val.hash;
+      } else if (res.status === 404) {
+        purgeLocalVaultEntry(lower);
+        return null;
+      }
+    } catch (e) {
+      try {
+        const directVault = localStorage.getItem(`vault_pwd_${lower}`);
+        if (directVault) return directVault;
+        const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
+        if (raw) {
+          const vault = JSON.parse(raw);
+          if (vault[lower]) return vault[lower].hash || vault[lower];
+        }
+      } catch (err2) {}
     }
   }
-
-  // Fallback to local storage vault
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
-    if (raw) {
-      const vault = JSON.parse(raw);
-      if (vault[lower]) return vault[lower].hash || vault[lower];
-    }
-  } catch (e) {}
 
   return null;
 }
@@ -134,10 +192,20 @@ export async function setUserPasswordHash(username, hash) {
     } catch (err) {
       console.debug("[Auth] Firebase write fallback to local storage:", err.message);
     }
+  } else {
+    try {
+      const url = `https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/auth/${lower}.json`;
+      await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {}
   }
 
   // Backup to localStorage vault
   try {
+    localStorage.setItem(`vault_pwd_${lower}`, hash);
     const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
     const vault = raw ? JSON.parse(raw) : {};
     vault[lower] = payload;
@@ -160,16 +228,14 @@ export async function deleteUserPasswordHash(username) {
         await set(authRef, { reset: true, updatedAt: Date.now() });
       });
     } catch (err) {}
+  } else {
+    try {
+      const url = `https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/auth/${lower}.json`;
+      await fetch(url, { method: "DELETE" });
+    } catch (e) {}
   }
 
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_PWD_KEY);
-    if (raw) {
-      const vault = JSON.parse(raw);
-      delete vault[lower];
-      localStorage.setItem(LOCAL_STORAGE_PWD_KEY, JSON.stringify(vault));
-    }
-  } catch (e) {}
+  purgeLocalVaultEntry(lower);
 }
 
 /**

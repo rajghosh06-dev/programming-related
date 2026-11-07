@@ -124,7 +124,9 @@ export class Terminal {
     // Authentication Subsystem
     this.isMaskedInput = false;
     this.rawPasswordBuffer = "";
+    this.authMode = "USERNAME";
     this.pendingAuthUser = null;
+    this.pendingUsername = "";
     this.pendingAuthRole = null;
     this.tempInitPassword = null;
     this.sessionTimer = null;
@@ -174,6 +176,81 @@ export class Terminal {
 
   set history(val) {
     this.commandHistory = val;
+  }
+
+  get passwordBuffer() {
+    return this.rawPasswordBuffer;
+  }
+
+  set passwordBuffer(val) {
+    this.rawPasswordBuffer = val;
+  }
+
+  get pendingUsername() {
+    return this.pendingAuthUser;
+  }
+
+  set pendingUsername(val) {
+    this.pendingAuthUser = val;
+  }
+
+  renderPrompt(text) {
+    if (this.promptTextElement) {
+      this.promptTextElement.textContent = text;
+    }
+  }
+
+  handleCtrlC() {
+    if (this.mode === "AUTH") {
+      const currentInput = this.isMaskedInput ? "*".repeat(this.rawPasswordBuffer.length) : (this.input ? this.input.value : "");
+      const prefix = this.getPromptPrefix();
+      this.appendRaw(`${prefix}${currentInput}^C\n\n`);
+
+      this.authMode = "USERNAME";
+      this.authState = "AUTH_USERNAME";
+      this.pendingUsername = "";
+      this.pendingAuthUser = null;
+      this.pendingAuthRole = null;
+      this.passwordBuffer = "";
+      this.rawPasswordBuffer = "";
+      this.tempInitPassword = null;
+      this.isMaskedInput = false;
+      if (this.input) {
+        this.input.value = "";
+      }
+      this.renderPrompt("Enter Username: ");
+      this.updateCaret();
+      this.scrollBottom();
+      if (this.input) {
+        this.input.focus();
+      }
+      return;
+    }
+
+    // Standard Interactive CLI Mode (INPUT / ACTION / GREP)
+    if (this.actions) {
+      this.actions.style.display = "none";
+      this.actions.innerHTML = "";
+    }
+    this.hideSuggestions();
+    this.hideGrepWarning();
+    this.mode = "INPUT";
+    this.actionMode = null;
+    this.activeItem = null;
+
+    const prefix = this.getPromptPrefix();
+    const currentCmd = this.input ? this.input.value : "";
+    this.appendRaw(`${prefix}${currentCmd}^C\n`);
+    if (this.input) {
+      this.input.value = "";
+    }
+    this.historyIndex = this.history.length;
+    this.updatePromptDisplay();
+    this.updateCaret();
+    this.scrollBottom();
+    if (this.input) {
+      this.input.focus();
+    }
   }
 
   printLine(text) {
@@ -274,10 +351,12 @@ export class Terminal {
     this.stopSessionCountdown();
     this.cwd = "";
     this.mode = "AUTH";
+    this.authMode = "USERNAME";
     this.authState = "AUTH_USERNAME";
     this.isMaskedInput = false;
     this.rawPasswordBuffer = "";
     this.pendingAuthUser = null;
+    this.pendingUsername = "";
     this.pendingAuthRole = null;
     this.tempInitPassword = null;
 
@@ -873,6 +952,7 @@ pause
 
       const existingHash = await getUserPasswordHash(this.pendingAuthUser);
       if (!existingHash) {
+        this.authMode = "INIT_PASSWORD";
         this.authState = "AUTH_INIT_PWD";
         this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
         this.isMaskedInput = true;
@@ -881,6 +961,7 @@ pause
         this.updateCaret();
         this.scrollBottom();
       } else {
+        this.authMode = "PASSWORD";
         this.authState = "AUTH_PASSWORD";
         this.promptTextElement.textContent = "Password: ";
         this.isMaskedInput = true;
@@ -895,6 +976,7 @@ pause
       this.appendRaw(`Initialize Password (min 8 characters): ${mask}\n`);
       if (pwd.length < 8) {
         this.appendRaw(`[!] Password must be at least 8 characters.\n\n`);
+        this.authMode = "INIT_PASSWORD";
         this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
         this.isMaskedInput = true;
         this.rawPasswordBuffer = "";
@@ -904,6 +986,7 @@ pause
         return;
       }
       this.tempInitPassword = pwd;
+      this.authMode = "CONFIRM_PASSWORD";
       this.authState = "AUTH_CONFIRM_PWD";
       this.promptTextElement.textContent = "Confirm Password: ";
       this.isMaskedInput = true;
@@ -918,6 +1001,7 @@ pause
       if (confirmPwd !== this.tempInitPassword) {
         this.appendRaw(`[!] Passwords do not match. Please try again.\n\n`);
         this.tempInitPassword = null;
+        this.authMode = "INIT_PASSWORD";
         this.authState = "AUTH_INIT_PWD";
         this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
         this.isMaskedInput = true;
@@ -950,16 +1034,19 @@ pause
         this.startSessionCountdown();
 
         this.mode = "INPUT";
+        this.authMode = null;
         this.authState = null;
         this.isMaskedInput = false;
         this.rawPasswordBuffer = "";
         this.pendingAuthUser = null;
+        this.pendingUsername = "";
         this.pendingAuthRole = null;
 
         this.initPromptConfig();
         this.clearScreen();
       } else {
         this.appendRaw(`[ERR] Authentication failed: Invalid credentials.\n\n`);
+        this.authMode = "PASSWORD";
         this.promptTextElement.textContent = "Password: ";
         this.isMaskedInput = true;
         this.rawPasswordBuffer = "";
@@ -982,6 +1069,18 @@ pause
 
   handleKeydown(e) {
     markActive();
+
+    // Global Ctrl+C prompt cancellation (Native PowerShell behavior)
+    if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+      const selection = window.getSelection ? window.getSelection().toString() : "";
+      if (selection.length > 0) {
+        return; // Allow native copy
+      }
+      e.preventDefault();
+      this.handleCtrlC();
+      return;
+    }
+
     if (this.isInputDisabled || (this.input && this.input.disabled)) {
       e.preventDefault();
       return;

@@ -121,13 +121,46 @@ Administrative commands manage client caching, terminal persona, standalone serv
 - **Description**: Generates a new random Windows setup device identifier (`DESKTOP-XXXXXXX`) and resets simulated drive path back to `D:`.
 - **Syntax**: `/reset-prompt`
 
+### `/logout`
+- **Description**: Safely ends the active terminal session, clears `sessionStorage`, resets cloud presence to anonymous, and returns to the authentication gate.
+- **Syntax**: `/logout`
+
 ### `/help` or `help`
 - **Description**: Outputs the comprehensive terminal command index and quickstart guide to the buffer.
 - **Syntax**: `/help`
 
 ---
 
-## 5. Standard PowerShell Built-in Commands
+## 5. Security & Administrative Commands (Admin Only)
+
+These commands are reserved strictly for authorized administrators (`ADMIN` role). Standard users attempting execution receive an access denied error.
+
+### `/users`
+- **Description**: Displays a formatted table of all whitelisted users, security roles (`ADMIN` vs `USER`), password status (`CONFIGURED` vs `PENDING`), and live presence status (`Active (Live)`, `Idle`, `Offline`).
+- **Syntax**: `/users`
+
+### `/reset-user-pwd <username>`
+- **Description**: Purges the stored salted SHA-256 password hash for `<username>` from Firebase Realtime Database and the local vault. The user will be required to initialize a new password on their next sign-in.
+- **Syntax**: `/reset-user-pwd <username>`
+- **Example**: `/reset-user-pwd karthik10-dev`
+
+### `/add-user <username>`
+- **Description**: Adds a new handle to the authorized whitelist with the standard `USER` role.
+- **Syntax**: `/add-user <username>`
+- **Example**: `/add-user newpeer-dev`
+
+### `/remove-user <username>`
+- **Description**: Removes `<username>` from the authorized whitelist and deletes all associated credential records.
+- **Syntax**: `/remove-user <username>`
+- **Example**: `/remove-user oldpeer-dev`
+
+### `/sessions`
+- **Description**: Lists all active multi-device presence sessions, detailing session IDs, masked user identities, activity state (`Active` vs `Idle`), and session type (`Admin`, `User`, `Visitor`).
+- **Syntax**: `/sessions`
+
+---
+
+## 6. Standard PowerShell Built-in Commands
 
 The terminal emulates classic PowerShell 7 console commands for direct folder traversal and buffer inspection.
 

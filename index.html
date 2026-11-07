@@ -58,9 +58,23 @@
     <div class="terminal-statusbar" id="statusBar">
       <div class="status-left">
         <span class="status-indicator online" id="statusIndicator">[*]</span>
-        <span id="statusText">Connecting rajghosh06-dev/Programming-Related...</span>
+        <span id="statusText">Connecting Programming-Related...</span>
       </div>
       <div class="status-right">
+        <!-- Live Presence Widget -->
+        <div class="presence-widget-container" id="presenceWidgetContainer">
+          <span class="status-badge live-presence-widget" id="livePresenceWidget" role="button" aria-haspopup="true" tabindex="0">
+            <span class="presence-dot pulse" id="presenceDot">●</span>
+            <span id="presenceCountText">0 Live Users</span>
+          </span>
+          <div id="presencePopover" class="presence-popover" role="tooltip" aria-hidden="true">
+            <div class="presence-header">ACTIVE SESSIONS &amp; USER PRESENCE</div>
+            <div class="presence-section" id="presenceActiveSection"></div>
+            <div class="presence-divider" style="margin: 6px 0; border-top: 1px dashed #262626;"></div>
+            <div class="presence-section" id="presenceOfflineSection"></div>
+          </div>
+        </div>
+
         <span class="status-badge" id="statusCount">0 items</span>
         <span class="status-badge">24h TTL</span>
         <span class="status-badge">PWSH 7.6.9</span>

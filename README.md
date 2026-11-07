@@ -3,6 +3,7 @@
 # Windows 11 Terminal — Web Explorer
 ### Authentic PowerShell 7.6.9 Client & Dynamic Repository Indexer
 
+[![Windows Terminal Explorer](https://img.shields.io/badge/Web%20Explorer-Windows%20Terminal-0C0C0C?style=flat&logo=powershell&logoColor=3884FF)](https://rajghosh06-dev.github.io/Programming-Related/)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-0C0C0C?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rajghosh06-dev.github.io/Programming-Related/)
 [![PowerShell](https://img.shields.io/badge/PowerShell-7.6.9-5391FE?style=for-the-badge&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
 [![Windows 11](https://img.shields.io/badge/Windows%2011-Terminal%20UI-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://github.com/microsoft/terminal)

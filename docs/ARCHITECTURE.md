@@ -158,3 +158,40 @@ The interface mirrors the authentic Windows 11 Terminal with PowerShell 7 profil
 - **Custom Block Caret (`#customCaret`)**: Synchronized to an off-screen measuring span with sub-character tracking. When blurred, the caret shifts from a solid green block (`#13A10E`) to a persistent outline stroke.
 - **Interactive Suggestions Dropdown**: Suggestions are rendered in a clean 4-line fixed-height viewport with smooth scrolling, keyboard `Up`/`Down`/`Enter`/`Tab` interaction, and ASCII type indicators (`[DIR]`, `[FILE]`).
 - **Context Action Modal**: Selecting an item presents numbered contextual actions (GitHub Tree/Blob, Raw Stream, Copy Path, Direct Download).
+
+---
+
+## 6. CLI Authentication & Session Security Subsystem
+
+A client-side security gate protects access to repository assets, administrative tooling, and live presence nodes.
+
+### 6.1 Cryptographic Architecture
+- **Web Crypto API**: SHA-256 hashing executed via native browser primitives (`crypto.subtle.digest`). Plaintext passwords are never stored in memory or sent across network streams.
+- **Cryptographic Salting**: SHA-256 hashing prepends a unique repository salt prefix (`pr-salt-2026:`) to prevent rainbow table or precomputed dictionary attacks.
+- **First-Time Password Initialization**: Unregistered whitelisted users are guided through interactive initialization (`min 8 characters`, password confirmation, and keystroke masking).
+
+### 6.2 Hard 3-Hour Session Timeout
+- Sessions are stored strictly within ephemeral `sessionStorage` (`auth_user`, `auth_role`, `auth_login_time`).
+- An active timer enforces a hard logout after **3 hours** (`10,800,000 ms`).
+- Closing the browser tab or window purges `sessionStorage` instantly, resetting the terminal state to `AUTH_USERNAME`.
+
+### 6.3 Strict Privacy & Identity Masking
+- System administrative accounts are masked in all public UI touchpoints, CLI boot banners, login gates, and hover cards, displaying only generic identifiers (`Administrator` or `Admin`).
+- Unauthorized login attempts produce sanitized responses without exposing account existence.
+
+---
+
+## 7. Multi-Device Real-Time Cloud Presence Engine
+
+The terminal maintains bi-directional synchronization with Firebase Realtime Database to display live multi-device sessions and activity states.
+
+### 7.1 Connection Lifecycle & Heartbeat
+- Listens to `.info/connected` on Firebase RTDB.
+- On connection, writes `/presence/{sessionId}` with current user identity, window state, and server timestamp.
+- Hooks `.onDisconnect().remove()` to clean up dead sessions immediately when tabs close or network connections drop.
+
+### 7.2 Window Activity Introspection
+- Dynamically binds to `window.focus`, `window.blur`, and `document.visibilitychange`.
+- Focused active tabs update status to `"active"` (pulsing green indicator `#16c60c`).
+- Background tabs or blurred windows switch state to `"idle"` (yellow indicator `#e5c07b`).
+- Whitelisted peers not currently connected are dynamically listed as offline (`#e81123`).

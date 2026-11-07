@@ -3,6 +3,26 @@ import {
   getCacheStatus, 
   refetchRepositoryIndex 
 } from './api.js';
+import {
+  SESSION_TTL_MS,
+  hashPassword,
+  getAuthorizedWhitelist,
+  checkUserWhitelist,
+  getUserPasswordHash,
+  setUserPasswordHash,
+  deleteUserPasswordHash,
+  addAuthorizedUser,
+  removeAuthorizedUser,
+  saveSession,
+  clearSession,
+  getCurrentSession,
+  isSessionActive
+} from './auth.js';
+import {
+  updatePresenceUser,
+  resetPresenceToAnonymous,
+  getCachedPresenceMap
+} from './presence.js';
 
 /**
  * Pinned authoring build version extracted from DistanceVector.pkt in TEST-CISCO
@@ -53,21 +73,41 @@ export class Terminal {
     this.caretElement = document.getElementById('customCaret');
     this.caretMirror = document.getElementById('caretMirror');
 
-    // Prompt Configuration & Device Identifier Persistence
-    this.initPromptConfig();
-
-    // Terminal State
+    // Terminal State & Authentication
     this.filteredResults = [];
     this.selectedIndex = 0;
     this.activeItem = null;
-    this.mode = "INPUT"; // "INPUT" | "ACTION"
     this.actionMode = null; // null | "ITEM" | "SERVE_OS"
     this.grepActive = false;
     this.commandHistory = [];
     this.historyIndex = -1;
 
-    // Boot
-    this.initBootBanner();
+    // Authentication Subsystem
+    this.isMaskedInput = false;
+    this.rawPasswordBuffer = "";
+    this.pendingAuthUser = null;
+    this.pendingAuthRole = null;
+    this.tempInitPassword = null;
+    this.sessionTimer = null;
+
+    const activeSession = getCurrentSession();
+    if (activeSession) {
+      this.currentUser = activeSession.user;
+      this.currentRole = activeSession.role;
+      this.mode = "INPUT";
+      this.authState = null;
+      this.initPromptConfig();
+      this.initBootBanner();
+      this.scheduleSessionExpiration(activeSession.remainingMs);
+    } else {
+      this.currentUser = null;
+      this.currentRole = null;
+      this.mode = "AUTH";
+      this.authState = "AUTH_USERNAME";
+      this.initPromptConfig();
+      this.initAuthGate();
+    }
+
     this.bindEvents();
     this.updateStatus();
     this.updatePromptDisplay();
@@ -80,16 +120,22 @@ export class Terminal {
   initPromptConfig() {
     this.drive = localStorage.getItem("pwsh_terminal_drive") || "D";
 
-    const customUser = localStorage.getItem("pwsh_terminal_username");
-    if (customUser && customUser.trim().length > 0) {
-      this.userOrDevice = customUser.trim();
+    if (this.currentRole === "ADMIN") {
+      this.userOrDevice = "Administrator";
+    } else if (this.currentUser) {
+      this.userOrDevice = this.currentUser;
     } else {
-      let deviceId = localStorage.getItem("pwsh_terminal_device_id");
-      if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
-        deviceId = generateDesktopId();
-        localStorage.setItem("pwsh_terminal_device_id", deviceId);
+      const customUser = localStorage.getItem("pwsh_terminal_username");
+      if (customUser && customUser.trim().length > 0) {
+        this.userOrDevice = customUser.trim();
+      } else {
+        let deviceId = localStorage.getItem("pwsh_terminal_device_id");
+        if (!deviceId || !deviceId.startsWith("DESKTOP-")) {
+          deviceId = generateDesktopId();
+          localStorage.setItem("pwsh_terminal_device_id", deviceId);
+        }
+        this.userOrDevice = deviceId;
       }
-      this.userOrDevice = deviceId;
     }
   }
 
@@ -98,6 +144,12 @@ export class Terminal {
   }
 
   getPromptPrefix() {
+    if (this.mode === "AUTH") {
+      if (this.authState === "AUTH_USERNAME") return "Enter Username: ";
+      if (this.authState === "AUTH_PASSWORD") return "Password: ";
+      if (this.authState === "AUTH_INIT_PWD") return "Initialize Password (min 8 characters): ";
+      if (this.authState === "AUTH_CONFIRM_PWD") return "Confirm Password: ";
+    }
     return `PS ${this.getPromptPath()}> `;
   }
 
@@ -105,6 +157,52 @@ export class Terminal {
     if (this.promptTextElement) {
       this.promptTextElement.textContent = this.getPromptPrefix();
     }
+  }
+
+  initAuthGate(alertMessage = null) {
+    this.mode = "AUTH";
+    this.authState = "AUTH_USERNAME";
+    this.isMaskedInput = false;
+    this.rawPasswordBuffer = "";
+    this.pendingAuthUser = null;
+    this.pendingAuthRole = null;
+    this.tempInitPassword = null;
+
+    this.output.textContent = "";
+    let html = `PowerShell 7.6.9 - Authentication Subsystem\nRepository: Programming-Related\n\n`;
+    if (alertMessage) {
+      html += `<span style="color: #e5c07b;">[!] ${alertMessage}</span>\n\n`;
+    }
+    this.appendHTML(html.replace(/\n/g, "<br>"));
+    if (this.promptTextElement) {
+      this.promptTextElement.textContent = "Enter Username: ";
+    }
+    this.input.value = "";
+    this.hideSuggestions();
+    this.hideGrepWarning();
+    this.updateCaret();
+    this.scrollBottom();
+  }
+
+  scheduleSessionExpiration(ms) {
+    if (this.sessionTimer) {
+      clearTimeout(this.sessionTimer);
+    }
+    this.sessionTimer = setTimeout(() => {
+      this.logout("Session expired after 3 hours. Please sign in again.");
+    }, ms);
+  }
+
+  logout(reason = "You have signed out.") {
+    if (this.sessionTimer) {
+      clearTimeout(this.sessionTimer);
+      this.sessionTimer = null;
+    }
+    clearSession();
+    resetPresenceToAnonymous();
+    this.currentUser = null;
+    this.currentRole = null;
+    this.initAuthGate(reason);
   }
 
   initBootBanner() {
@@ -129,6 +227,7 @@ export class Terminal {
     this.mode = "INPUT";
     this.actionMode = null;
     this.activeItem = null;
+    this.updatePromptDisplay();
     this.input.focus();
     this.updateCaret();
   }
@@ -142,7 +241,7 @@ export class Terminal {
         this.statusText.textContent = customMessage;
       } else {
         const cache = getCacheStatus();
-        this.statusText.textContent = `Connected: ${REPO_CONFIG.owner}/${REPO_CONFIG.repo} [${cache.refetchesUsed}/6 refetches]`;
+        this.statusText.textContent = `Connected: ${REPO_CONFIG.repo} [${cache.refetchesUsed}/6 refetches]`;
       }
     }
   }
@@ -293,6 +392,12 @@ export class Terminal {
         { name: "set-user", desc: "Change prompt username", usage: "/set-user " },
         { name: "set-drive", desc: "Change prompt drive letter", usage: "/set-drive " },
         { name: "reset-prompt", desc: "Reset prompt to default DESKTOP-XXXXXXX", usage: "/reset-prompt" },
+        { name: "users", desc: "List authorized users & status (Admin)", usage: "/users" },
+        { name: "reset-user-pwd", desc: "Reset user password (Admin)", usage: "/reset-user-pwd " },
+        { name: "add-user", desc: "Add user to access list (Admin)", usage: "/add-user " },
+        { name: "remove-user", desc: "Remove user from access list (Admin)", usage: "/remove-user " },
+        { name: "sessions", desc: "List active presence sessions (Admin)", usage: "/sessions" },
+        { name: "logout", desc: "Sign out of terminal session", usage: "/logout" },
         { name: "help", desc: "Show command reference", usage: "/help" }
       ];
 
@@ -454,7 +559,184 @@ pause
     this.filteredResults = [];
   }
 
+  async handleAuthSubmit(val) {
+    if (this.authState === "AUTH_USERNAME") {
+      const username = (val || "").trim();
+      if (!username) return;
+      this.appendRaw(`Enter Username: ${username}\n`);
+
+      const check = checkUserWhitelist(username);
+      if (!check.authorized) {
+        this.appendRaw(
+          `[!] Access denied: '${username}' is not on the authorized access list.\n` +
+          `    Please contact the administrator.\n\n`
+        );
+        this.promptTextElement.textContent = "Enter Username: ";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+        return;
+      }
+
+      this.pendingAuthUser = check.canonicalName;
+      this.pendingAuthRole = check.role;
+
+      const existingHash = await getUserPasswordHash(this.pendingAuthUser);
+      if (!existingHash) {
+        this.authState = "AUTH_INIT_PWD";
+        this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
+        this.isMaskedInput = true;
+        this.rawPasswordBuffer = "";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+      } else {
+        this.authState = "AUTH_PASSWORD";
+        this.promptTextElement.textContent = "Password: ";
+        this.isMaskedInput = true;
+        this.rawPasswordBuffer = "";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+      }
+    } else if (this.authState === "AUTH_INIT_PWD") {
+      const pwd = val || "";
+      const mask = "*".repeat(pwd.length);
+      this.appendRaw(`Initialize Password (min 8 characters): ${mask}\n`);
+      if (pwd.length < 8) {
+        this.appendRaw(`[!] Password must be at least 8 characters.\n\n`);
+        this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
+        this.isMaskedInput = true;
+        this.rawPasswordBuffer = "";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+        return;
+      }
+      this.tempInitPassword = pwd;
+      this.authState = "AUTH_CONFIRM_PWD";
+      this.promptTextElement.textContent = "Confirm Password: ";
+      this.isMaskedInput = true;
+      this.rawPasswordBuffer = "";
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+    } else if (this.authState === "AUTH_CONFIRM_PWD") {
+      const confirmPwd = val || "";
+      const mask = "*".repeat(confirmPwd.length);
+      this.appendRaw(`Confirm Password: ${mask}\n`);
+      if (confirmPwd !== this.tempInitPassword) {
+        this.appendRaw(`[!] Passwords do not match. Please try again.\n\n`);
+        this.tempInitPassword = null;
+        this.authState = "AUTH_INIT_PWD";
+        this.promptTextElement.textContent = "Initialize Password (min 8 characters): ";
+        this.isMaskedInput = true;
+        this.rawPasswordBuffer = "";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+        return;
+      }
+
+      const hash = await hashPassword(confirmPwd);
+      await setUserPasswordHash(this.pendingAuthUser, hash);
+      this.tempInitPassword = null;
+
+      this.appendHTML(`
+        <span style="color: #16c60c;">[OK] Password created successful! Please remember.</span><br>
+        <span style="color: #e5c07b;">[!] If you forget your password, please contact the administrator!</span><br><br>
+        Please sign-in to continue.<br><br>
+      `);
+
+      this.authState = "AUTH_USERNAME";
+      this.isMaskedInput = false;
+      this.rawPasswordBuffer = "";
+      this.input.value = "";
+      this.promptTextElement.textContent = "Enter Username: ";
+      this.updateCaret();
+      this.scrollBottom();
+    } else if (this.authState === "AUTH_PASSWORD") {
+      const pwd = val || "";
+      const mask = "*".repeat(pwd.length);
+      this.appendRaw(`Password: ${mask}\n`);
+
+      const hash = await hashPassword(pwd);
+      const storedHash = await getUserPasswordHash(this.pendingAuthUser);
+
+      if (storedHash && storedHash.toLowerCase() === hash.toLowerCase()) {
+        this.currentUser = this.pendingAuthUser;
+        this.currentRole = this.pendingAuthRole;
+        saveSession(this.currentUser, this.currentRole);
+        updatePresenceUser(this.currentUser);
+        this.scheduleSessionExpiration(SESSION_TTL_MS);
+
+        this.mode = "INPUT";
+        this.authState = null;
+        this.isMaskedInput = false;
+        this.rawPasswordBuffer = "";
+        this.pendingAuthUser = null;
+        this.pendingAuthRole = null;
+
+        this.initPromptConfig();
+        this.clearScreen();
+      } else {
+        this.appendRaw(`[ERR] Authentication failed: Invalid credentials.\n\n`);
+        this.promptTextElement.textContent = "Password: ";
+        this.isMaskedInput = true;
+        this.rawPasswordBuffer = "";
+        this.input.value = "";
+        this.updateCaret();
+        this.scrollBottom();
+      }
+    }
+  }
+
   handleKeydown(e) {
+    // Mode: AUTH (CLI Authentication Subsystem)
+    if (this.mode === "AUTH") {
+      if (this.isMaskedInput) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const pwd = this.rawPasswordBuffer;
+          this.rawPasswordBuffer = "";
+          this.input.value = "";
+          this.handleAuthSubmit(pwd);
+          return;
+        }
+        if (e.key === "Backspace") {
+          e.preventDefault();
+          this.rawPasswordBuffer = this.rawPasswordBuffer.slice(0, -1);
+          this.input.value = "*".repeat(this.rawPasswordBuffer.length);
+          this.updateCaret();
+          return;
+        }
+        if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+          e.preventDefault();
+          this.rawPasswordBuffer += e.key;
+          this.input.value = "*".repeat(this.rawPasswordBuffer.length);
+          this.updateCaret();
+          return;
+        }
+        if (e.key === "Escape") {
+          e.preventDefault();
+          this.rawPasswordBuffer = "";
+          this.input.value = "";
+          this.updateCaret();
+          return;
+        }
+        return;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const val = this.input.value.trim();
+        this.input.value = "";
+        this.handleAuthSubmit(val);
+        return;
+      }
+      return;
+    }
+
     // Mode: ACTION (1, 2, 3, 4, Escape)
     if (this.mode === "ACTION") {
       this.handleActionKeys(e);
@@ -1727,13 +2009,100 @@ pause
     // Print executed prompt line to history
     this.appendRaw(`${this.getPromptPrefix()}${cmd}\n`);
 
+    // Verify 3-hour session validity before executing any command
+    const activeSession = getCurrentSession();
+    if (!activeSession) {
+      this.logout("Session expired after 3 hours. Please sign in again.");
+      return;
+    }
+
+    // Sign out command
+    if (raw === "/logout") {
+      this.logout("You have successfully signed out.");
+      return;
+    }
+
     // 1. Clear / Cls (Complete viewport scroll bug resolution)
     if (raw === "/clear" || raw === "/cls" || raw === "clear" || raw === "cls") {
       this.clearScreen();
       return;
     } 
     
-    // 2. Built-in Slash Commands
+    // 2. Built-in Administrative & Security Commands
+    if (raw === "/users") {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        await this.renderUsersTable();
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    } else if (raw.startsWith("/reset-user-pwd")) {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        const parts = cmd.split(/\s+/);
+        if (parts.length < 2 || !parts[1].trim()) {
+          this.appendRaw("Usage: /reset-user-pwd <username>\nExample: /reset-user-pwd karthik10-dev\n\n");
+        } else {
+          const target = parts[1].trim();
+          await deleteUserPasswordHash(target);
+          this.appendRaw(`[OK] Password for '${target}' has been reset. They will be prompted to initialize on next login.\n\n`);
+        }
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    } else if (raw.startsWith("/add-user")) {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        const parts = cmd.split(/\s+/);
+        if (parts.length < 2 || !parts[1].trim()) {
+          this.appendRaw("Usage: /add-user <username>\nExample: /add-user testuser-dev\n\n");
+        } else {
+          const target = parts[1].trim();
+          addAuthorizedUser(target, "USER");
+          this.appendRaw(`[OK] User '${target}' added to the authorized access list.\n\n`);
+        }
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    } else if (raw.startsWith("/remove-user")) {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        const parts = cmd.split(/\s+/);
+        if (parts.length < 2 || !parts[1].trim()) {
+          this.appendRaw("Usage: /remove-user <username>\nExample: /remove-user starcloud-retro\n\n");
+        } else {
+          const target = parts[1].trim();
+          await removeAuthorizedUser(target);
+          this.appendRaw(`[OK] User '${target}' removed from the authorized access list and credentials purged.\n\n`);
+        }
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    } else if (raw === "/sessions") {
+      if (this.currentRole !== "ADMIN") {
+        this.appendRaw("[!] Access denied: Administrative privileges required.\n\n");
+      } else {
+        this.renderSessionsTable();
+      }
+      this.input.value = "";
+      this.updateCaret();
+      this.scrollBottom();
+      return;
+    }
+
+    // 3. Built-in Slash Commands
     if (raw === "/re-fetch") {
       await this.executeRefetch();
     } else if (raw === "/cache") {
@@ -1871,6 +2240,92 @@ pause
     }
   }
 
+  async renderUsersTable() {
+    const whitelist = getAuthorizedWhitelist();
+    const presenceMap = getCachedPresenceMap();
+    let html = `
+      <div style="margin: 6px 0 12px 0; font-family: var(--font-mono); line-height: 1.6;">
+        <span class="ps-header">Authorized Access List &amp; Security Roles</span><br><br>
+        <table style="border-collapse: collapse; width: 100%; max-width: 720px; font-size: 12px;">
+          <thead>
+            <tr style="border-bottom: 1px solid #333333; text-align: left; color: #16c60c;">
+              <th style="padding: 4px 12px 4px 0;">USERNAME</th>
+              <th style="padding: 4px 12px;">ROLE</th>
+              <th style="padding: 4px 12px;">PASSWORD STATUS</th>
+              <th style="padding: 4px 12px;">LAST ACTIVE</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    for (const [userHandle, userMeta] of Object.entries(whitelist)) {
+      const role = userMeta.role || "USER";
+      const displayUser = role === "ADMIN" ? "Administrator" : userHandle;
+      const hash = await getUserPasswordHash(userHandle);
+      const pwdStatus = hash ? `<span style="color:#16c60c;">CONFIGURED</span>` : `<span style="color:#e5c07b;">PENDING</span>`;
+
+      let activeStatus = `<span style="color:#777777;">Offline</span>`;
+      for (const s of Object.values(presenceMap || {})) {
+        if (s.user && s.user.toLowerCase() === userHandle.toLowerCase()) {
+          activeStatus = s.status === "active" ? `<span style="color:#16c60c;">Active (Live)</span>` : `<span style="color:#e5c07b;">Idle</span>`;
+          break;
+        }
+      }
+
+      html += `
+        <tr style="border-bottom: 1px solid #1c1c1c;">
+          <td style="padding: 4px 12px 4px 0; color: #cccccc;">${displayUser}</td>
+          <td style="padding: 4px 12px; color: ${role === 'ADMIN' ? '#4ec9b0' : '#888888'}; font-weight: ${role === 'ADMIN' ? 'bold' : 'normal'};">${role}</td>
+          <td style="padding: 4px 12px;">${pwdStatus}</td>
+          <td style="padding: 4px 12px;">${activeStatus}</td>
+        </tr>
+      `;
+    }
+
+    html += `</tbody></table></div>`;
+    this.appendHTML(html);
+  }
+
+  renderSessionsTable() {
+    const presenceMap = getCachedPresenceMap();
+    const entries = Object.entries(presenceMap || {});
+    let html = `
+      <div style="margin: 6px 0 12px 0; font-family: var(--font-mono); line-height: 1.6;">
+        <span class="ps-header">Active Real-Time Presence Sessions (${entries.length})</span><br><br>
+        <table style="border-collapse: collapse; width: 100%; max-width: 680px; font-size: 12px;">
+          <thead>
+            <tr style="border-bottom: 1px solid #333333; text-align: left; color: #16c60c;">
+              <th style="padding: 4px 12px 4px 0;">SESSION ID</th>
+              <th style="padding: 4px 12px;">IDENTITY</th>
+              <th style="padding: 4px 12px;">STATE</th>
+              <th style="padding: 4px 12px;">TYPE</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    for (const [sid, sess] of entries) {
+      const rawUser = sess.user || "anonymous";
+      const isAdmin = rawUser.toLowerCase() === "rajghosh06-dev";
+      const displayUser = isAdmin ? "Administrator" : rawUser;
+      const isAnonymous = rawUser.startsWith("anonymous-");
+      const userType = isAdmin ? `<span style="color:#4ec9b0; font-weight:bold;">Admin</span>` : (isAnonymous ? `<span style="color:#888888;">Visitor</span>` : `<span style="color:#cccccc;">User</span>`);
+      const statusDot = sess.status === "active" ? `<span style="color:#16c60c;">[●] Active</span>` : `<span style="color:#e5c07b;">[●] Idle</span>`;
+
+      html += `
+        <tr style="border-bottom: 1px solid #1c1c1c;">
+          <td style="padding: 4px 12px 4px 0; color: #888888; font-size: 11px;">${sid.slice(-10)}</td>
+          <td style="padding: 4px 12px; color: #ffffff;">${displayUser}</td>
+          <td style="padding: 4px 12px;">${statusDot}</td>
+          <td style="padding: 4px 12px;">${userType}</td>
+        </tr>
+      `;
+    }
+
+    html += `</tbody></table></div>`;
+    this.appendHTML(html);
+  }
+
   /**
    * Renders the /cache status report
    */
@@ -1882,7 +2337,7 @@ pause
       <div style="margin: 6px 0 12px 0; font-family: var(--font-mono); line-height: 1.6;">
         <span class="ps-header">GitHub Repository Indexer - Cache Report</span><br>
         ------------------------------------------------------------------------<br>
-        &nbsp;&nbsp;Repository Scope  : <span style="color:#ffffff;">${REPO_CONFIG.owner}/${REPO_CONFIG.repo} (${REPO_CONFIG.branch})</span><br>
+        &nbsp;&nbsp;Repository Scope  : <span style="color:#ffffff;">${REPO_CONFIG.repo} (${REPO_CONFIG.branch})</span><br>
         &nbsp;&nbsp;Storage Engine    : <span style="color:#3b8eea;">localStorage (Persistent 24-Hour TTL)</span><br>
         &nbsp;&nbsp;Cached Item Count : <span style="color:#ffe082;">${s.itemCount.toLocaleString()} files & directories</span><br>
         &nbsp;&nbsp;Cache Timestamp   : <span style="color:#cccccc;">${s.formattedDate}</span><br>
@@ -1900,8 +2355,8 @@ pause
   renderHelp() {
     this.appendHTML(`
       <div style="margin-bottom: 12px; line-height: 1.55;">
-        <span style="color: #ffffff; font-weight: bold;">PowerShell 7.6.9 - GitHub Repository Indexer</span><br>
-        <span style="color: #888888;">Repository: https://github.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}</span><br><br>
+        <span style="color: #ffffff; font-weight: bold;">PowerShell 7.6.9 - Repository Explorer</span><br>
+        <span style="color: #888888;">Repository: ${REPO_CONFIG.repo}</span><br><br>
         
         <span class="ps-header">1. File & Folder Indexing ('@'):</span><br>
         &nbsp;&nbsp;<span style="color: #ffe082;">@&lt;query&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search files & folders in real-time (e.g. <span style="color:#569cd6;">@cypher</span>, <span style="color:#569cd6;">@queue</span>)<br>
@@ -1925,17 +2380,25 @@ pause
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/install-wt</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Installs modern Windows Terminal (wt.exe)<br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/install-pwsh</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hardened 3-tier installer/upgrader for PowerShell 7<br><br>
 
-        <span class="ps-header">4. Standard PowerShell Commands:</span><br>
+        <span class="ps-header">4. Administrative &amp; Security Commands:</span><br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/users</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List authorized access roster and credentials status (Admin)<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/reset-user-pwd &lt;user&gt;</span>&nbsp;&nbsp;Purge user password and force re-initialization (Admin)<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/add-user &lt;user&gt;</span>&nbsp;&nbsp;&nbsp;Add new handle to authorized access list (Admin)<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/remove-user &lt;user&gt;</span>&nbsp;Remove user from access list and wipe credentials (Admin)<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/sessions</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inspect active multi-device presence sessions (Admin)<br>
+        &nbsp;&nbsp;<span style="color: #4ec9b0;">/logout</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sign out of the current terminal session<br><br>
+
+        <span class="ps-header">5. Standard PowerShell Commands:</span><br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls / dir</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List current directory contents with authentic styling<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls &lt;folder&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List contents of folder (e.g. <span style="color:#569cd6;">ls 1st-Year</span>)<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">cat &lt;file&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Preview file details and stream directly<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">repo / info</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Display repository metadata and branch information<br><br>
 
-        <span class="ps-header">5. Context-Aware Item Actions:</span><br>
+        <span class="ps-header">6. Context-Aware Item Actions:</span><br>
         &nbsp;&nbsp;<span style="color: #4ec9b0;">[DIR]</span>&nbsp;&nbsp;[<span class="key-badge">1</span>] View on GitHub (tree) | [<span class="key-badge">2</span>] Browse in Terminal | [<span class="key-badge">3</span>] Copy Path | [<span class="key-badge">ESC</span>] Cancel<br>
         &nbsp;&nbsp;<span style="color: #e5c07b;">[FILE]</span> [<span class="key-badge">1</span>] View on GitHub (blob) | [<span class="key-badge">2</span>] View Raw | [<span class="key-badge">3</span>] Copy Content | [<span class="key-badge">4</span>] Download | [<span class="key-badge">ESC</span>] Cancel<br><br>
 
-        <span class="ps-header">6. Shortcuts:</span><br>
+        <span class="ps-header">7. Shortcuts:</span><br>
         &nbsp;&nbsp;<span style="color: #ffffff;">Up / Down</span> : Navigate suggestions / command history &nbsp;•&nbsp; <span style="color: #ffffff;">Enter</span> : Select &nbsp;•&nbsp; <span style="color: #ffffff;">Tab</span> : Autocomplete &nbsp;•&nbsp; <span style="color: #ffffff;">Ctrl+L</span> : Clear<br><br>
       </div>
     `);
@@ -1946,12 +2409,12 @@ pause
     this.appendHTML(`
       <div style="margin: 6px 0 12px 0; line-height: 1.6;">
         <span class="ps-header">Repository Metadata:</span><br>
-        &nbsp;&nbsp;Owner / Repo : <span style="color:#ffffff;">${REPO_CONFIG.owner}/${REPO_CONFIG.repo}</span><br>
+        &nbsp;&nbsp;Repository   : <span style="color:#ffffff;">${REPO_CONFIG.repo}</span><br>
         &nbsp;&nbsp;Active Branch: <span style="color:#4ec9b0;">${REPO_CONFIG.branch}</span><br>
         &nbsp;&nbsp;Total Indexed: <span style="color:#ffe082;">${this.items.length.toLocaleString()} items (files & directories)</span><br>
         &nbsp;&nbsp;Cache Engine : <span style="color:#16c60c;">localStorage 24h TTL (${s.ageFormatted})</span><br>
         &nbsp;&nbsp;Refetches    : <span style="color:#4ec9b0;">${s.refetchesUsed}/6 used this session</span><br>
-        &nbsp;&nbsp;Repository   : <a href="https://github.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}" target="_blank" style="color:#569cd6; text-decoration: underline;">https://github.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}</a><br><br>
+        &nbsp;&nbsp;Status       : <span style="color:#16c60c;">Online</span><br><br>
       </div>
     `);
   }

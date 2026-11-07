@@ -306,3 +306,21 @@ export function getCurrentSession() {
 export function isSessionActive() {
   return getCurrentSession() !== null;
 }
+
+/**
+ * Formats duration in milliseconds to HH:MM:SS format
+ * @param {number} remainingMs 
+ * @returns {string} e.g. "02:58:14"
+ */
+export function formatRemainingTime(remainingMs) {
+  if (remainingMs <= 0 || isNaN(remainingMs)) return "00:00:00";
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [
+    hours.toString().padStart(2, "0"),
+    minutes.toString().padStart(2, "0"),
+    seconds.toString().padStart(2, "0")
+  ].join(":");
+}

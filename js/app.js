@@ -96,7 +96,9 @@ async function initApp() {
     grepWarningBox: document.getElementById("grepWarningBox"),
     statusText: document.getElementById("statusText"),
     statusCount: document.getElementById("statusCount"),
-    statusIndicator: document.getElementById("statusIndicator")
+    statusIndicator: document.getElementById("statusIndicator"),
+    sessionTimerWidget: document.getElementById("sessionTimerWidget"),
+    sessionTimerClock: document.getElementById("sessionTimerClock")
   };
 
   // Setup presence popover toggle

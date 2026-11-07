@@ -17,7 +17,8 @@ import {
   clearSession,
   getCurrentSession,
   isSessionActive,
-  handlePasswordInit
+  handlePasswordInit,
+  formatRemainingTime
 } from './auth.js';
 import {
   updatePresenceUser,
@@ -92,6 +93,10 @@ export class Terminal {
     this.sessionTimer = null;
     this.isInputDisabled = false;
 
+    this.sessionTimerWidget = elements.sessionTimerWidget || document.getElementById('sessionTimerWidget');
+    this.sessionTimerClock = elements.sessionTimerClock || document.getElementById('sessionTimerClock');
+    this.sessionCountdownInterval = null;
+
     const activeSession = getCurrentSession();
     if (activeSession) {
       this.currentUser = activeSession.user;
@@ -101,6 +106,7 @@ export class Terminal {
       this.initPromptConfig();
       this.initBootBanner();
       this.scheduleSessionExpiration(activeSession.remainingMs);
+      this.startSessionCountdown();
       if (window.__startPresenceSubscription) {
         window.__startPresenceSubscription();
       }
@@ -111,6 +117,7 @@ export class Terminal {
       this.authState = "AUTH_USERNAME";
       this.initPromptConfig();
       this.initAuthGate();
+      this.stopSessionCountdown();
       if (window.__stopPresenceSubscription) {
         window.__stopPresenceSubscription();
       }
@@ -163,6 +170,7 @@ export class Terminal {
   }
 
   initAuthGate(alertMessage = null) {
+    this.stopSessionCountdown();
     this.mode = "AUTH";
     this.authState = "AUTH_USERNAME";
     this.isMaskedInput = false;
@@ -223,11 +231,75 @@ export class Terminal {
     }, ms);
   }
 
+  /**
+   * Starts live 1-second countdown clock in status bar
+   */
+  startSessionCountdown() {
+    this.stopSessionCountdown();
+
+    const widget = this.sessionTimerWidget || document.getElementById("sessionTimerWidget");
+    const clock = this.sessionTimerClock || document.getElementById("sessionTimerClock");
+
+    if (widget) {
+      widget.classList.add("authenticated");
+      widget.style.display = "inline-flex";
+    }
+
+    const updateClock = () => {
+      const loginTimeStr = sessionStorage.getItem("auth_login_time");
+      const loginTime = loginTimeStr ? parseInt(loginTimeStr, 10) : Date.now();
+      const elapsed = Date.now() - loginTime;
+      const remainingMs = Math.max(0, SESSION_TTL_MS - elapsed);
+
+      if (clock) {
+        clock.textContent = formatRemainingTime(remainingMs);
+      }
+
+      if (widget) {
+        widget.classList.remove("timer-warning", "timer-critical");
+        // Thresholds: Critical <= 5 mins (300,000 ms), Warning <= 15 mins (900,000 ms)
+        if (remainingMs <= 5 * 60 * 1000) {
+          widget.classList.add("timer-critical");
+        } else if (remainingMs <= 15 * 60 * 1000) {
+          widget.classList.add("timer-warning");
+        }
+      }
+
+      if (remainingMs <= 0) {
+        this.stopSessionCountdown();
+        this.logout("Session expired after 3 hours. Please sign in again.");
+      }
+    };
+
+    updateClock();
+    this.sessionCountdownInterval = setInterval(updateClock, 1000);
+  }
+
+  /**
+   * Stops live session countdown clock and hides widget
+   */
+  stopSessionCountdown() {
+    if (this.sessionCountdownInterval) {
+      clearInterval(this.sessionCountdownInterval);
+      this.sessionCountdownInterval = null;
+    }
+    const widget = this.sessionTimerWidget || document.getElementById("sessionTimerWidget");
+    const clock = this.sessionTimerClock || document.getElementById("sessionTimerClock");
+    if (widget) {
+      widget.classList.remove("authenticated", "timer-warning", "timer-critical");
+      widget.style.display = "none";
+    }
+    if (clock) {
+      clock.textContent = "03:00:00";
+    }
+  }
+
   logout(reason = "You have signed out.") {
     if (this.sessionTimer) {
       clearTimeout(this.sessionTimer);
       this.sessionTimer = null;
     }
+    this.stopSessionCountdown();
     clearSession();
     resetPresenceToAnonymous();
     if (typeof window.__stopPresenceSubscription === "function") {
@@ -692,6 +764,7 @@ pause
           window.__startPresenceSubscription();
         }
         this.scheduleSessionExpiration(SESSION_TTL_MS);
+        this.startSessionCountdown();
 
         this.mode = "INPUT";
         this.authState = null;

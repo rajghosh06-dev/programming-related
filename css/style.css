@@ -486,6 +486,55 @@ body.has-maximized {
   display: inline-flex !important;
 }
 
+/* Session Auto-Logout Timer Widget (Authenticated Users Only) */
+#sessionTimerWidget,
+.session-timer-item {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--status-fg, #858585);
+  user-select: none;
+}
+
+#sessionTimerWidget.authenticated,
+.session-timer-item.authenticated {
+  display: inline-flex;
+}
+
+.session-timer-item .timer-label {
+  color: #666666;
+}
+
+.session-timer-item .timer-clock {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+/* Session Countdown Threshold States */
+.session-timer-item.timer-warning,
+.session-timer-item.timer-warning .timer-clock,
+.session-timer-item.timer-warning .timer-label {
+  color: #e5c07b !important;
+}
+
+.session-timer-item.timer-critical,
+.session-timer-item.timer-critical .timer-clock,
+.session-timer-item.timer-critical .timer-label {
+  color: #e81123 !important;
+  animation: timerPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes timerPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .live-presence-widget {
   cursor: pointer;
   display: inline-flex;

@@ -4,11 +4,11 @@
 ### Authentic PowerShell 7.6.9 Client & Dynamic Repository Indexer
 
 [![Windows Terminal Explorer](https://img.shields.io/badge/Web%20Explorer-Windows%20Terminal-0C0C0C?style=flat&logo=powershell&logoColor=3884FF)](https://rajghosh06-dev.github.io/Programming-Related/)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-0C0C0C?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rajghosh06-dev.github.io/Programming-Related/)
-[![PowerShell](https://img.shields.io/badge/PowerShell-7.6.9-5391FE?style=for-the-badge&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
-[![Windows 11](https://img.shields.io/badge/Windows%2011-Terminal%20UI-0078D4?style=for-the-badge&logo=windows11&logoColor=white)](https://github.com/microsoft/terminal)
-[![Vanilla JS](https://img.shields.io/badge/Vanilla-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-0C0C0C?style=flat&logo=google-chrome&logoColor=white)](https://rajghosh06-dev.github.io/Programming-Related/)
+[![PowerShell](https://img.shields.io/badge/PowerShell-7.6.9-5391FE?style=flat&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
+[![Windows 11](https://img.shields.io/badge/Windows%2011-Terminal%20UI-0078D4?style=flat&logo=windows11&logoColor=white)](https://github.com/microsoft/terminal)
+[![Vanilla JS](https://img.shields.io/badge/Vanilla-ES6%2B-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
 
 <p align="center">
   A high-performance, client-side Windows 11 Terminal emulator designed to explore, search, and manage 4,400+ coursework assets in <code>rajghosh06-dev/Programming-Related</code> with sub-millisecond autocomplete, rate-limit protected caching, and multi-tier polyglot standalone runners.
@@ -40,17 +40,18 @@
 
 ```mermaid
 flowchart TD
-    User([Browser Client]) --> Indexer[api.js: RepositoryIndexer]
-    Indexer -->|Check Cache| LocalStorage[(localStorage 24h TTL)]
-    LocalStorage -->|Cache Hit| Init[terminal.js: Boot Terminal]
-    LocalStorage -->|Cache Miss| GitTreesAPI[GitHub Git Trees API: recursive=1]
-    GitTreesAPI -->|Store & Stamp| LocalStorage
-    
-    Init --> CLI[Interactive PowerShell Prompt]
-    CLI -->|'@' Prefix| Search[File/Folder Autocomplete: 4-Line Frame]
-    CLI -->|'/' Prefix| Commands[Built-in Admin & Slash Commands]
-    CLI -->|'$' Prefix| GrepGuard[Grep Warning & clone-index.bat Dispatch]
-    CLI -->|'ls' / 'dir'| TreeView[Formatted Directory Listing]
+    User(["Browser Client"]) --> Indexer["api.js: RepositoryIndexer"]
+    Indexer -->|"Check Cache"| LocalStorage["localStorage 24h TTL"]
+    LocalStorage -->|"Cache Hit"| Init["terminal.js: Boot Terminal"]
+    LocalStorage -->|"Cache Miss"| GitTreesAPI["GitHub Git Trees API (recursive=1)"]
+    GitTreesAPI -->|"Store & Stamp"| LocalStorage
+    Init --> AuthGate{"auth.js: Authenticated?"}
+    AuthGate -->|"No"| LoginScreen["Render Login Gate"]
+    AuthGate -->|"Yes"| TermUI["PowerShell 7.6.9 Terminal CLI"]
+    TermUI -->|"@ Search"| FuzzySearch["Fuzzy Auto-complete & Tree Jump"]
+    TermUI -->|"/ Commands"| SlashCmd["Admin & Local Slash Commands"]
+    TermUI -->|"cd / ls / cat"| VFSEngine["VFS & GitHub Raw Stream"]
+    TermUI -->|"Presence & Heartbeat"| FirebaseRTDB[("Firebase Realtime Database")]
 ```
 
 For deeper architectural details, cache lifecycle analysis, desktop shell detection hierarchies, and Cisco Packet Tracer registry mechanics, refer to [ARCHITECTURE.md](docs/ARCHITECTURE.md).

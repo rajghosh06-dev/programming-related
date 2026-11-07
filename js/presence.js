@@ -77,17 +77,24 @@ export function getEvaluatedStatus() {
 
 /**
  * Explicitly updates the local session presence status in Firebase RTDB
+ * Optimized for zero-latency synchronization (immediate optimistic render + unthrottled network write)
  */
 export function updatePresenceStatus(status) {
+  if (!status) status = getEvaluatedStatus();
+  if (currentSessionStatus === status && !isInactive && status === "active") {
+    return;
+  }
   currentSessionStatus = status;
   if (status === "active") {
     isInactive = false;
+  } else if (status === "idle") {
+    isInactive = true;
   }
   const sessionId = getSessionId();
   if (cachedPresenceMap && cachedPresenceMap[sessionId]) {
     cachedPresenceMap[sessionId].status = status;
   }
-  // Immediately dispatch to local presence listeners so UI updates instantly
+  // Immediate local optimistic render
   if (cachedPresenceMap) {
     for (const listener of presenceListeners) {
       try {
@@ -96,16 +103,19 @@ export function updatePresenceStatus(status) {
       } catch (e) {}
     }
   }
+  // Immediate unthrottled network write
   const database = getFirebaseDb();
   if (!database || !sessionId) return;
   try {
     const userPresenceRef = ref(database, `presence/${sessionId}`);
     update(userPresenceRef, {
-      status: status || getEvaluatedStatus(),
+      status: status,
       lastActive: serverTimestamp()
     }).catch(() => {});
   } catch (e) {}
 }
+
+export const updateStatus = updatePresenceStatus;
 
 /**
  * Initializes Firebase App and Realtime Database instances safely

@@ -164,10 +164,11 @@ export class Terminal {
 
   formatPromptPath() {
     const base = `${this.drive}:\\${this.userOrDevice}\\Programming-Related`;
-    if (!this.cwd || this.cwd === "") {
+    const cleanCwd = (this.cwd || "").replace(/^[\\\/]+|[\\\/]+$/g, "").replace(/\//g, "\\");
+    if (!cleanCwd) {
       return base;
     }
-    return `${base}\\${this.cwd.replace(/\//g, '\\')}`;
+    return `${base}\\${cleanCwd}`;
   }
 
   getPromptPath() {
@@ -649,8 +650,9 @@ pause
           <span class="item-meta" style="color: #569cd6; font-size: 11px;">Directory</span>
         `;
         div.onclick = () => {
-          const needsQuotes = /[\s-]/.test(item.name);
-          const formatted = needsQuotes ? `"${item.name}"` : item.name;
+          const q = item.quoteChar || '"';
+          const needsQuotes = /[\s-]/.test(item.name) || !!item.quoteChar;
+          const formatted = needsQuotes ? `${q}${item.name}${q}` : item.name;
           const cmd = item.cmdPrefix || "cd";
           this.input.value = `${cmd} ${formatted}`;
           this.hideSuggestions();
@@ -663,8 +665,9 @@ pause
           <span class="item-meta" style="color: #888888; font-size: 11px;">${item.length ? item.length + ' bytes' : 'File'}</span>
         `;
         div.onclick = () => {
-          const needsQuotes = /[\s-]/.test(item.name);
-          const formatted = needsQuotes ? `"${item.name}"` : item.name;
+          const q = item.quoteChar || '"';
+          const needsQuotes = /[\s-]/.test(item.name) || !!item.quoteChar;
+          const formatted = needsQuotes ? `${q}${item.name}${q}` : item.name;
           const cmd = item.cmdPrefix || "cat";
           this.input.value = `${cmd} ${formatted}`;
           this.hideSuggestions();
@@ -720,13 +723,15 @@ pause
     if (selected.type === "cmd") {
       this.input.value = selected.usage ? selected.usage : `/${selected.name} `;
     } else if (selected.type === "dir_complete") {
-      const needsQuotes = /[\s-]/.test(selected.name);
-      const formatted = needsQuotes ? `"${selected.name}"` : selected.name;
+      const q = selected.quoteChar || '"';
+      const needsQuotes = /[\s-]/.test(selected.name) || !!selected.quoteChar;
+      const formatted = needsQuotes ? `${q}${selected.name}${q}` : selected.name;
       const cmd = selected.cmdPrefix || "cd";
       this.input.value = `${cmd} ${formatted}`;
     } else if (selected.type === "file_complete") {
-      const needsQuotes = /[\s-]/.test(selected.name);
-      const formatted = needsQuotes ? `"${selected.name}"` : selected.name;
+      const q = selected.quoteChar || '"';
+      const needsQuotes = /[\s-]/.test(selected.name) || !!selected.quoteChar;
+      const formatted = needsQuotes ? `${q}${selected.name}${q}` : selected.name;
       const cmd = selected.cmdPrefix || "cat";
       this.input.value = `${cmd} ${formatted}`;
     }
@@ -1033,15 +1038,17 @@ pause
       if (cdMatch) {
         const cmdPrefix = cdMatch[1].trim();
         const argPart = cdMatch[2] !== undefined ? cdMatch[2] : "";
-        const cleanQuery = argPart.trim().replace(/^["']|["']$/g, "").toLowerCase();
+        const cleanQuery = argPart.trim().replace(/^['"]+|['"]+$/g, "").toLowerCase();
+        const quoteChar = argPart.startsWith("'") ? "'" : (argPart.startsWith('"') ? '"' : null);
 
         const dirs = this.getImmediateChildren(this.cwd).filter(c => c.isDir);
         const matches = dirs.filter(d => d.name.toLowerCase().startsWith(cleanQuery));
 
         if (matches.length === 1) {
           const targetName = matches[0].name;
-          const needsQuotes = /[\s-]/.test(targetName);
-          const formatted = needsQuotes ? `"${targetName}"` : targetName;
+          const q = quoteChar || '"';
+          const needsQuotes = /[\s-]/.test(targetName) || !!quoteChar;
+          const formatted = needsQuotes ? `${q}${targetName}${q}` : targetName;
           this.input.value = `${cmdPrefix} ${formatted}`;
           this.hideSuggestions();
           this.updateCaret();
@@ -1050,7 +1057,8 @@ pause
           this.filteredResults = matches.map(m => ({
             type: "dir_complete",
             name: m.name,
-            cmdPrefix: cmdPrefix
+            cmdPrefix: cmdPrefix,
+            quoteChar: quoteChar
           }));
           this.selectedIndex = 0;
           this.renderSuggestions();
@@ -1065,15 +1073,17 @@ pause
       if (catMatch) {
         const cmdPrefix = catMatch[1].trim();
         const argPart = catMatch[2] !== undefined ? catMatch[2] : "";
-        const cleanQuery = argPart.trim().replace(/^["']|["']$/g, "").toLowerCase();
+        const cleanQuery = argPart.trim().replace(/^['"]+|['"]+$/g, "").toLowerCase();
+        const quoteChar = argPart.startsWith("'") ? "'" : (argPart.startsWith('"') ? '"' : null);
 
         const files = this.getImmediateChildren(this.cwd).filter(c => !c.isDir);
         const matches = files.filter(f => f.name.toLowerCase().startsWith(cleanQuery));
 
         if (matches.length === 1) {
           const targetName = matches[0].name;
-          const needsQuotes = /[\s-]/.test(targetName);
-          const formatted = needsQuotes ? `"${targetName}"` : targetName;
+          const q = quoteChar || '"';
+          const needsQuotes = /[\s-]/.test(targetName) || !!quoteChar;
+          const formatted = needsQuotes ? `${q}${targetName}${q}` : targetName;
           this.input.value = `${cmdPrefix} ${formatted}`;
           this.hideSuggestions();
           this.updateCaret();
@@ -1083,7 +1093,8 @@ pause
             type: "file_complete",
             name: m.name,
             length: m.length,
-            cmdPrefix: cmdPrefix
+            cmdPrefix: cmdPrefix,
+            quoteChar: quoteChar
           }));
           this.selectedIndex = 0;
           this.renderSuggestions();
@@ -1213,9 +1224,11 @@ pause
         window.open(`https://github.com/${REPO_CONFIG.owner}/${REPO_CONFIG.repo}/tree/${REPO_CONFIG.branch}/${this.activeItem.path}`, "_blank");
         this.resetPrompt(`Opened GitHub tree: ${this.activeItem.path}`);
       } else if (actionKey === "2") {
-        const folder = this.activeItem.path;
+        const selectedDirPath = this.activeItem.path;
+        this.cwd = selectedDirPath;
+        this.updatePromptDisplay();
         this.resetPrompt();
-        this.handleCommand(`ls ${folder}`);
+        this.runLs(this.cwd);
       } else if (actionKey === "3") {
         try {
           await this.copyToClipboard(this.activeItem.path);
@@ -2671,7 +2684,7 @@ pause
         &nbsp;&nbsp;<span style="color: #4ec9b0;">/logout</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sign out of the current terminal session<br><br>
 
         <span class="ps-header">5. Standard PowerShell Commands:</span><br>
-        &nbsp;&nbsp;<span style="color: #ffe082;">cd &lt;dir&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change directory (e.g. <span style="color:#569cd6;">cd "2nd-Year"</span>, <span style="color:#569cd6;">cd ..</span>, <span style="color:#569cd6;">cd ~</span>)<br>
+        &nbsp;&nbsp;<span style="color: #ffe082;">cd &lt;dir&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change directory (e.g. <span style="color:#569cd6;">cd '3rd-Year'</span>, <span style="color:#569cd6;">cd ..</span>, <span style="color:#569cd6;">cd ...</span>, <span style="color:#569cd6;">cd ~</span>)<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">pwd</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Print current virtual directory path<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls / dir</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List current directory contents with authentic styling<br>
         &nbsp;&nbsp;<span style="color: #ffe082;">ls &lt;folder&gt;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List contents of folder (e.g. <span style="color:#569cd6;">ls 1st-Year</span>)<br>
@@ -2714,38 +2727,48 @@ pause
   }
 
   resolvePath(targetPath) {
-    if (!targetPath) return this.cwd;
-    let clean = targetPath.trim().replace(/^["']|["']$/g, "").replace(/\\/g, "/");
+    if (!targetPath && targetPath !== "") return this.cwd;
+    let clean = (targetPath || "").trim().replace(/^['"]+|['"]+$/g, "").replace(/\\/g, "/");
 
-    // Root navigations
-    if (clean === "" || clean === "~" || clean === "/" || clean === "\\") {
+    // Root navigations: cd \, cd /, cd ~, cd ..., or empty
+    if (clean === "" || clean === "~" || clean === "/" || clean === "\\" || clean === "...") {
       return "";
     }
 
     // Strip leading drive or repo root if passed e.g. D:/DESKTOP-XXXXXXX/Programming-Related/...
+    let isFromRoot = false;
     const repoMatch = clean.match(/Programming-Related\/?(.*)$/i);
     if (repoMatch) {
       clean = repoMatch[1];
+      isFromRoot = true;
     }
 
-    // If starts with / or ~, treat as from root
-    let isFromRoot = false;
+    // If starts with / or ~ or ..., treat as from root
     if (clean.startsWith("/")) {
       isFromRoot = true;
       clean = clean.replace(/^\/+/, "");
     } else if (clean.startsWith("~/")) {
       isFromRoot = true;
       clean = clean.slice(2);
+    } else if (clean.startsWith(".../")) {
+      isFromRoot = true;
+      clean = clean.slice(4);
+    }
+
+    if (clean === "" || clean === "...") {
+      return "";
     }
 
     let parts = (isFromRoot || !this.cwd) ? [] : this.cwd.split("/");
-    const segments = clean.split("/").filter(s => s.length > 0 && s !== ".");
+    const segments = clean.split("/").map(s => s.replace(/^['"]+|['"]+$/g, "")).filter(s => s.length > 0 && s !== ".");
 
     for (const seg of segments) {
       if (seg === "..") {
         if (parts.length > 0) {
           parts.pop();
         }
+      } else if (seg === "...") {
+        parts = [];
       } else {
         parts.push(seg);
       }
@@ -2855,15 +2878,16 @@ pause
     });
   }
 
-  executeCd(target) {
+  handleCd(target) {
     const rawTarget = (target || "").trim();
-    if (!rawTarget || rawTarget === "~" || rawTarget === "/" || rawTarget === "\\") {
+    const cleanTarget = rawTarget.replace(/^['"]+|['"]+$/g, "").trim();
+
+    if (!cleanTarget || cleanTarget === "~" || cleanTarget === "/" || cleanTarget === "\\" || cleanTarget === "...") {
       this.cwd = "";
       this.updatePromptDisplay();
       return;
     }
 
-    const cleanTarget = rawTarget.replace(/^["']|["']$/g, "").trim();
     const resolved = this.resolvePath(cleanTarget);
 
     if (this.isDirectory(resolved)) {
@@ -2881,6 +2905,10 @@ pause
       }
       this.appendRaw(`Set-Location : Cannot find path '${fullDisplayPath}' because it does not exist.\n\n`);
     }
+  }
+
+  executeCd(target) {
+    return this.handleCd(target);
   }
 
   executePwd() {
@@ -2902,7 +2930,7 @@ pause
       return;
     }
 
-    const cleanTarget = rawTarget.replace(/^["']|["']$/g, "").trim();
+    const cleanTarget = rawTarget.replace(/^['"]+|['"]+$/g, "").trim();
     const resolved = this.resolvePath(cleanTarget);
 
     // If target is directory
@@ -2979,13 +3007,17 @@ pause
     return this.executeCat(filePath);
   }
 
+  runLs(dir = this.cwd) {
+    return this.renderDirectoryListing(dir);
+  }
+
   /**
    * Renders PowerShell 'ls' or 'dir' listing with dynamic prompt path
    */
   renderDirectoryListing(subFolder = "") {
     let targetDir = this.cwd;
-    if (subFolder && subFolder.trim().length > 0) {
-      const cleanSub = subFolder.replace(/^["']|["']$/g, "").trim();
+    if (subFolder && subFolder.trim().length > 0 && subFolder !== this.cwd) {
+      const cleanSub = subFolder.replace(/^['"]+|['"]+$/g, "").trim();
       targetDir = this.resolvePath(cleanSub);
       if (!this.isDirectory(targetDir)) {
         const displayTarget = cleanSub.replace(/\//g, "\\");
@@ -3046,6 +3078,7 @@ pause
     this.mode = "INPUT";
     this.actionMode = null;
     this.activeItem = null;
+    this.updatePromptDisplay();
     this.input.focus();
     this.updateCaret();
     this.scrollBottom();

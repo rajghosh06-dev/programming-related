@@ -8,6 +8,8 @@
 
 *Comprehensive coursework spanning foundational problem-solving through advanced algorithms and systems programming*
 
+[![Windows Terminal Explorer](https://img.shields.io/badge/Web%20Explorer-Windows%20Terminal-0C0C0C?style=flat&logo=powershell&logoColor=3884FF)](https://rajghosh06-dev.github.io/Programming-Related/)
+
 <img src="https://img.shields.io/badge/Years-2024--2026-00DDFF?style=for-the-badge" alt="Years" />
 <img src="https://img.shields.io/badge/Projects-7-39FF14?style=for-the-badge" alt="Projects" />
 <img src="https://img.shields.io/badge/Languages-12+-FF00FF?style=for-the-badge" alt="Languages" />

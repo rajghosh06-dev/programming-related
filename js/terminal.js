@@ -240,6 +240,9 @@ export class Terminal {
     }
 
     // Standard Interactive CLI Mode (INPUT / ACTION / GREP)
+    const currentCmd = this.input ? this.input.value : "";
+    const prefix = this.getPromptPrefix();
+
     if (this.actions) {
       this.actions.style.display = "none";
       this.actions.innerHTML = "";
@@ -251,8 +254,6 @@ export class Terminal {
     this.actionMode = null;
     this.activeItem = null;
 
-    const prefix = this.getPromptPrefix();
-    const currentCmd = this.input ? this.input.value : "";
     this.appendRaw(`${prefix}${currentCmd}^C\n`);
     if (this.input) {
       this.input.value = "";

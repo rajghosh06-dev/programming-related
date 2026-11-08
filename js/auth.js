@@ -20,7 +20,8 @@ export const DEFAULT_WHITELIST = {
   "saieshwar-web": { role: "USER" },
   "saikrishna-dev-oss": { role: "USER" },
   "starcloud-retro": { role: "USER" },
-  "rayainwarrior-dev": { role: "USER" }
+  "rayainwarrior-dev": { role: "USER" },
+  "test-runner-temp-dev": { role: "USER" }
 };
 
 export const AUTHORIZED_USERS = DEFAULT_WHITELIST;
@@ -231,7 +232,14 @@ export async function deleteUserPasswordHash(username) {
   } else {
     try {
       const url = `https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/auth/${lower}.json`;
-      await fetch(url, { method: "DELETE" });
+      const res = await fetch(url, { method: "DELETE" });
+      if (!res.ok) {
+        await fetch(url, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reset: true, updatedAt: Date.now() })
+        });
+      }
     } catch (e) {}
   }
 
@@ -420,7 +428,21 @@ export async function clearSessionTimer(username) {
   if (db) {
     try {
       const timerRef = ref(db, `auth/${lower}/session_timer`);
-      await remove(timerRef);
+      await remove(timerRef).catch(async () => {
+        await set(timerRef, { reset: true, updatedAt: Date.now() });
+      });
+    } catch (e) {}
+  } else {
+    try {
+      const url = `https://programming-related-web-default-rtdb.asia-southeast1.firebasedatabase.app/auth/${lower}/session_timer.json`;
+      const res = await fetch(url, { method: "DELETE" });
+      if (!res.ok) {
+        await fetch(url, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reset: true, updatedAt: Date.now() })
+        });
+      }
     } catch (e) {}
   }
 }

@@ -1978,35 +1978,71 @@ pause
   }
 
   /**
+   * Normalizes any input string to clean Windows CRLF line endings (\r\n)
+   * Prevents double carriage returns (\r\r\n) and bare LFs
+   */
+  toCrlf(str) {
+    if (typeof str !== "string") return "";
+    return str.replace(/\r\n/g, "\n").replace(/\r/g, "\n").replace(/\n/g, "\r\n");
+  }
+
+  /**
+   * Normalizes any input string to clean Unix LF line endings (\n)
+   * Strips all carriage returns (\r)
+   */
+  toLf(str) {
+    if (typeof str !== "string") return "";
+    return str.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  }
+
+  /**
    * Unified asynchronous script download helper with persistent custom caret focus restoration
+   * Ensures Windows-compatible CRLF line endings for batch files and LF for shell scripts
    */
   triggerScriptDownload(filename, content, mime = "text/plain;charset=utf-8") {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
+    try {
+      let finalContent = content;
+      if (filename.endsWith(".bat") || filename.endsWith(".cmd")) {
+        finalContent = this.toCrlf(content);
+      } else if (filename.endsWith(".sh")) {
+        finalContent = this.toLf(content);
+      }
+      const blob = new Blob([finalContent], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
 
-    requestAnimationFrame(() => {
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      requestAnimationFrame(() => {
+        try {
+          a.click();
+        } finally {
+          if (a.parentNode) {
+            document.body.removeChild(a);
+          }
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
 
-      // Immediately restore input focus and custom block caret
-      setTimeout(() => {
-        this.input.focus();
-        this.updateCaret();
-        this.scrollBottom();
-      }, 50);
-    });
+          // Immediately restore input focus and custom block caret
+          setTimeout(() => {
+            if (this.input) {
+              this.input.focus();
+              this.updateCaret();
+              this.scrollBottom();
+            }
+          }, 50);
+        }
+      });
+    } catch (err) {
+      this.appendRaw(`[ERR] Failed to trigger script download: ${err.message}\n\n`);
+    }
   }
 
   /**
    * Standalone Multi-Platform Script Generators
    */
   generateWindowsLauncherScript() {
-    return `@echo off
+    return this.toCrlf(`@echo off
 setlocal enabledelayedexpansion
 title Windows 11 Terminal - Standalone Launcher
 cd /d "%~dp0"
@@ -2017,9 +2053,6 @@ echo   Repository: ${REPO_CONFIG.owner}/${REPO_CONFIG.repo}
 echo ====================================================================
 echo.
 
-set PORT=8000
-set URL=http://localhost:%PORT%
-
 :: Windows Version Detection
 set WIN_VER=Windows 10
 for /f "tokens=3" %%i in ('reg query "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion" /v CurrentBuildNumber 2^>nul') do (
@@ -2029,25 +2062,31 @@ for /f "tokens=3" %%i in ('reg query "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\Cur
 )
 echo [INFO] Detected OS: %WIN_VER%
 
-:: Windows Terminal (wt.exe) Verification & Auto-Baselining
-where wt.exe >nul 2>nul
-if %errorlevel% neq 0 (
+:: Windows Terminal [wt.exe] Verification & Auto-Baselining
+where wt.exe >nul 2>&1
+if errorlevel 1 (
     echo [INFO] Windows Terminal not found. Checking winget...
-    where winget.exe >nul 2>nul
-    if %errorlevel% equ 0 (
+    where winget.exe >nul 2>&1
+    if not errorlevel 1 (
         echo [*] Installing Windows Terminal via winget...
         winget install --id Microsoft.WindowsTerminal -e --silent --accept-source-agreements --accept-package-agreements
+        where wt.exe >nul 2>&1
+        if not errorlevel 1 (
+            echo [OK] Windows Terminal installed and verified.
+        ) else (
+            echo [INFO] Windows Terminal installed. A terminal restart may be required to refresh PATH.
+        )
     ) else (
         echo [INFO] Winget not found. Use '/install-winget' or '/install-wt' in terminal for installer scripts.
     )
 ) else (
-    echo [OK] Windows Terminal (wt.exe) verified.
+    echo [OK] Windows Terminal [wt.exe] verified.
 )
 
 :: PowerShell 7 vs 5.1 Verification
-where pwsh.exe >nul 2>nul
-if %errorlevel% equ 0 (
-    echo [OK] Modern PowerShell 7 (pwsh.exe) verified.
+where pwsh.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [OK] Modern PowerShell 7 [pwsh.exe] verified.
     set PS_BIN=pwsh.exe
 ) else (
     echo [INFO] Modern PowerShell 7 not found. Using Windows PowerShell 5.1 fallback.
@@ -2055,111 +2094,152 @@ if %errorlevel% equ 0 (
 )
 
 echo.
+echo [*] Searching for available local port [8000-8010]...
+
+:: Detect available port without killing unrelated processes
+set PORT=
+for /f "usebackq" %%p in (\`powershell -NoProfile -Command "$port = 8000; while ($port -le 8010) { $conns = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue; if (-not $conns) { Write-Output $port; break }; $port++ }"\`) do set PORT=%%p
+
+if not defined PORT (
+    echo [ERR] Ports 8000 through 8010 are all occupied by active processes.
+    echo [ERR] Please free a port or close conflicting applications before launching.
+    pause
+    exit /b 1
+)
+
+set HOST=127.0.0.1
+set URL=http://%HOST%:%PORT%
+echo [OK] Selected available port: %PORT%
+
 echo [*] Initializing local HTTP server on port %PORT%...
+set SERVER_PID=
 
-:: Cleanup any existing process on port 8000
-for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr :%PORT% ^| findstr LISTENING 2^>nul') do (
-    taskkill /F /PID %%a >nul 2>nul
-)
-
-set SERVER_STARTED=0
-
-:: Check Python
-where python >nul 2>nul
-if %errorlevel% equ 0 (
+:: Check Python runtime
+where python >nul 2>&1
+if not errorlevel 1 (
     echo [OK] Detected Python runtime. Starting server...
-    start "PWSH_SRV_8000" /min python -m http.server %PORT%
-    set SERVER_STARTED=1
-    goto :server_ready
+    for /f "usebackq" %%p in (\`powershell -NoProfile -Command "$p = Start-Process -FilePath 'python' -ArgumentList @('-m', 'http.server', '%PORT%', '--bind', '%HOST%') -PassThru -WindowStyle Hidden; if ($p) { $p.Id }"\`) do set SERVER_PID=%%p
+    goto :server_started
 )
 
-:: Check Node.js / npx
-where npx >nul 2>nul
-if %errorlevel% equ 0 (
+:: Check Node.js / npx runtime
+where npx.cmd >nul 2>&1
+if not errorlevel 1 (
     echo [OK] Detected Node.js / npx runtime. Starting server...
-    start "PWSH_SRV_8000" /min npx --yes serve -l %PORT% .
-    set SERVER_STARTED=1
-    goto :server_ready
+    for /f "usebackq" %%p in (\`powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList @('/c', 'npx', '--yes', 'serve', '-l', 'tcp://%HOST%:%PORT%', '.') -PassThru -WindowStyle Hidden; if ($p) { $p.Id }"\`) do set SERVER_PID=%%p
+    goto :server_started
 )
 
-:: Check PHP
-where php >nul 2>nul
-if %errorlevel% equ 0 (
+:: Check PHP CLI runtime
+where php.exe >nul 2>&1
+if not errorlevel 1 (
     echo [OK] Detected PHP CLI runtime. Starting server...
-    start "PWSH_SRV_8000" /min php -S localhost:%PORT%
-    set SERVER_STARTED=1
-    goto :server_ready
+    for /f "usebackq" %%p in (\`powershell -NoProfile -Command "$p = Start-Process -FilePath 'php' -ArgumentList @('-S', '%HOST%:%PORT%') -PassThru -WindowStyle Hidden; if ($p) { $p.Id }"\`) do set SERVER_PID=%%p
+    goto :server_started
 )
 
-:: Fallback: Built-in PowerShell HttpListener
+:: Fallback: Built-in Windows PowerShell HttpListener
 echo [OK] Starting built-in Windows PowerShell HttpListener fallback server...
-start "PWSH_SRV_8000" /min powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$port = %PORT%; $listener = New-Object System.Net.HttpListener; $listener.Prefixes.Add('http://localhost:' + $port + '/'); $listener.Start(); while ($listener.IsListening) { try { $ctx = $listener.GetContext(); $req = $ctx.Request; $res = $ctx.Response; $rel = $req.Url.LocalPath.TrimStart('/'); if ([string]::IsNullOrEmpty($rel)) { $rel = 'index.html' }; $filePath = Join-Path (Get-Location) $rel.Replace('/', '\\'); if (Test-Path $filePath -PathType Leaf) { $ext = [System.IO.Path]::GetExtension($filePath).ToLower(); $mime = switch ($ext) { '.html' { 'text/html; charset=utf-8' } '.css' { 'text/css; charset=utf-8' } '.js' { 'application/javascript; charset=utf-8' } '.json' { 'application/json; charset=utf-8' } '.png' { 'image/png' } '.jpg' { 'image/jpeg' } '.svg' { 'image/svg+xml' } default { 'application/octet-stream' } }; $res.ContentType = $mime; $bytes = [System.IO.File]::ReadAllBytes($filePath); $res.ContentLength64 = $bytes.Length; $res.OutputStream.Write($bytes, 0, $bytes.Length); } else { $res.StatusCode = 404; $msg = [System.Text.Encoding]::UTF8.GetBytes('404 Not Found'); $res.OutputStream.Write($msg, 0, $msg.Length); }; $res.OutputStream.Close(); } catch {} }"
-set SERVER_STARTED=1
+for /f "usebackq" %%p in (\`powershell -NoProfile -Command "$cmd = '$port = %PORT%; $listener = New-Object System.Net.HttpListener; $listener.Prefixes.Add(''http://%HOST%:'' + $port + ''/''); $listener.Start(); while ($listener.IsListening) { try { $ctx = $listener.GetContext(); $req = $ctx.Request; $res = $ctx.Response; $rel = $req.Url.LocalPath.TrimStart(''/''); if ([string]::IsNullOrEmpty($rel)) { $rel = ''index.html'' }; $filePath = Join-Path (Get-Location) $rel.Replace(''/'', ''\\''); if (Test-Path $filePath -PathType Leaf) { $ext = [System.IO.Path]::GetExtension($filePath).ToLower(); $mime = switch ($ext) { ''.html'' { ''text/html; charset=utf-8'' } ''.css'' { ''text/css; charset=utf-8'' } ''.js'' { ''application/javascript; charset=utf-8'' } ''.json'' { ''application/json; charset=utf-8'' } ''.png'' { ''image/png'' } ''.jpg'' { ''image/jpeg'' } ''.svg'' { ''image/svg+xml'' } default { ''application/octet-stream'' } }; $res.ContentType = $mime; $bytes = [System.IO.File]::ReadAllBytes($filePath); $res.ContentLength64 = $bytes.Length; $res.OutputStream.Write($bytes, 0, $bytes.Length); } else { $res.StatusCode = 404; $msg = [System.Text.Encoding]::UTF8.GetBytes(''404 Not Found''); $res.OutputStream.Write($msg, 0, $msg.Length); }; $res.OutputStream.Close(); } catch {} }'; $p = Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $cmd) -PassThru -WindowStyle Hidden; if ($p) { $p.Id }"\`) do set SERVER_PID=%%p
 
-:server_ready
-timeout /t 2 /nobreak >nul
+:server_started
+if not defined SERVER_PID (
+    echo [ERR] Failed to start local server process.
+    pause
+    exit /b 1
+)
+echo [OK] Server process spawned with PID %SERVER_PID%.
+
+:: Bounded server readiness verification [up to 15 seconds]
+echo [*] Verifying server readiness at %URL%...
+set SERVER_READY=0
+for /l %%i in (1,1,15) do (
+    if "!SERVER_READY!"=="0" (
+        powershell -NoProfile -Command "try { $req = [System.Net.HttpWebRequest]::Create('%URL%'); $req.Timeout = 2000; $res = $req.GetResponse(); if ([int]$res.StatusCode -eq 200) { $res.Close(); exit 0 } else { $res.Close(); exit 1 } } catch { exit 1 }" >nul 2>&1
+        if not errorlevel 1 (
+            set SERVER_READY=1
+        ) else (
+            timeout /t 1 /nobreak >nul
+        )
+    )
+)
+
+if not "%SERVER_READY%"=="1" (
+    echo [ERR] Local server failed to respond at %URL% within 15 seconds.
+    goto :cleanup
+)
+echo [OK] Local server confirmed responding at %URL%.
 
 :: Desktop App Launch Hierarchy
 echo [*] Launching desktop application...
 
 :: Tier 1: Python pywebview
-python -c "import webview" >nul 2>nul
-if %errorlevel% equ 0 (
+python -c "import webview" >nul 2>&1
+if not errorlevel 1 (
     echo [OK] Launching via pywebview desktop shell...
     python -c "import webview; webview.create_window('PowerShell 7.6.9', '%URL%', width=1100, height=680); webview.start()"
     goto :cleanup
 )
 
-:: Tier 2: Edge App Mode (Standalone window)
-where msedge.exe >nul 2>nul
-if %errorlevel% equ 0 (
-    echo [OK] Launching standalone Edge App Mode (1100x680)...
-    start /wait msedge.exe --app=%URL% --window-size=1100,680
-    goto :cleanup
+:: Tier 2: Edge App Mode [Standalone window]
+where msedge.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [OK] Launching standalone Edge App Mode [1100x680]...
+    start "" msedge.exe --app=%URL% --window-size=1100,680
+    goto :await_exit
 )
 
 if exist "%ProgramFiles(x86)%\\Microsoft\\Edge\\Application\\msedge.exe" (
-    echo [OK] Launching standalone Edge App Mode (1100x680)...
-    start /wait "" "%ProgramFiles(x86)%\\Microsoft\\Edge\\Application\\msedge.exe" --app=%URL% --window-size=1100,680
-    goto :cleanup
+    echo [OK] Launching standalone Edge App Mode [1100x680]...
+    start "" "%ProgramFiles(x86)%\\Microsoft\\Edge\\Application\\msedge.exe" --app=%URL% --window-size=1100,680
+    goto :await_exit
 )
 if exist "%ProgramFiles%\\Microsoft\\Edge\\Application\\msedge.exe" (
-    echo [OK] Launching standalone Edge App Mode (1100x680)...
-    start /wait "" "%ProgramFiles%\\Microsoft\\Edge\\Application\\msedge.exe" --app=%URL% --window-size=1100,680
-    goto :cleanup
+    echo [OK] Launching standalone Edge App Mode [1100x680]...
+    start "" "%ProgramFiles%\\Microsoft\\Edge\\Application\\msedge.exe" --app=%URL% --window-size=1100,680
+    goto :await_exit
 )
 
 :: Tier 3: Chrome App Mode fallback
-where chrome.exe >nul 2>nul
-if %errorlevel% equ 0 (
-    echo [OK] Launching Chrome App Mode (1100x680)...
-    start /wait chrome.exe --app=%URL% --window-size=1100,680
-    goto :cleanup
+where chrome.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [OK] Launching Chrome App Mode [1100x680]...
+    start "" chrome.exe --app=%URL% --window-size=1100,680
+    goto :await_exit
 )
 
 :: Tier 4: Default Browser Fallback
 echo [OK] Launching in default web browser...
 start "" "%URL%"
+
+:await_exit
 echo.
 echo ====================================================================
-echo   Server is running at %URL%
-echo   Press any key in this window to stop server and exit.
+echo   [RUNNING] Windows 11 Terminal is active at %URL%
+echo.
+echo   Keep this launcher window open while using the application.
+echo   To stop the server and exit:
+echo     1. Close the terminal application window.
+echo     2. Press any key in this console window.
 echo ====================================================================
 pause >nul
+goto :cleanup
 
 :cleanup
 echo.
 echo [*] Shutting down local server...
-for /f "tokens=5" %%a in ('netstat -aon 2^>nul ^| findstr :%PORT% ^| findstr LISTENING 2^>nul') do (
-    taskkill /F /PID %%a >nul 2>nul
+if defined SERVER_PID (
+    echo [*] Terminating owned server process tree [PID: %SERVER_PID%]...
+    taskkill /T /F /PID %SERVER_PID% >nul 2>&1
+    powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq %SERVER_PID% } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }; Stop-Process -Id %SERVER_PID% -Force -ErrorAction SilentlyContinue" >nul 2>&1
 )
-taskkill /FI "WINDOWTITLE eq PWSH_SRV_8000*" /F >nul 2>nul
+if defined PORT (
+    powershell -NoProfile -Command "$retry = 0; while ($retry -lt 10) { $conns = Get-NetTCPConnection -LocalPort %PORT% -ErrorAction SilentlyContinue; if (-not $conns) { break }; Start-Sleep -Milliseconds 200; $retry++ }" >nul 2>&1
+)
 echo [OK] Server terminated cleanly.
 exit /b 0
-`;
+`);
   }
-
   generateUbuntuLauncherScript() {
     return `#!/usr/bin/env bash
 # ====================================================================

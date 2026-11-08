@@ -1,0 +1,97 @@
+======================================================================
+WEEK 8 — EXPERIMENT 2: DISTANCE VECTOR ROUTING (RIP)
+======================================================================
+
+FILE CHECKED: DistanceVector.pkt
+
+DEVICES IN THE SAVED FILE:
+- 3 routers: Router0, Router1, Router2 (Cisco 1841)
+- 3 switches: Switch0, Switch1, Switch2 (Cisco 2960-24TT)
+- 6 PCs: PC0 through PC5
+
+IMPORTANT MODEL / INTERFACE CORRECTION:
+The .pkt file uses Cisco 1841 routers. Their LAN interfaces are FastEthernet0/0
+and their WAN links are Serial0/0/0 and Serial0/0/1. The PDF's GigabitEthernet
+interfaces do not match this saved file.
+
+EXACT SWITCH / PC / ROUTER CONNECTIONS:
+PC0 FastEthernet0 -> Switch0 FastEthernet0/1   (Copper Straight-Through)
+PC1 FastEthernet0 -> Switch0 FastEthernet0/2   (Copper Straight-Through)
+Switch0 FastEthernet0/3 -> Router0 FastEthernet0/0   (Copper Straight-Through)
+
+PC2 FastEthernet0 -> Switch1 FastEthernet0/1   (Copper Straight-Through)
+PC3 FastEthernet0 -> Switch1 FastEthernet0/2   (Copper Straight-Through)
+Switch1 FastEthernet0/3 -> Router1 FastEthernet0/0   (Copper Straight-Through)
+
+PC4 FastEthernet0 -> Switch2 FastEthernet0/1   (Copper Straight-Through)
+PC5 FastEthernet0 -> Switch2 FastEthernet0/2   (Copper Straight-Through)
+Switch2 FastEthernet0/3 -> Router2 FastEthernet0/0   (Copper Straight-Through)
+
+EXACT ROUTER-TO-ROUTER SERIAL CONNECTIONS:
+Router0 Serial0/0/0 -> Router1 Serial0/0/0   (Serial cable)
+Router1 Serial0/0/1 -> Router2 Serial0/0/0   (Serial cable)
+Router0 Serial0/0/1 -> Router2 Serial0/0/1   (Serial cable)
+
+SERIAL DCE INFORMATION FROM THE SAVED FILE:
+- Router1 Serial0/0/0 is the DCE end for the Router0-Router1 link.
+- Router2 Serial0/0/0 is the DCE end for the Router1-Router2 link.
+- Router2 Serial0/0/1 is the DCE end for the Router0-Router2 link.
+
+The saved configuration sets clock rate 2000000 on those DCE interfaces:
+- Router1: Serial0/0/0
+- Router2: Serial0/0/0
+- Router2: Serial0/0/1
+
+PC IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address       Subnet Mask       Default Gateway
+PC0      192.168.1.2      255.255.255.0     192.168.1.1
+PC1      192.168.1.3      255.255.255.0     192.168.1.1
+PC2      192.168.2.2      255.255.255.0     192.168.2.1
+PC3      192.168.2.3      255.255.255.0     192.168.2.1
+PC4      192.168.3.2      255.255.255.0     192.168.3.1
+PC5      192.168.3.3      255.255.255.0     192.168.3.1
+
+ROUTER INTERFACE IP CONFIGURATION READ FROM THE FILE:
+
+Router0:
+- FastEthernet0/0 = 192.168.1.1  255.255.255.0
+- Serial0/0/0      = 10.0.0.1    255.0.0.0
+- Serial0/0/1      = 12.0.0.1    255.0.0.0
+
+Router1:
+- FastEthernet0/0 = 192.168.2.1  255.255.255.0
+- Serial0/0/0      = 10.0.0.2    255.0.0.0
+- Serial0/0/1      = 11.0.0.1    255.0.0.0
+
+Router2:
+- FastEthernet0/0 = 192.168.3.1  255.255.255.0
+- Serial0/0/0      = 11.0.0.2    255.0.0.0
+- Serial0/0/1      = 12.0.0.2    255.0.0.0
+
+ROUTER LINK ADDRESS PAIRS:
+- R0-R1 serial link: 10.0.0.1 <-> 10.0.0.2 (network 10.0.0.0/8)
+- R1-R2 serial link: 11.0.0.1 <-> 11.0.0.2 (network 11.0.0.0/8)
+- R0-R2 serial link: 12.0.0.1 <-> 12.0.0.2 (network 12.0.0.0/8)
+
+RIP CONFIGURATION NOTE:
+The saved router configurations contain these RIP network statements:
+- network 10.0.0.0
+- network 11.0.0.0
+- network 12.0.0.0
+- network 192.168.1.0
+- network 192.168.2.0
+- network 192.168.3.0
+
+IMPORTANT DIFFERENCE FROM THE PDF:
+The supplied .pkt files do NOT show "version 2" or "no auto-summary" in the
+saved RIP configurations. The saved files also use Serial interfaces instead
+of the GigabitEthernet WAN links shown in the PDF. If you are copying the
+PDF's RIP v2 CLI commands, that is a different configuration from the current
+saved .pkt state.
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.3.3
+
+The first ping may time out while ARP/routing information is being learned.
+Try the ping again after the network has converged.

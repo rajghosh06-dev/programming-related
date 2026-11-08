@@ -1,0 +1,53 @@
+# ==============================================================================
+# SML Lab - Required External R Packages
+# ==============================================================================
+
+# --- Complete Installation (All Weeks Combined) ---
+all_packages <- c("AR", "BSDA", "caTools", "car", "corrplot", "datarium", "e1071", "factoextra", "MASS", "quantmod", "remotes")
+install.packages(setdiff(all_packages, rownames(installed.packages())), dependencies = TRUE)
+
+
+# ==============================================================================
+# Weekly Package Breakdown
+# ==============================================================================
+
+# [DAY-1]
+# No external packages required
+
+# [WEEK01]
+# No external packages required
+# Note: 'rankMatrix()' in W1_P2.R is provided by the 'Matrix' package (recommended package included with standard R).
+
+# [WEEK02]
+# No external packages required
+
+# [WEEK03]
+install.packages(c("remotes", "AR"))
+# Note: 'AR' and its dependency 'DISTRIB' are archived from CRAN. If install.packages fails, install via:
+# remotes::install_github("cran/DISTRIB")
+# remotes::install_github("cran/AR")
+
+# [WEEK04]
+install.packages(c("BSDA"))
+
+# [WEEK05]
+# No external packages required
+
+# [WEEK06]
+install.packages(c("caTools", "car", "quantmod", "MASS", "corrplot", "datarium"))
+
+# [WEEK07]
+# No external packages required
+
+# [WEEK08]
+install.packages(c("e1071"))
+
+# [WEEK09]
+install.packages(c("factoextra"))
+# Note: Importing the accompanying Excel data files (.xlsx) in W9_P1 requires 'readxl'.
+
+# [WEEK10]
+install.packages(c("e1071"))
+
+# [Additionals]
+# No external packages required

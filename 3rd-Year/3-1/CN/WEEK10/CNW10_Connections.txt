@@ -1,0 +1,106 @@
+======================================================================
+WEEK 10 — EXPERIMENT 3: FTP AND TFTP FILE TRANSFER
+======================================================================
+
+FILE CHECKED: FileTransferProtocol_TFTP.pkt
+
+DEVICES IN THE SAVED FILE:
+- 2 routers: Router0 and Router1 (Cisco ISR4331)
+- 2 switches: Switch0 and Switch1 (Switch-PT)
+- 3 PCs: PC0, PC1, PC2
+- 1 server: Server0 (Server-PT)
+
+IMPORTANT MODEL / INTERFACE CORRECTION:
+The saved .pkt file uses ISR4331 routers and Switch-PT switches.
+The router-facing switch ports are FastEthernet2/1.
+The LAN router interface is GigabitEthernet0/0/0.
+The router-to-router WAN interface is GigabitEthernet0/0/1.
+This is the reverse of the interface roles shown in the PDF's connection/config
+table.
+
+EXACT CONNECTIONS:
+
+PC0 FastEthernet0 -> Switch0 FastEthernet0/1   (Copper Straight-Through)
+PC1 FastEthernet0 -> Switch0 FastEthernet1/1   (Copper Straight-Through)
+Switch0 FastEthernet2/1 -> Router0 GigabitEthernet0/0/0   (Copper Straight-Through)
+
+PC2 FastEthernet0 -> Switch1 FastEthernet0/1   (Copper Straight-Through)
+Server0 FastEthernet0 -> Switch1 FastEthernet1/1   (Copper Straight-Through)
+Switch1 FastEthernet2/1 -> Router1 GigabitEthernet0/0/0   (Copper Straight-Through)
+
+Router0 GigabitEthernet0/0/1 -> Router1 GigabitEthernet0/0/1
+(Copper Straight-Through)
+
+IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address   Subnet Mask       Default Gateway
+PC0      1.1.1.2      255.0.0.0         1.1.1.1
+PC1      1.1.1.3      255.0.0.0         1.1.1.1
+PC2      2.2.2.3      255.0.0.0         2.2.2.1
+Server0  2.2.2.2      255.0.0.0         2.2.2.1
+
+ROUTER INTERFACE IP CONFIGURATION READ FROM THE FILE:
+
+Router0:
+- GigabitEthernet0/0/0 = 1.1.1.1  255.0.0.0   (LAN; connected to Switch0)
+- GigabitEthernet0/0/1 = 3.3.3.3  255.0.0.0   (WAN; connected to Router1)
+
+Router1:
+- GigabitEthernet0/0/0 = 2.2.2.1  255.0.0.0   (LAN; connected to Switch1)
+- GigabitEthernet0/0/1 = 3.3.3.4  255.0.0.0   (WAN; connected to Router0)
+
+Router-to-router link:
+- Router0: 3.3.3.3
+- Router1: 3.3.3.4
+- Network: 3.0.0.0/8
+
+ROUTING CONFIGURATION DIFFERENCE:
+The PDF describes static routes using "ip route". However, the saved .pkt router
+configurations contain RIP network statements:
+- network 1.0.0.0
+- network 2.0.0.0
+- network 3.0.0.0
+
+The saved configurations do not contain the static "ip route" commands shown
+in the PDF. They also do not show "version 2" or "no auto-summary".
+Therefore, do not assume the current saved .pkt configuration is the same as
+the static-routing instructions in the PDF.
+
+FTP / TFTP SERVER ADDRESS:
+Server0 IP address: 2.2.2.2
+Use this address from PC0 or PC2 when connecting to the server.
+
+FTP CLIENT COMMANDS (as described in the PDF):
+From PC0:
+1. Create A.txt using Desktop > Text Editor and save it.
+2. Open Desktop > Command Prompt.
+3. Enter:
+   ftp 2.2.2.2
+4. Use the FTP username/password configured on Server0.
+5. At the ftp> prompt, upload:
+   put A.txt
+6. Exit:
+   quit
+
+From PC2:
+1. Open Desktop > Command Prompt.
+2. Enter:
+   ftp 2.2.2.2
+3. Log in with the same FTP credentials.
+4. Download:
+   get A.txt
+5. Exit:
+   quit
+6. Verify:
+   dir
+   type A.txt
+
+TFTP CLIENT COMMANDS (as described in the PDF):
+From PC0, upload:
+tftp -i 2.2.2.2 put A.txt
+
+From PC2, download:
+tftp -i 2.2.2.2 get A.txt
+
+Verify the downloaded file:
+dir
+type A.txt

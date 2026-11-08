@@ -1,0 +1,59 @@
+MAC ADDRESS INVENTORY — REFERENCE ONLY
+======================================================================
+
+These are the MAC addresses stored in the supplied .pkt files.
+Packet Tracer already assigns these to the NICs. You normally do NOT enter
+these values manually.
+
+[BUS — Bus-Topology.pkt]
+PC0      IP=192.168.0.1     MASK=255.255.255.0   GW=None            MAC=00E0.A357.95AB
+PC1      IP=192.168.0.2     MASK=255.255.255.0   GW=None            MAC=00E0.F9E3.0409
+PC2      IP=192.168.0.3     MASK=255.255.255.0   GW=None            MAC=000C.8562.D570
+
+[STAR — Star-Topology.pkt]
+PC0      IP=192.168.0.1     MASK=255.255.255.0   GW=None            MAC=00E0.F775.1995
+PC1      IP=192.168.0.2     MASK=255.255.255.0   GW=None            MAC=00D0.9750.D132
+PC2      IP=192.168.0.3     MASK=255.255.255.0   GW=None            MAC=0060.5CA9.2BC6
+PC3      IP=192.168.0.4     MASK=255.255.255.0   GW=None            MAC=0010.11CA.E474
+PC4      IP=192.168.0.5     MASK=255.255.255.0   GW=None            MAC=00D0.BC11.99E2
+
+[MESH — Mesh-Topology.pkt]
+PC0      IP=192.168.0.1     MASK=255.255.255.0   GW=None            MAC=0050.0FDA.4695
+PC1      IP=192.168.0.2     MASK=255.255.255.0   GW=None            MAC=00D0.589C.2C05
+PC2      IP=192.168.0.3     MASK=255.255.255.0   GW=None            MAC=0060.3E02.3A94
+PC3      IP=192.168.0.4     MASK=255.255.255.0   GW=None            MAC=0001.424E.219B
+
+[RING — Ring-Topology.pkt]
+PC0      IP=192.168.1.1     MASK=255.255.255.0   GW=None            MAC=00E0.F7A6.0DE9
+PC1      IP=192.168.1.2     MASK=255.255.255.0   GW=None            MAC=0050.0F43.B8B6
+PC2      IP=192.168.1.3     MASK=255.255.255.0   GW=None            MAC=0060.3EAA.A8D8
+
+[HYBRID — Hybrid-Topology.pkt]
+PC0      IP=192.168.1.1     MASK=255.255.255.0   GW=None            MAC=0002.1610.5E30
+PC1      IP=192.168.1.2     MASK=255.255.255.0   GW=None            MAC=0050.0F76.B732
+PC2      IP=192.168.1.3     MASK=255.255.255.0   GW=None            MAC=0005.5E4A.DD00
+PC3      IP=192.168.1.4     MASK=255.255.255.0   GW=None            MAC=00D0.5845.ACBD
+PC4      IP=192.168.1.5     MASK=255.255.255.0   GW=None            MAC=0007.ECD1.88A6
+PC5      IP=192.168.1.6     MASK=255.255.255.0   GW=None            MAC=00E0.F938.CEC1
+PC6      IP=192.168.1.7     MASK=255.255.255.0   GW=None            MAC=00D0.9773.38DC
+PC7      IP=192.168.1.8     MASK=255.255.255.0   GW=None            MAC=000A.F394.094A
+PC8      IP=192.168.1.9     MASK=255.255.255.0   GW=None            MAC=0002.1784.7C9C
+PC9      IP=192.168.1.10    MASK=255.255.255.0   GW=None            MAC=0002.1788.B119
+PC10     IP=192.168.1.11    MASK=255.255.255.0   GW=None            MAC=0090.215B.889A
+PC11     IP=192.168.1.12    MASK=255.255.255.0   GW=None            MAC=00D0.FF1A.7E87
+PC12     IP=192.168.1.13    MASK=255.255.255.0   GW=None            MAC=0000.0CA4.2979
+PC13     IP=192.168.1.14    MASK=255.255.255.0   GW=None            MAC=000A.F345.2C7A
+
+[DISTANCE VECTOR — DistanceVector.pkt]
+PC0      IP=192.168.1.2     MASK=255.255.255.0   GW=192.168.1.1     MAC=0060.702E.A014
+PC1      IP=192.168.1.3     MASK=255.255.255.0   GW=192.168.1.1     MAC=0090.215C.45E4
+PC2      IP=192.168.2.2     MASK=255.255.255.0   GW=192.168.2.1     MAC=0060.7064.8760
+PC3      IP=192.168.2.3     MASK=255.255.255.0   GW=192.168.2.1     MAC=0001.C981.3CEC
+PC4      IP=192.168.3.2     MASK=255.255.255.0   GW=192.168.3.1     MAC=0000.0C4E.518E
+PC5      IP=192.168.3.3     MASK=255.255.255.0   GW=192.168.3.1     MAC=0001.43DA.6A1D
+
+[FTP/TFTP — FileTransferProtocol_TFTP.pkt]
+PC0      IP=1.1.1.2         MASK=255.0.0.0       GW=1.1.1.1         MAC=0040.0B96.0129
+PC1      IP=1.1.1.3         MASK=255.0.0.0       GW=1.1.1.1         MAC=000A.41A6.8C25
+PC2      IP=2.2.2.3         MASK=255.0.0.0       GW=2.2.2.1         MAC=00D0.D3B8.7915
+Server0  IP=2.2.2.2         MASK=255.0.0.0       GW=2.2.2.1         MAC=0060.70BB.4D4E

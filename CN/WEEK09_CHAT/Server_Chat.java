@@ -1,14 +1,12 @@
-package TCP;
-
 import java.io.*;
 import java.net.*;
 
-public class Server {
+public class Server_Chat {
     public static void main(String args[]) throws Exception {
-        ServerSocket ss = new ServerSocket(2000);
-        Socket sk = ss.accept();
-        BufferedReader in = new BufferedReader(new InputStreamReader(sk.getInputStream()));
-        PrintStream out = new PrintStream(sk.getOutputStream());
+        ServerSocket ss = new ServerSocket(6262);
+        Socket socket = ss.accept();
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
         String s;
 
@@ -26,7 +24,7 @@ public class Server {
         }
 
         ss.close();
-        sk.close();
+        socket.close();
         in.close();
         out.close();
         stdin.close();

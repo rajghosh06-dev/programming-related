@@ -1,22 +1,20 @@
-package TCP;
-
 import java.io.*;
 import java.net.*;
 
-public class Client {
+public class Client_Chat {
     public static void main(String args[]) throws Exception {
-        Socket sk = new Socket("127.0.0.1", 2000);
-        BufferedReader sin = new BufferedReader(new InputStreamReader(sk.getInputStream()));
-        PrintStream sout = new PrintStream(sk.getOutputStream());
+        Socket socket = new Socket("127.0.0.1", 6262);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
         String s;
 
         while (true) {
             System.out.print("Client : ");
             s = stdin.readLine();
-            sout.println(s);
+            out.println(s);
 
-            s = sin.readLine();
+            s = in.readLine();
             System.out.print("Server : " + s + "\n");
 
             if (s != null && s.equalsIgnoreCase("BYE")) {
@@ -24,9 +22,9 @@ public class Client {
             }
         }
 
-        sk.close();
-        sin.close();
-        sout.close();
+        socket.close();
+        in.close();
+        out .close();
         stdin.close();
     }
 }

@@ -1,0 +1,211 @@
+======================================================================
+WEEK 4 — EXPERIMENT 1: NETWORK TOPOLOGIES
+======================================================================
+
+COMMON DEVICE MODELS:
+- PCs: PC-PT
+- Switches: Cisco 2960-24TT
+- PC-to-switch cable: Copper Straight-Through
+- Switch-to-switch cable: Copper Cross-Over
+
+------------------------------------------------------------
+1. BUS TOPOLOGY — Bus-Topology.pkt
+------------------------------------------------------------
+
+DEVICES IN THE SAVED FILE:
+- 3 switches: Switch1, Switch2, Switch3
+- 3 PCs: PC0, PC1, PC2
+
+EXACT CONNECTIONS:
+
+PC0 FastEthernet0       -> Switch1 FastEthernet0/1   (Copper Straight-Through)
+PC1 FastEthernet0       -> Switch2 FastEthernet0/1   (Copper Straight-Through)
+PC2 FastEthernet0       -> Switch3 FastEthernet0/1   (Copper Straight-Through)
+
+Switch1 FastEthernet0/2 -> Switch2 FastEthernet0/2   (Copper Cross-Over)
+Switch2 FastEthernet0/3 -> Switch3 FastEthernet0/2   (Copper Cross-Over)
+
+IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address       Subnet Mask       Default Gateway
+PC0      192.168.0.1      255.255.255.0     None
+PC1      192.168.0.2      255.255.255.0     None
+PC2      192.168.0.3      255.255.255.0     None
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.0.3
+
+------------------------------------------------------------
+2. STAR TOPOLOGY — Star-Topology.pkt
+------------------------------------------------------------
+
+DEVICES IN THE SAVED FILE:
+- 1 central switch: Switch0 (2960-24TT)
+- 5 PCs: PC0, PC1, PC2, PC3, PC4
+
+EXACT CONNECTIONS:
+
+PC0 FastEthernet0 -> Switch0 FastEthernet0/1   (Copper Straight-Through)
+PC1 FastEthernet0 -> Switch0 FastEthernet0/2   (Copper Straight-Through)
+PC2 FastEthernet0 -> Switch0 FastEthernet0/3   (Copper Straight-Through)
+PC3 FastEthernet0 -> Switch0 FastEthernet0/4   (Copper Straight-Through)
+PC4 FastEthernet0 -> Switch0 FastEthernet0/5   (Copper Straight-Through)
+
+IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address       Subnet Mask       Default Gateway
+PC0      192.168.0.1      255.255.255.0     None
+PC1      192.168.0.2      255.255.255.0     None
+PC2      192.168.0.3      255.255.255.0     None
+PC3      192.168.0.4      255.255.255.0     None
+PC4      192.168.0.5      255.255.255.0     None
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.0.4
+
+------------------------------------------------------------
+3. MESH TOPOLOGY — Mesh-Topology.pkt
+------------------------------------------------------------
+
+DEVICES IN THE SAVED FILE:
+- 4 switches: Switch0, Switch1, Switch2, Switch3
+- 4 PCs: PC0, PC1, PC2, PC3
+
+INTER-SWITCH MESH CONNECTIONS:
+Switch2 FastEthernet0/1 -> Switch0 FastEthernet0/1   (Copper Cross-Over)
+Switch0 FastEthernet0/2 -> Switch1 FastEthernet0/1   (Copper Cross-Over)
+Switch1 FastEthernet0/2 -> Switch3 FastEthernet0/1   (Copper Cross-Over)
+Switch2 FastEthernet0/2 -> Switch3 FastEthernet0/2   (Copper Cross-Over)
+Switch0 FastEthernet0/3 -> Switch3 FastEthernet0/3   (Copper Cross-Over)
+Switch1 FastEthernet0/3 -> Switch2 FastEthernet0/3   (Copper Cross-Over)
+
+PC-TO-SWITCH ACCESS CONNECTIONS:
+PC0 FastEthernet0 -> Switch0 FastEthernet0/4   (Copper Straight-Through)
+PC1 FastEthernet0 -> Switch2 FastEthernet0/4   (Copper Straight-Through)
+PC2 FastEthernet0 -> Switch1 FastEthernet0/4   (Copper Straight-Through)
+PC3 FastEthernet0 -> Switch3 FastEthernet0/4   (Copper Straight-Through)
+
+IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address       Subnet Mask       Default Gateway
+PC0      192.168.0.1      255.255.255.0     None
+PC1      192.168.0.2      255.255.255.0     None
+PC2      192.168.0.3      255.255.255.0     None
+PC3      192.168.0.4      255.255.255.0     None
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.0.4
+
+NOTE:
+The saved file has a complete four-switch mesh: every switch has a direct link
+to each of the other three switches. Spanning Tree Protocol may block redundant
+paths; this is expected in a Layer-2 looped topology.
+
+------------------------------------------------------------
+4. RING TOPOLOGY — Ring-Topology.pkt
+------------------------------------------------------------
+
+IMPORTANT:
+The supplied .pkt file uses THREE switches and THREE PCs, not four switches
+and four PCs as described in the PDF.
+
+DEVICES IN THE SAVED FILE:
+- 3 switches: Switch0, Switch1, Switch2
+- 3 PCs: PC0, PC1, PC2
+
+PC-TO-SWITCH CONNECTIONS:
+PC1 FastEthernet0 -> Switch0 FastEthernet0/1   (Copper Straight-Through)
+PC2 FastEthernet0 -> Switch1 FastEthernet0/1   (Copper Straight-Through)
+PC0 FastEthernet0 -> Switch2 FastEthernet0/1   (Copper Straight-Through)
+
+SWITCH RING CONNECTIONS:
+Switch2 FastEthernet0/2 -> Switch0 FastEthernet0/2   (Copper Cross-Over)
+Switch0 FastEthernet0/3 -> Switch1 FastEthernet0/2   (Copper Cross-Over)
+Switch2 FastEthernet0/3 -> Switch1 FastEthernet0/3   (Copper Cross-Over)
+
+IP CONFIGURATION READ FROM THE FILE:
+Device   IP Address       Subnet Mask       Default Gateway
+PC0      192.168.1.1      255.255.255.0     None
+PC1      192.168.1.2      255.255.255.0     None
+PC2      192.168.1.3      255.255.255.0     None
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.1.3
+
+------------------------------------------------------------
+5. HYBRID TOPOLOGY — Hybrid-Topology.pkt
+------------------------------------------------------------
+
+IMPORTANT:
+The supplied .pkt file is a larger hybrid topology than the simple example
+described in the PDF. It contains 11 switches and 14 PCs.
+
+DEVICES IN THE SAVED FILE:
+- 11 switches: Switch0 through Switch10 (2960-24TT)
+- 14 PCs: PC0 through PC13
+
+ALL PC-TO-SWITCH CONNECTIONS:
+PC0  FastEthernet0 -> Switch0  FastEthernet0/1   (Copper Straight-Through)
+PC1  FastEthernet0 -> Switch2  FastEthernet0/1   (Copper Straight-Through)
+PC2  FastEthernet0 -> Switch1  FastEthernet0/1   (Copper Straight-Through)
+PC3  FastEthernet0 -> Switch3  FastEthernet0/1   (Copper Straight-Through)
+PC4  FastEthernet0 -> Switch4  FastEthernet0/3   (Copper Straight-Through)
+PC5  FastEthernet0 -> Switch5  FastEthernet0/3   (Copper Straight-Through)
+PC6  FastEthernet0 -> Switch6  FastEthernet0/2   (Copper Straight-Through)
+PC7  FastEthernet0 -> Switch7  FastEthernet0/2   (Copper Straight-Through)
+PC8  FastEthernet0 -> Switch7  FastEthernet0/3   (Copper Straight-Through)
+PC9  FastEthernet0 -> Switch7  FastEthernet0/4   (Copper Straight-Through)
+PC10 FastEthernet0 -> Switch7  FastEthernet0/5   (Copper Straight-Through)
+PC11 FastEthernet0 -> Switch8  FastEthernet0/2   (Copper Straight-Through)
+PC12 FastEthernet0 -> Switch9  FastEthernet0/1   (Copper Straight-Through)
+PC13 FastEthernet0 -> Switch10 FastEthernet0/3   (Copper Straight-Through)
+
+ALL SWITCH-TO-SWITCH CONNECTIONS:
+Switch2  FastEthernet0/2 -> Switch1  FastEthernet0/2   (Copper Cross-Over)
+Switch3  FastEthernet0/2 -> Switch0  FastEthernet0/2   (Copper Cross-Over)
+Switch0  FastEthernet0/3 -> Switch2  FastEthernet0/3   (Copper Cross-Over)
+Switch3  FastEthernet0/3 -> Switch2  FastEthernet0/4   (Copper Cross-Over)
+Switch1  FastEthernet0/3 -> Switch3  FastEthernet0/4   (Copper Cross-Over)
+Switch0  FastEthernet0/4 -> Switch1  FastEthernet0/4   (Copper Cross-Over)
+
+Switch3  FastEthernet0/5 -> Switch4  FastEthernet0/1   (Copper Cross-Over)
+Switch5  FastEthernet0/1 -> Switch4  FastEthernet0/2   (Copper Cross-Over)
+Switch6  FastEthernet0/1 -> Switch5  FastEthernet0/2   (Copper Cross-Over)
+
+Switch6  FastEthernet0/3 -> Switch7  FastEthernet0/1   (Copper Cross-Over)
+Switch7  FastEthernet0/6 -> Switch8  FastEthernet0/1   (Copper Cross-Over)
+
+Switch8  FastEthernet0/3 -> Switch9  FastEthernet0/2   (Copper Cross-Over)
+Switch8  FastEthernet0/4 -> Switch10 FastEthernet0/1   (Copper Cross-Over)
+Switch9  FastEthernet0/3 -> Switch10 FastEthernet0/2   (Copper Cross-Over)
+
+IP CONFIGURATION READ FROM THE FILE:
+All PCs use subnet mask 255.255.255.0 and no default gateway.
+
+PC0  = 192.168.1.1
+PC1  = 192.168.1.2
+PC2  = 192.168.1.3
+PC3  = 192.168.1.4
+PC4  = 192.168.1.5
+PC5  = 192.168.1.6
+PC6  = 192.168.1.7
+PC7  = 192.168.1.8
+PC8  = 192.168.1.9
+PC9  = 192.168.1.10
+PC10 = 192.168.1.11
+PC11 = 192.168.1.12
+PC12 = 192.168.1.13
+PC13 = 192.168.1.14
+
+TEST:
+From PC0 > Desktop > Command Prompt:
+ping 192.168.1.14
+
+TO UNDERSTAND THE SHAPE:
+- Switch0, Switch1, Switch2, and Switch3 form a fully connected mesh.
+- Switch3 extends to a daisy-chain section containing Switch4, Switch5, and Switch6.
+- Switch6 connects to Switch7, which acts as a star-like access switch for several PCs.
+- Switch7 connects onward to Switch8.
+- Switch8, Switch9, and Switch10 form a triangular interconnected section.
+This description is only to help visualize the saved links; use the exact port table above.
